@@ -1,0 +1,142 @@
+{
+  "health_check": {
+    "endpoint": "GET /api/health",
+    "description": "Check service health and model availability",
+    "response": {
+      "ok": {
+        "status": 200,
+        "body": {
+          "status": "ready",
+          "models_loaded": true,
+          "message": "Analysis service is running"
+        }
+      },
+      "loading": {
+        "status": 503,
+        "body": {
+          "status": "loading",
+          "models_loaded": false,
+          "message": "Speech models still loading, try again in a few seconds"
+        }
+      }
+    }
+  },
+  "analyze": {
+    "endpoint": "POST /api/analyze",
+    "description": "Submit audio for emphasis analysis",
+    "request": {
+      "content_type": "multipart/form-data",
+      "fields": {
+        "audio": {
+          "type": "file",
+          "description": "WAV audio file (max 5 MB, max 10 seconds)",
+          "constraints": {
+            "max_size_mb": 5,
+            "max_duration_seconds": 10,
+            "format": "audio/wav"
+          }
+        },
+        "puzzle_id": {
+          "type": "string",
+          "description": "ID of the speaking question being answered, e.g. 'speak-track-A-001'"
+        }
+      }
+    },
+    "responses": {
+      "success_match": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "puzzle_id": "speak-track-A-001",
+          "confidence": 0.92,
+          "message": "Your emphasis matched the target. Great job!",
+          "per_word_scores": [
+            {
+              "word": "Can",
+              "position": 0,
+              "prominence_score": 0.35,
+              "expected_emphasis": false
+            },
+            {
+              "word": "you",
+              "position": 1,
+              "prominence_score": 0.28,
+              "expected_emphasis": false
+            },
+            {
+              "word": "PRESENT",
+              "position": 2,
+              "prominence_score": 0.89,
+              "expected_emphasis": true
+            },
+            {
+              "word": "this",
+              "position": 3,
+              "prominence_score": 0.31,
+              "expected_emphasis": false
+            }
+          ]
+        }
+      },
+      "uncertain": {
+        "status": 200,
+        "body": {
+          "status": "uncertain",
+          "puzzle_id": "speak-track-A-001",
+          "confidence": 0.52,
+          "message": "The emphasis was unclear. Try again with clearer pronunciation.",
+          "per_word_scores": [
+            {
+              "word": "Can",
+              "position": 0,
+              "prominence_score": 0.40,
+              "expected_emphasis": false
+            },
+            {
+              "word": "you",
+              "position": 1,
+              "prominence_score": 0.38,
+              "expected_emphasis": false
+            },
+            {
+              "word": "PRESENT",
+              "position": 2,
+              "prominence_score": 0.52,
+              "expected_emphasis": true
+            },
+            {
+              "word": "this",
+              "position": 3,
+              "prominence_score": 0.44,
+              "expected_emphasis": false
+            }
+          ]
+        }
+      },
+      "invalid_audio": {
+        "status": 200,
+        "body": {
+          "status": "invalid",
+          "puzzle_id": "speak-track-A-001",
+          "confidence": 0,
+          "message": "Could not detect clear speech. Please try again.",
+          "per_word_scores": null
+        }
+      },
+      "validation_error": {
+        "status": 400,
+        "body": {
+          "error": "Invalid request",
+          "details": "Audio file exceeds 5 MB limit or puzzle_id is missing"
+        }
+      },
+      "service_error": {
+        "status": 503,
+        "body": {
+          "error": "Service unavailable",
+          "details": "Speech models not ready or server error"
+        }
+      }
+    }
+  }
+}

@@ -1,12 +1,10 @@
 [project]
 name = "ml-lingo"
 version = "0.1.0"
-description = "Prosody & pronunciation trainer — a gamified Streamlit hackathon app"
+description = "LingoWave — gamified English prosody trainer (FastAPI + web SPA)"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "streamlit>=1.36",
-    "plotly>=5.22",
-    "numpy>=1.26",
-    "matplotlib>=3.8",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
 ]

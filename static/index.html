@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LingoWave · Speak the Music of English</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { display: ['Nunito', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: { purple: '#7c3aed', blue: '#2563eb', cyan: '#06b6d4' },
+            ink: '#0b1220',
+          },
+          keyframes: {
+            pop: { '0%': { transform: 'scale(.9)', opacity: 0 }, '100%': { transform: 'scale(1)', opacity: 1 } },
+            floaty: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
+          },
+          animation: { pop: 'pop .25s ease-out', floaty: 'floaty 3s ease-in-out infinite' },
+        },
+      },
+    };
+  </script>
+
+  <!-- Chart.js for the radar / spider chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+
+<body class="font-display text-slate-100 min-h-screen">
+  <!-- ================= Sticky Navbar / HUD ================= -->
+  <header class="sticky top-0 z-40 backdrop-blur-lg bg-ink/70 border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
+      <button id="logo-btn" class="flex items-center gap-2 group">
+        <span class="text-2xl animate-floaty">🌊</span>
+        <div class="text-left leading-tight">
+          <div class="font-black text-lg tracking-tight">LingoWave</div>
+          <div class="text-[11px] text-slate-400 -mt-1">Speak the music of English</div>
+        </div>
+      </button>
+
+      <div class="flex-1"></div>
+
+      <!-- Live HUD stats -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="hud-pill" title="Daily streak">🔥 <span id="hud-streak">0</span></div>
+        <div class="hud-pill" title="Experience points">⭐ <span id="hud-xp">0</span></div>
+        <div class="hud-pill" title="Fluency level">🎓 <span id="hud-level">A1</span></div>
+        <div class="hud-pill hidden sm:flex" title="Games unlocked">🗺️ <span id="hud-unlocked">0/7</span></div>
+      </div>
+
+      <button id="demo-btn"
+        class="btn-gradient px-3 py-2 rounded-xl text-sm font-extrabold shadow-lg shadow-blue-600/30">
+        ⚡ Skip to Demo Mode
+      </button>
+      <button id="reset-btn"
+        class="px-3 py-2 rounded-xl text-sm font-bold bg-white/5 border border-white/10 hover:bg-white/10">
+        🔄 Reset
+      </button>
+    </div>
+    <!-- global mastery progress -->
+    <div class="h-1 bg-white/5">
+      <div id="hud-progress" class="h-1 bg-gradient-to-r from-brand-purple via-brand-blue to-brand-cyan transition-all"
+           style="width:0%"></div>
+    </div>
+  </header>
+
+  <!-- ================= Main content root ================= -->
+  <main id="app" class="max-w-6xl mx-auto px-4 py-6"></main>
+
+  <!-- toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
+    <div id="toast-body" class="px-5 py-3 rounded-2xl font-extrabold shadow-2xl"></div>
+  </div>
+
+  <footer class="max-w-6xl mx-auto px-4 py-8 text-center text-xs text-slate-500">
+    Built with FastAPI · vanilla JS · Web Audio API · Canvas · Chart.js — zero external assets.
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

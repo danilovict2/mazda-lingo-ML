@@ -1,3 +1,7 @@
+let tokenProvider: (() => Promise<string>) | null = null;
+export function setTokenProvider(provider: (() => Promise<string>) | null) {
+    tokenProvider = provider;
+}
 export type Analysis = {
     overallScore: number;
     wordStress: number;
@@ -12,13 +16,15 @@ async function request<T>(
     path: string,
     body: unknown,
 ): Promise<T> {
+    if (!tokenProvider) throw new Error("Please sign in to continue.");
+    const token = await tokenProvider();
     const res = await fetch(`${base}${path}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(10000),
     });
-    if (!res.ok) throw new Error("API unavailable");
+    if (!res.ok) throw new Error(res.status === 401 ? "Your session expired. Please sign in again." : "Unable to complete the request. Please try again.");
     return (await res.json()) as T;
 }
 export const api = {

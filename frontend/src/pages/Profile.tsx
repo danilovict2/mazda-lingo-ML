@@ -111,25 +111,25 @@ export function Profile() {
                             </div>
                         ))}
                     </section>
-                    <section className="recommendation">
-                        <span className="eyebrow">
-                            <Sparkles size={16} /> YOUR NEXT SMALL WIN
-                        </span>
-                        <h2>
-                            You hear the difference.
-                            <br />
-                            Now, make it heard.
-                        </h2>
-                        <p>
-                            Your word-stress recognition is excellent. Spend your next session
-                            exploring sentence emphasis in Stress Detective.
-                        </p>
-                        <Button to="/game/stress-detective">
-                            Practice sentence emphasis <ArrowRight size={16} />
-                        </Button>
-                    </section>
                 </div>
             </div>
+            <section className="recommendation">
+                <span className="eyebrow">
+                    <Sparkles size={16} /> YOUR NEXT SMALL WIN
+                </span>
+                <h2>
+                    You hear the difference.
+                    <br />
+                    Now, make it heard.
+                </h2>
+                <p>
+                    Your word-stress recognition is excellent. Spend your next session
+                    exploring sentence emphasis in Stress Detective.
+                </p>
+                <Button to="/game/stress-detective">
+                    Practice sentence emphasis <ArrowRight size={16} />
+                </Button>
+            </section>
             <section className="panel history">
                 <div className="section-heading">
                     <h2>Your recent rhythm</h2>

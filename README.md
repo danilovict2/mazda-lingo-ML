@@ -12,12 +12,12 @@ bun i
 bun run dev
 ```
 
-Open http://localhost:5173. The Python API is required for placement, lesson completion, and speech analysis. No API keys are required.
+Open http://localhost:5173. The Python API is required for placement, lesson completion, and speech analysis. Auth0 configuration is required; follow [Auth0 setup](frontend/AUTH0.md) before starting.
 
 Required Python API, in a second terminal from the repository root:
 
 ```sh
-uv run uvicorn main:app --reload
+uv run uvicorn main:app --reload --env-file .env
 ```
 
 Vite development and preview proxy `/api` to `http://127.0.0.1:8000`. Optionally set `VITE_API_URL` in `frontend/.env.local` to use another host and restart Vite. Production must route `/api` to the backend or set `VITE_API_URL` at build time. Failed requests show errors instead of local fallback results. API docs: http://localhost:8000/docs.
@@ -37,7 +37,7 @@ bun run preview
 5. Open **Shape Your Sound** → **Try demo recording** → **Finish & analyze**. Save the practice.
 6. Open **Speech profile** for the radar chart, skill breakdown, and recommendation.
 
-The sidebar’s **Reset demo** clears progress. Direct game URLs support quick showcase navigation. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
+The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage separately for each Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
 
 ## Architecture
 
@@ -60,6 +60,6 @@ The six selection games contain 4–5 questions each. Five representative questi
 - Studio simulation needs no permissions. **Use my microphone** optionally records through MediaRecorder and provides local playback. Permission/device failure falls back to simulation. Streams are stopped when recording finishes or the studio unmounts; audio is never uploaded.
 - All scoring is explicitly mocked. `POST /api/analyze-speech` is the Python integration boundary: replace its response with a real analysis pipeline and add multipart audio upload in `src/api/client.ts` when needed.
 - API routes: `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech`. Lesson content remains local. API session results are stateless, with persistence owned by the browser.
-- A future authenticated profile can replace the context/localStorage initialization without changing the games. No paid APIs, database, account system, camera, or ML infrastructure is required.
+- Auth0 authenticates accounts; FastAPI validates RS256 access tokens on practice endpoints. Progress remains local to each browser and account, without a database. See [Auth0 setup](frontend/AUTH0.md).
 
 Responsive layouts, visible keyboard focus, semantic buttons, disabled answer states, live feedback, reduced-motion support, and labeled audio controls are included.

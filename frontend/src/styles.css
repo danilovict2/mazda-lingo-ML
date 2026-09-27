@@ -1811,6 +1811,15 @@ footer {
     align-items: center;
     gap: 8px;
     transition: all 0.2s;
+    user-select: none;
+}
+
+.placed-word[draggable="true"] {
+    cursor: grab;
+}
+
+.placed-word[draggable="true"]:active {
+    cursor: grabbing;
 }
 
 .placed-word.example-word {
@@ -1818,45 +1827,30 @@ footer {
     border-color: #b69dd4;
     font-style: italic;
     opacity: 0.8;
+    cursor: default;
 }
 
 .placed-word.correct {
     background: #f0f7f1;
-    border-color: #a6c9aa;
+    border: 2px solid #6ba67d;
     color: #5d9168;
+    font-weight: 600;
 }
 
 .placed-word.incorrect {
     background: #fdf2ec;
-    border-color: #dfbba6;
-    color: #ac8067;
+    border: 2px solid #e6975e;
+    color: #b8753e;
+    font-weight: 600;
 }
 
 .placed-word span {
     flex: 1;
 }
 
-.remove-btn {
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 20px;
-    padding: 0;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-}
-
-.remove-btn:hover:not(:disabled) {
-    opacity: 1;
-}
-
-.remove-btn:disabled {
-    cursor: default;
-}
-
 .check-icon {
-    margin-left: auto;
+    color: #6ba67d;
+    flex-shrink: 0;
 }
 
 .submit-btn {

@@ -27,6 +27,11 @@ export function StressStepsView({
     function handleDragStart(e: React.DragEvent, word: string) {
         draggedWord.current = word;
         e.dataTransfer!.effectAllowed = "move";
+        (e.currentTarget as HTMLElement).style.opacity = "0.5";
+    }
+
+    function handleDragEnd(e: React.DragEvent) {
+        (e.currentTarget as HTMLElement).style.opacity = "1";
     }
 
     function handleDragOver(e: React.DragEvent) {
@@ -44,14 +49,6 @@ export function StressStepsView({
             [word]: category,
         }));
         draggedWord.current = null;
-    }
-
-    function handleRemove(word: string) {
-        setPlaced((prev) => {
-            const newPlaced = { ...prev };
-            delete newPlaced[word];
-            return newPlaced;
-        });
     }
 
     function handleSubmit() {
@@ -107,26 +104,24 @@ export function StressStepsView({
                     </div>
                     <div className="column-label">{q.category1Label}</div>
                     <div className="words-list">
-                        {column1Words.map((word, idx) => (
-                            <div
-                                key={word}
-                                className={`placed-word ${idx === 0 ? "example-word" : ""} ${showCorrectness && q.correctMap[word] !== 0 ? "incorrect" : showCorrectness && q.correctMap[word] === 0 ? "correct" : ""}`}
-                            >
-                                <span>{word}</span>
-                                {idx !== 0 && (
-                                    <button
-                                        onClick={() => handleRemove(word)}
-                                        disabled={submitted}
-                                        className="remove-btn"
-                                    >
-                                        ×
-                                    </button>
-                                )}
-                                {showCorrectness && q.correctMap[word] === 0 && (
-                                    <Check size={16} className="check-icon" />
-                                )}
-                            </div>
-                        ))}
+                        {column1Words.map((word, idx) => {
+                            const isCorrect = q.correctMap[word] === 0;
+                            const isExample = idx === 0;
+                            return (
+                                <div
+                                    key={word}
+                                    draggable={!isExample && !submitted}
+                                    onDragStart={(e) => !isExample && handleDragStart(e, word)}
+                                    onDragEnd={handleDragEnd}
+                                    className={`placed-word ${isExample ? "example-word" : ""} ${showCorrectness && !isExample && !isCorrect ? "incorrect" : showCorrectness && !isExample && isCorrect ? "correct" : ""}`}
+                                >
+                                    <span>{word}</span>
+                                    {showCorrectness && !isExample && isCorrect && (
+                                        <Check size={16} className="check-icon" />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -140,26 +135,24 @@ export function StressStepsView({
                     </div>
                     <div className="column-label">{q.category2Label}</div>
                     <div className="words-list">
-                        {column2Words.map((word, idx) => (
-                            <div
-                                key={word}
-                                className={`placed-word ${idx === 0 ? "example-word" : ""} ${showCorrectness && q.correctMap[word] !== 1 ? "incorrect" : showCorrectness && q.correctMap[word] === 1 ? "correct" : ""}`}
-                            >
-                                <span>{word}</span>
-                                {idx !== 0 && (
-                                    <button
-                                        onClick={() => handleRemove(word)}
-                                        disabled={submitted}
-                                        className="remove-btn"
-                                    >
-                                        ×
-                                    </button>
-                                )}
-                                {showCorrectness && q.correctMap[word] === 1 && (
-                                    <Check size={16} className="check-icon" />
-                                )}
-                            </div>
-                        ))}
+                        {column2Words.map((word, idx) => {
+                            const isCorrect = q.correctMap[word] === 1;
+                            const isExample = idx === 0;
+                            return (
+                                <div
+                                    key={word}
+                                    draggable={!isExample && !submitted}
+                                    onDragStart={(e) => !isExample && handleDragStart(e, word)}
+                                    onDragEnd={handleDragEnd}
+                                    className={`placed-word ${isExample ? "example-word" : ""} ${showCorrectness && !isExample && !isCorrect ? "incorrect" : showCorrectness && !isExample && isCorrect ? "correct" : ""}`}
+                                >
+                                    <span>{word}</span>
+                                    {showCorrectness && !isExample && isCorrect && (
+                                        <Check size={16} className="check-icon" />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

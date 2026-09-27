@@ -1815,7 +1815,7 @@ footer {
 
 .words-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     overflow-y: auto;
     flex: 1;
@@ -1824,10 +1824,10 @@ footer {
 .draggable-word {
     background: #f8f3fc;
     border: 2px solid #b69dd4;
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: 6px;
+    padding: 6px 8px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
     cursor: move;
     user-select: none;
     transition:

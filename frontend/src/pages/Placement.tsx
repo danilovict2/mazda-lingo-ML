@@ -104,6 +104,7 @@ export function Placement() {
                         </h1>
                     </div>
                     <QuestionView
+                        success="Nice ear!"
                         q={q}
                         selected={selected}
                         onSelect={(i) => {

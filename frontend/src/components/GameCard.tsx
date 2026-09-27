@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check, Clock, Lock } from "lucide-react";
-import { games } from "../data";
+import { games, questions } from "../data";
 import { GameIcon } from "../components/GameIcon";
 
 export function GameCard({
@@ -45,7 +45,7 @@ export function GameCard({
                         ? "Complete a lesson"
                         : status === "Completed"
                             ? "Play again"
-                            : "+120 XP"}
+                            : `+${(questions[g.id]?.length ?? 0) * 30} XP`}
                 </span>
             </div>
         </Link>

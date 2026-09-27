@@ -3566,3 +3566,47 @@ p {
     padding: 8px 12px;
     font-size: 14px;
 }
+
+/* Header link to the Speech Profile, styled like the Log out button. */
+.top-panel .top-link {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: #6d6b7d;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.top-panel .top-link:hover {
+    color: #6d45b0;
+    border-color: #d9cfea;
+}
+
+.top-panel a.avatar {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* One-line tip under each game's title, with an example to play. */
+.game-tip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 14px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f4f0fa;
+    color: #4b465c;
+    font-size: 13px;
+}
+
+.game-tip > svg {
+    color: #8862c1;
+}
+
+.game-tip > span {
+    flex: 1;
+    min-width: 220px;
+}

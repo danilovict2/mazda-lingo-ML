@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Lightbulb, X } from "lucide-react";
 import { games, questions, type Question, type StressStepsQuestion } from "../data";
 import { api } from "../api/client";
 import { Button } from "../components/Button";
@@ -13,6 +13,21 @@ import { QuestionView } from "../components/QuestionView";
 import { StressStepsView } from "../components/StressStepsView";
 import { Completion } from "../components/Completion";
 import { useProgress } from "../state/ProgressProvider";
+
+const FEEDBACK: Record<string, { success: string; retry: string }> = {
+    "stress-twins": {
+        success: "Right, that word keeps its stress.",
+        retry: "Not quite. Hear each pair below.",
+    },
+    "what-do-they-mean": {
+        success: "Exactly, you heard the emphasis.",
+        retry: "Almost. Listen again for the loudest word.",
+    },
+    "rhythm-match": {
+        success: "You found the beat!",
+        retry: "Almost. Listen for the strong words.",
+    },
+};
 
 export function Lesson() {
     const { id } = useParams();
@@ -118,6 +133,16 @@ export function Lesson() {
                             </select>
                         )}
                     </div>
+                    <div className="game-tip">
+                        <Lightbulb size={16} />
+                        <span>{game.tip}</span>
+                        <AudioButton
+                            compact
+                            text={game.example.label}
+                            label={`Example: ${game.example.label}`}
+                            clip={game.example.clip}
+                        />
+                    </div>
                     <div className="lesson-progress">
                         <Bar value={(index / list.length) * 100} />
                         <span>
@@ -154,10 +179,14 @@ export function Lesson() {
                                 setSelected(1);
                                 if (isCorrect) setCorrect((c) => c + 1);
                             }}
+                            onContinue={next}
+                            continuing={busy}
                         />
                     ) : (
                         <QuestionView
                             q={spoken!}
+                            {...FEEDBACK[game.id]}
+                            xp={{ correct: 30, wrong: 20 }}
                             selected={selected}
                             onSelect={(i) => {
                                 setSelected(i);
@@ -183,7 +212,7 @@ export function Lesson() {
                         </div>
                     )}
                     {apiError && <p role="alert" className="notice">{apiError}</p>}
-                    <div className="exercise-actions">
+                    {!sorting && <div className="exercise-actions">
                         <Button disabled={selected === null || busy} onClick={next}>
                             {busy
                                 ? "Saving…"
@@ -192,7 +221,7 @@ export function Lesson() {
                                     : "Next question"}{" "}
                             <ArrowRight size={17} />
                         </Button>
-                    </div>
+                    </div>}
                 </div>
             )}
         </Shell>

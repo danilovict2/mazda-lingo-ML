@@ -23,8 +23,9 @@ WORKDIR /app
 RUN pip install --no-cache-dir uv
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
-COPY auth.py database.py main.py ./
+COPY auth.py database.py main.py speech_features.py speech_scoring.py ./
 COPY --from=frontend-build /build/frontend/dist ./frontend/dist
+COPY frontend/src/generated/audio.json ./frontend/src/generated/audio.json
 
 RUN useradd --uid 10001 --create-home cadence \
     && mkdir -p /data \

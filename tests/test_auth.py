@@ -1,5 +1,6 @@
 import time
 import unittest
+import ssl
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -101,6 +102,23 @@ class AuthenticationTests(unittest.TestCase):
     def test_missing_configuration(self):
         from auth import settings
 
+        settings.cache_clear()
+
+    def test_jwks_client_uses_bundled_ca_certificates(self):
+        from auth import settings
+
+        settings.cache_clear()
+        with patch("auth.jwt.PyJWKClient") as client:
+            with patch.dict(
+                "os.environ",
+                {"AUTH0_DOMAIN": "test.auth0.com", "AUTH0_AUDIENCE": "cadence"},
+            ):
+                settings()
+        context = client.call_args.kwargs["ssl_context"]
+        self.assertIsInstance(context, ssl.SSLContext)
+        self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
+        self.assertTrue(context.check_hostname)
+        self.assertGreater(context.cert_store_stats()["x509_ca"], 0)
         settings.cache_clear()
         with patch.dict("os.environ", {"AUTH0_DOMAIN": "", "AUTH0_AUDIENCE": ""}):
             self.assertEqual(self.request(self.token()).status_code, 503)

@@ -746,7 +746,7 @@ main {
     background: white;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 16px;
+    padding: 20px;
     transition:
         transform 0.2s,
         box-shadow 0.2s;
@@ -762,36 +762,37 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 19px;
+    margin-bottom: 16px;
     color: #bab3c3;
 }
 
 .game-icon {
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 52px;
+    height: 52px;
     border-radius: 13px;
     flex-shrink: 0;
 }
 
 .game-tag {
     color: #aaa1b4;
-    font-size: 7px;
+    font-size: 9px;
     letter-spacing: 1.15px;
     font-weight: 600;
 }
 
 .game-card h3 {
-    font-size: 14px;
-    margin: 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 8px 0;
 }
 
 .game-card p {
-    font-size: 10px;
-    line-height: 1.7;
+    font-size: 12px;
+    line-height: 1.6;
     min-height: 34px;
-    max-width: 145px;
+    max-width: none;
 }
 
 .card-bottom {
@@ -799,10 +800,10 @@ main {
     justify-content: space-between;
     gap: 3px;
     border-top: 1px solid #f2f0f5;
-    margin-top: 16px;
+    margin-top: 14px;
     padding-top: 12px;
     color: #a6a0ad;
-    font-size: 8px;
+    font-size: 11px;
 }
 
 .card-bottom span:first-child {

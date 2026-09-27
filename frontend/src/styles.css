@@ -1743,7 +1743,7 @@ footer {
     flex-direction: column;
     gap: 10px;
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .stress-layout {
@@ -1751,7 +1751,7 @@ footer {
     grid-template-columns: 1fr 1.8fr;
     gap: 24px;
     flex: 1;
-    overflow: hidden;
+    overflow-y: auto;
     min-height: 0;
 }
 

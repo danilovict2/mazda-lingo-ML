@@ -1779,31 +1779,19 @@ footer {
     border-color: #b69dd4;
 }
 
-.column-content {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e6e1ed;
-}
-
 .column-header {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
 }
 
-.column-example {
-    font-size: 14px;
-    font-weight: 600;
-    color: #8862c1;
-    margin-bottom: 8px;
-}
-
 .column-label {
     font-size: 11px;
     color: #a08bac;
+    text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    margin-bottom: 15px;
 }
 
 .words-list {
@@ -1823,6 +1811,13 @@ footer {
     align-items: center;
     gap: 8px;
     transition: all 0.2s;
+}
+
+.placed-word.example-word {
+    background: #e4d9f2;
+    border-color: #b69dd4;
+    font-style: italic;
+    opacity: 0.8;
 }
 
 .placed-word.correct {

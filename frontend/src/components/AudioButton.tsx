@@ -2,15 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { AudioLines, Volume2 } from "lucide-react";
 import { clipUrl } from "../audio";
 
+// Only one clip plays at a time: starting a new one pauses the previous one.
+let current: HTMLAudioElement | null = null;
+
 export function AudioButton({
     text,
     clip,
     onTime,
+    compact = false,
+    label,
 }: {
     text: string;
     clip?: string;
     /** Called with the playback position in seconds, or null when stopped. */
     onTime?: (time: number | null) => void;
+    /** Small speaker icon (with an optional label) instead of the Listen button. */
+    compact?: boolean;
+    label?: string;
 }) {
     const [playing, setPlaying] = useState(false);
     const [message, setMessage] = useState("");
@@ -50,6 +58,11 @@ export function AudioButton({
         // Pre-generated ElevenLabs recording; the browser voice is only a fallback.
         const a = new Audio(clipUrl(clip));
         a.onended = stop;
+        a.onpause = () => {
+            if (audio.current === a) stop();
+        };
+        current?.pause();
+        current = a;
         audio.current = a;
         const tick = () => {
             onTime?.(a.currentTime);
@@ -59,6 +72,19 @@ export function AudioButton({
             if (audio.current === a) speak();
         });
     }
+    if (compact)
+        return (
+            <button
+                type="button"
+                className={`word-audio${playing ? " playing" : ""}`}
+                onClick={play}
+                aria-label={`Hear “${text}”`}
+                title={`Hear “${text}”`}
+            >
+                {playing ? <AudioLines size={14} /> : <Volume2 size={14} />}
+                {label && <span>{label}</span>}
+            </button>
+        );
     return (
         <span className="audio-wrap">
             <button

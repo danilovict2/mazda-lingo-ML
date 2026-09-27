@@ -34,13 +34,14 @@ REFERENCES = json.loads(REFERENCE_FILE.read_text()) if REFERENCE_FILE.exists() e
 MAX_UPLOAD = 10 * 1024 * 1024
 
 
+# Game id -> display name saved with each session. Must match frontend/src/data.ts.
 GAMES = {
-    "stress-steps": "Stress Steps",
-    "rhythm-echo": "Rhythm Echo",
+    "stress-sort": "Stress Sort",
     "stress-twins": "Stress Twins",
-    "soundprint": "Soundprint",
-    "stress-detective": "Stress Detective",
+    "what-do-they-mean": "What do they mean?",
     "rhythm-match": "Rhythm Match",
+    "say-it-right": "Say It Right",
+    # Only recorded through /api/studio-session.
     "shape-your-sound": "Shape Your Sound",
 }
 
@@ -64,13 +65,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )
-GAMES = [
-    "stress-sort",
-    "stress-twins",
-    "what-do-they-mean",
-    "rhythm-match",
-    "say-it-right",
-]
 
 
 class Placement(BaseModel):

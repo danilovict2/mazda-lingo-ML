@@ -36,7 +36,7 @@ class ProgressApiTests(unittest.TestCase):
 
         attempt = "60e07dc0-4b0a-41e8-8716-f16847730d48"
         body = {
-            "game": "stress-steps",
+            "game": "stress-sort",
             "correct": 4,
             "total": 5,
             "attemptId": attempt,

@@ -413,7 +413,7 @@ nav {
 }
 
 main {
-    padding: 12px 40px 12px;
+    padding: 8px 40px 12px;
     max-width: 1530px;
     margin: auto;
     display: flex;
@@ -1596,7 +1596,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 35px 0 25px;
+    margin: 12px 0 16px;
 }
 
 .lesson-heading h1 {
@@ -1622,7 +1622,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 27px;
+    margin-bottom: 12px;
 }
 
 .lesson-progress .progress-track {
@@ -1741,7 +1741,7 @@ footer {
 .stress-steps-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     height: 100%;
     overflow: hidden;
 }
@@ -1759,7 +1759,8 @@ footer {
     text-align: center;
     font-size: 13px;
     color: #6a6573;
-    padding: 8px 0;
+    padding: 4px 0;
+    margin-bottom: 8px;
     flex-shrink: 0;
 }
 
@@ -1789,11 +1790,11 @@ footer {
 .stress-words-pool {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     background: #fff;
     border: 2px solid #d9cfea;
     border-radius: 10px;
-    padding: 14px;
+    padding: 12px;
     overflow: hidden;
 }
 
@@ -1850,7 +1851,7 @@ footer {
     background: #fff;
     border: 2px solid #d9cfea;
     border-radius: 10px;
-    padding: 14px;
+    padding: 12px;
     transition: border-color 0.2s;
     display: flex;
     flex-direction: column;

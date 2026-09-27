@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check, Clock, Lock } from "lucide-react";
-import { games } from "../data";
+import { games, questions } from "../data";
 import { GameIcon } from "../components/GameIcon";
 
 export function GameCard({
     game: g,
     status,
+    wide = false,
 }: {
     game: (typeof games)[number];
     status: string;
+    /** Full-width horizontal card spanning the grid (used for Say It Right). */
+    wide?: boolean;
 }) {
     const locked = status === "Locked";
     return (
@@ -18,7 +21,7 @@ export function GameCard({
             onClick={(e) => {
                 if (locked) e.preventDefault();
             }}
-            className={`game-card ${locked ? "locked" : ""}`}
+            className={`game-card ${locked ? "locked" : ""} ${wide ? "wide" : ""}`}
         >
             <div className="card-top">
                 <span className={`game-icon ${g.color}`}>
@@ -45,7 +48,7 @@ export function GameCard({
                         ? "Complete a lesson"
                         : status === "Completed"
                             ? "Play again"
-                            : "+120 XP"}
+                            : `+${(questions[g.id]?.length ?? 0) * 30} XP`}
                 </span>
             </div>
         </Link>

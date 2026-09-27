@@ -42,8 +42,9 @@ class AuthenticationTests(unittest.TestCase):
             self.assertEqual(
                 self.client.post("/api/" + route, json={}).status_code, 401
             )
-        self.assertEqual(self.client.get("/api/progress").status_code, 401)
-        self.assertEqual(self.client.delete("/api/progress").status_code, 401)
+        # Recording routes spend ElevenLabs credits, so they must be protected too.
+        for route in ("analyze-recording", "check-stress"):
+            self.assertEqual(self.client.post("/api/" + route).status_code, 401)
         self.assertEqual(self.client.get("/api/me").status_code, 401)
 
     @patch("auth.settings")
@@ -80,7 +81,7 @@ class AuthenticationTests(unittest.TestCase):
         headers = {"Authorization": "Bearer " + self.token()}
         for route, body in [
             ("placement-test", {"correct": 3}),
-            ("session", {"game": "stress-steps", "correct": 2, "total": 3}),
+            ("session", {"game": "stress-sort", "correct": 2, "total": 3}),
             ("analyze-speech", {"text": "hello"}),
         ]:
             self.assertEqual(

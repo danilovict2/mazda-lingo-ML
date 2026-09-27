@@ -23,13 +23,12 @@ const base = import.meta.env.VITE_API_URL || "";
 async function send<T>(path: string, init: RequestInit, timeout = 10000): Promise<T> {
     if (!tokenProvider) throw new Error("Please sign in to continue.");
     const token = await tokenProvider();
-    const headers = new Headers(init.headers);
-    headers.set("Authorization", `Bearer ${token}`);
     const res = await fetch(`${base}${path}`, {
         ...init,
-        headers,
+        headers: { ...init.headers, Authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(timeout),
     });
+    if (res.status === 401) throw new Error("Your session expired. Please sign in again.");
     if (!res.ok) {
         const body = await res.json().catch(() => null);
         throw new Error(typeof body?.detail === "string" ? body.detail : "API unavailable");
@@ -48,6 +47,15 @@ function request<T>(
     });
 }
 
+/** Result of a Say It Right attempt. */
+export type StressCheck = {
+    passed: boolean;
+    feedback: string;
+    transcript: string;
+    recognised: number;
+    strongest: string | null;
+    words: { text: string; target: boolean; heard: boolean; prominence: number }[];
+};
 export const api = {
     analyze: (text: string, difficulty: string) =>
         request<Analysis>("/api/analyze-speech", {
@@ -64,6 +72,13 @@ export const api = {
             { method: "POST", body: form },
             45000,
         );
+    },
+    checkStress: (audio: Blob, sentence: string, targets: string[]) => {
+        const form = new FormData();
+        form.append("sentence", sentence);
+        form.append("targets", targets.join(","));
+        form.append("audio", audio, "recording.wav");
+        return send<StressCheck>("/api/check-stress", { body: form }, 45000);
     },
     placement: (correct: number, total: number) =>
         request<{ level: string; progress: Progress }>("/api/placement-test", {

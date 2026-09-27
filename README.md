@@ -1,4 +1,4 @@
-# Cadence
+# Lingo
 
 **Good English. Great rhythm.** A demo-ready pronunciation coach for English word stress, sentence emphasis, and natural rhythm. Seven short games turn listening and speaking practice into a visual, rewarding learning path.
 
@@ -98,6 +98,8 @@ uv run scripts/generate_audio.py detective-she  # regenerate one clip
 
 Commit the generated `.wav` files and `frontend/src/generated/audio.json`.
 
-API routes: public `GET /api/health`; authenticated `GET`/`DELETE /api/progress`; and authenticated `POST /api/placement-test`, `/api/session`, `/api/studio-session`, `/api/analyze-speech` (demo scores), and `/api/analyze-recording` (real scores). Lesson content remains bundled with the frontend, while user progress is persisted in SQLite. Auth0 access tokens are validated on every account and practice endpoint; see [Auth0 setup](frontend/AUTH0.md).
+**Say It Right** (speaking game): the player records a sentence stressing the highlighted words. `POST /api/check-stress` transcribes the take with ElevenLabs speech-to-text, then `stress_check.py` compares each word's loudness and length per syllable within the speaker's own sentence. The attempt passes when the sentence was said and the target words are at least as prominent as every other content word. The game only uses sentences the checker judged correctly in calibration.
+
+API routes (all but health need a signed-in user): `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech` (demo scores), `/api/analyze-recording` (real scores), `/api/check-stress` (Say It Right). Lesson content remains local, and persistence is owned by the browser.
 
 Responsive layouts, visible keyboard focus, semantic buttons, disabled answer states, live feedback, reduced-motion support, and labeled audio controls are included.

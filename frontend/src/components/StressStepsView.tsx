@@ -1,24 +1,20 @@
 import { useState, useRef } from "react";
 import { Check } from "lucide-react";
+import type { StressStepsQuestion } from "../data";
 import { StressPattern } from "./StressPattern";
-
-type StressStepsQuestion = {
-    words: string[];
-    category1Example: string;
-    category2Example: string;
-    category1Pattern: number[];
-    category2Pattern: number[];
-    category1Label: string;
-    category2Label: string;
-    correctMap: Record<string, number>;
-};
+import { AudioButton } from "./AudioButton";
 
 export function StressStepsView({
     q,
     onComplete,
+    onContinue,
+    continuing = false,
 }: {
     q: StressStepsQuestion;
     onComplete: (correct: boolean) => void;
+    /** Called when the player presses Continue after a correct sort. */
+    onContinue: () => void;
+    continuing?: boolean;
 }) {
     const [placed, setPlaced] = useState<Record<string, number>>({});
     const [feedback, setFeedback] = useState<string | null>(null);
@@ -131,6 +127,10 @@ export function StressStepsView({
                                     {showCorrectness && !isExample && isCorrect && (
                                         <Check size={16} className="check-icon" />
                                     )}
+                                    {/* The stress is only revealed after Check. */}
+                                    {showCorrectness && (
+                                        <AudioButton compact text={word} clip={`sort-${word.toLowerCase()}`} />
+                                    )}
                                 </div>
                             );
                         })}
@@ -162,6 +162,10 @@ export function StressStepsView({
                                     {showCorrectness && !isExample && isCorrect && (
                                         <Check size={16} className="check-icon" />
                                     )}
+                                    {/* The stress is only revealed after Check. */}
+                                    {showCorrectness && (
+                                        <AudioButton compact text={word} clip={`sort-${word.toLowerCase()}`} />
+                                    )}
                                 </div>
                             );
                         })}
@@ -181,11 +185,11 @@ export function StressStepsView({
             )}
 
             <button
-                onClick={handleSubmit}
-                disabled={submitted}
+                onClick={submitted ? onContinue : handleSubmit}
+                disabled={continuing}
                 className="submit-btn"
             >
-                {submitted ? "Perfect!" : "Check"}
+                {continuing ? "Saving…" : submitted ? "Continue →" : "Check"}
             </button>
         </div>
     );

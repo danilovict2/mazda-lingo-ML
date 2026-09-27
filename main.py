@@ -12,7 +12,9 @@ from typing import Literal
 from uuid import UUID, uuid4
 
 import httpx
-from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
+import numpy as np
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Depends
+from auth import current_user
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +24,7 @@ from auth import current_user
 from database import db
 import speech_features as sf
 from speech_scoring import NoSpeech, score
+import stress_check
 
 
 ROOT = Path(__file__).resolve().parent
@@ -61,6 +64,13 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )
+GAMES = [
+    "stress-sort",
+    "stress-twins",
+    "what-do-they-mean",
+    "rhythm-match",
+    "say-it-right",
+]
 
 
 class Placement(BaseModel):
@@ -193,17 +203,8 @@ def elevenlabs_key() -> str | None:
     return None
 
 
-@app.post("/api/analyze-recording")
-async def analyze_recording(
-    clip: str = Form(),
-    audio: UploadFile = File(),
-    user: dict = Depends(current_user),
-):
-    """Score a real microphone recording (16-bit mono WAV) against a studio clip."""
-    del user
-    ref = REFERENCES.get(clip)
-    if not clip.startswith("studio-") or not ref:
-        raise HTTPException(422, "Unknown practice text")
+async def read_recording(audio: UploadFile) -> tuple[bytes, np.ndarray, int]:
+    """Read an uploaded 16-bit mono WAV; returns (raw bytes, samples, sample rate)."""
     data = await audio.read(MAX_UPLOAD + 1)
     if len(data) > MAX_UPLOAD:
         raise HTTPException(413, "Recording is too long")
@@ -217,6 +218,11 @@ async def analyze_recording(
         raise HTTPException(422, "Could not read the recording")
     if x.size < rate * 0.3:
         raise HTTPException(422, "That recording is too short. Try again.")
+    return data, x, rate
+
+
+async def transcribe(data: bytes) -> list[dict]:
+    """Words with start/end times from ElevenLabs speech-to-text."""
     key = elevenlabs_key()
     if not key:
         raise HTTPException(503, "ELEVENLABS_API_KEY is not configured on the server")
@@ -237,10 +243,40 @@ async def analyze_recording(
         raise HTTPException(502, "Speech-to-text service is unreachable")
     if res.status_code != 200:
         raise HTTPException(502, "Speech-to-text failed")
-    heard = [w for w in res.json().get("words", []) if w.get("type") == "word"]
+    return [w for w in res.json().get("words", []) if w.get("type") == "word"]
+
+
+@app.post("/api/analyze-recording", dependencies=[Depends(current_user)])
+async def analyze_recording(clip: str = Form(), audio: UploadFile = File()):
+    """Score a real microphone recording (16-bit mono WAV) against a studio clip."""
+    ref = REFERENCES.get(clip)
+    if not clip.startswith("studio-") or not ref:
+        raise HTTPException(422, "Unknown practice text")
+    data, x, rate = await read_recording(audio)
+    heard = await transcribe(data)
     try:
         return score(ref, x, rate, heard)
     except NoSpeech as e:
+        raise HTTPException(422, str(e))
+
+
+@app.post("/api/check-stress", dependencies=[Depends(current_user)])
+async def check_stress(
+    sentence: str = Form(max_length=200),
+    targets: str = Form(max_length=100),
+    audio: UploadFile = File(),
+):
+    """Say It Right: did the speaker stress the target word(s)? (comma-separated)"""
+    words = [t.strip() for t in targets.split(",") if t.strip()]
+    if not 1 <= len(words) <= 3:
+        raise HTTPException(422, "Give one to three target words")
+    data, x, rate = await read_recording(audio)
+    heard = await transcribe(data)
+    try:
+        return stress_check.check_stress(x, rate, heard, sentence, words)
+    except stress_check.NoSpeech as e:
+        raise HTTPException(422, str(e))
+    except ValueError as e:
         raise HTTPException(422, str(e))
 
 

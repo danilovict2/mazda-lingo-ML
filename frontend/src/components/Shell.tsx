@@ -120,7 +120,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </header>
                 <main>{children}</main>
                 <footer>
-                    <span>cadence © 2026</span>
+                    <span>Lingo © 2026</span>
                 </footer>
             </div>
         </div>

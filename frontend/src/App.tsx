@@ -1,3 +1,4 @@
+import { ProgressProvider } from "./state/ProgressProvider";
 import { AuthProvider, RequireAuth } from "./auth/Auth";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useParams, useLocation, Navigate } from "react-router-dom";
@@ -9,21 +10,19 @@ import { Profile } from "./pages/Profile";
 
 export function App() {
     return (
-        <BrowserRouter>
-            <AuthProvider>
+        <ProgressProvider>
+            <BrowserRouter>
                 <ScrollTop />
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                    <Route element={<RequireAuth />}>
-                        <Route path="/placement" element={<Placement />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/game/:id" element={<LessonKey />} />
-                        <Route path="/progress" element={<Profile />} />
-                    </Route>
+                    <Route path="/placement" element={<Placement />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/game/:id" element={<LessonKey />} />
+                    <Route path="/progress" element={<Profile />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-            </AuthProvider>
-        </BrowserRouter>
+            </BrowserRouter>
+        </ProgressProvider>
     );
 }
 

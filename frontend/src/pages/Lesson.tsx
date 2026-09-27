@@ -116,6 +116,26 @@ export function Lesson() {
                             {index + 1} of {list.length}
                         </span>
                     </div>
+                    {id === "stress-sort" ? (
+                        <StressStepsView
+                            q={q as StressStepsQuestion}
+                            onComplete={(isCorrect) => {
+                                setSelected(1);
+                                if (isCorrect) setCorrect((c) => c + 1);
+                            }}
+                        />
+                    ) : (
+                        <QuestionView
+                            q={q as any}
+                            selected={selected}
+                            onSelect={(i) => {
+                                setSelected(i);
+                                if (i === (q as any).correct) setCorrect((c) => c + 1);
+                            }}
+                        />
+                    )}
+                    {apiError && <p role="alert" className="notice">{apiError}</p>}
+                    <div className="exercise-actions">
                     <section
                         className={`question-card ${id === "soundprint" ? "soundprint-card" : ""}`}
                     >

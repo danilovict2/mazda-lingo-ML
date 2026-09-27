@@ -111,6 +111,8 @@ export function Profile() {
                             </div>
                         ))}
                     </section>
+                </div>
+            </div>
                     <section className="recommendation">
                         <span className="eyebrow">
                             <Sparkles size={16} /> YOUR NEXT SMALL WIN

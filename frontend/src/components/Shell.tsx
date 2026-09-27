@@ -1,3 +1,6 @@
+import type React from "react";
+import { useState } from "react";
+import { BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import type React from "react";
@@ -8,6 +11,27 @@ import { initialProgress } from "../data";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
 
+function TopPanel() {
+    const { progress } = useProgress();
+    return (
+        <div className="top-panel">
+            <Link to="/dashboard" className="project-name">
+                Lingo
+            </Link>
+            <div className="top-panel-right">
+                <span className="streak">
+                    <Flame size={16} className="orange" /> 7
+                </span>
+                <span className="xp">
+                    <Zap size={16} className="violet" /> {progress.xp}
+                </span>
+                <span className="avatar">JD</span>
+            </div>
+        </div>
+    );
+}
+
+export function Shell({ children }: { children: React.ReactNode }) {
 export function Shell({ children }: { children: React.ReactNode }) {
     const { user } = useAuth0();
     const name = user?.name || user?.email || "Learner";
@@ -118,8 +142,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </header>
                 <main>{children}</main>
                 <footer>
-                    Made for your voice. Built for your confidence.
-                    <span>cadence © 2026</span>
+                    <span>Lingo © 2026</span>
                 </footer>
             </div>
         </div>

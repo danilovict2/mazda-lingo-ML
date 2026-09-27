@@ -78,7 +78,11 @@ export const api = {
         form.append("sentence", sentence);
         form.append("targets", targets.join(","));
         form.append("audio", audio, "recording.wav");
-        return send<StressCheck>("/api/check-stress", { body: form }, 45000);
+        return send<StressCheck>(
+            "/api/check-stress",
+            { method: "POST", body: form },
+            45000,
+        );
     },
     placement: (correct: number, total: number) =>
         request<{ level: string; progress: Progress }>("/api/placement-test", {

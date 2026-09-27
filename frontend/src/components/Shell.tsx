@@ -1,5 +1,5 @@
-import type React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import type React from "react";
 import { Link } from "react-router-dom";
 import { Flame, Zap } from "lucide-react";
 import LogoutButton from "./LogoutButton";

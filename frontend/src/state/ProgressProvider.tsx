@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { initialProgress, type Progress } from "../data";
+import { api } from "../api/client";
 
 const ProgressContext = createContext<{
     progress: Progress;
@@ -9,27 +10,20 @@ const ProgressContext = createContext<{
 export const useProgress = () => useContext(ProgressContext);
 
 export function ProgressProvider({ children, userId }: { children: ReactNode; userId: string }) {
-    const storageKey = `cadence-progress:${userId}`;
-    const [progress, setProgress] = useState<Progress>(() => {
-        try {
-            const raw = localStorage.getItem(storageKey);
-            if (raw) {
-                const p = JSON.parse(raw);
-                if (
-                    typeof p.xp === "number" &&
-                    Array.isArray(p.completed) &&
-                    Array.isArray(p.sessions)
-                )
-                    return { ...initialProgress, ...p };
-            }
-        } catch { }
-        return initialProgress;
-    });
+    const [progress, setProgress] = useState<Progress>(initialProgress);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     useEffect(() => {
-        try {
-            localStorage.setItem(storageKey, JSON.stringify(progress));
-        } catch { }
-    }, [progress, storageKey]);
+        let active = true;
+        setLoading(true);
+        api.progress()
+            .then((saved) => active && setProgress(saved))
+            .catch(() => active && setError("Could not load your progress. Please refresh to try again."))
+            .finally(() => active && setLoading(false));
+        return () => { active = false; };
+    }, [userId]);
+    if (loading) return <main className="auth-screen" role="status">Loading your progress…</main>;
+    if (error) return <main className="auth-screen" role="alert"><h1>Unable to load progress</h1><p>{error}</p></main>;
     return (
         <ProgressContext.Provider value={{ progress, setProgress }}>
             {children}

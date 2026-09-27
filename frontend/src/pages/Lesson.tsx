@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowRight, Lightbulb, X } from "lucide-react";
 import { games, questions, stressStepsByDifficulty, type Question, type SpeakQuestion, type StressStepsQuestion } from "../data";
@@ -42,6 +42,7 @@ export function Lesson() {
     const [difficulty, setDifficulty] = useState("Medium");
     const [busy, setBusy] = useState(false);
     const [apiError, setApiError] = useState("");
+    const attemptId = useRef(crypto.randomUUID());
     const [time, setTime] = useState<number | null>(null);
     // Say It Right: questions already passed (any passing attempt counts once).
     const [passed, setPassed] = useState<number[]>([]);
@@ -74,23 +75,9 @@ export function Lesson() {
         setBusy(true);
         setApiError("");
         try {
-            const r = await api.session(game!.id, correct, list.length);
+            const r = await api.session(game!.id, correct, list.length, attemptId.current);
             setEarned(r.xp);
-            setProgress((p) => ({
-                ...p,
-                xp: p.xp + r.xp,
-                completed: Array.from(new Set([...p.completed, game!.id])),
-                answers: p.answers + list.length,
-                correct: p.correct + correct,
-                sessions: [
-                    {
-                        name: game!.name,
-                        accuracy: Math.round((correct / list.length) * 100),
-                        date: new Date().toLocaleDateString(),
-                    },
-                    ...p.sessions,
-                ].slice(0, 8),
-            }));
+            setProgress(r.progress);
             setDone(true);
         } catch {
             setApiError("Could not reach the API. Check that the server is running and try again.");

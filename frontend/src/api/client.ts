@@ -1,7 +1,11 @@
+import type { Progress } from "../data";
+
 let tokenProvider: (() => Promise<string>) | null = null;
+
 export function setTokenProvider(provider: (() => Promise<string>) | null) {
     tokenProvider = provider;
 }
+
 export type Analysis = {
     overallScore: number;
     wordStress: number;
@@ -13,12 +17,13 @@ export type Analysis = {
     transcript?: string;
     simulated: boolean;
 };
+
 const base = import.meta.env.VITE_API_URL || "";
+
 async function send<T>(path: string, init: RequestInit, timeout = 10000): Promise<T> {
     if (!tokenProvider) throw new Error("Please sign in to continue.");
     const token = await tokenProvider();
     const res = await fetch(`${base}${path}`, {
-        method: "POST",
         ...init,
         headers: { ...init.headers, Authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(timeout),
@@ -30,10 +35,15 @@ async function send<T>(path: string, init: RequestInit, timeout = 10000): Promis
     }
     return (await res.json()) as T;
 }
-function request<T>(path: string, body: unknown): Promise<T> {
+
+function request<T>(
+    path: string,
+    options: { method?: "GET" | "POST" | "DELETE"; body?: unknown } = {},
+): Promise<T> {
     return send<T>(path, {
+        method: options.method || "GET",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: options.body === undefined ? undefined : JSON.stringify(options.body),
     });
 }
 
@@ -48,13 +58,20 @@ export type StressCheck = {
 };
 export const api = {
     analyze: (text: string, difficulty: string) =>
-        request<Analysis>("/api/analyze-speech", { text, difficulty }),
+        request<Analysis>("/api/analyze-speech", {
+            method: "POST",
+            body: { text, difficulty },
+        }),
     analyzeRecording: (audio: Blob, clip: string) => {
         const form = new FormData();
         form.append("clip", clip);
         form.append("audio", audio, "recording.wav");
         // Speech-to-text takes a few seconds, longer for the paragraph.
-        return send<Analysis>("/api/analyze-recording", { body: form }, 45000);
+        return send<Analysis>(
+            "/api/analyze-recording",
+            { method: "POST", body: form },
+            45000,
+        );
     },
     checkStress: (audio: Blob, sentence: string, targets: string[]) => {
         const form = new FormData();
@@ -64,7 +81,20 @@ export const api = {
         return send<StressCheck>("/api/check-stress", { body: form }, 45000);
     },
     placement: (correct: number, total: number) =>
-        request<{ level: string }>("/api/placement-test", { correct, total }),
-    session: (game: string, correct: number, total: number) =>
-        request<{ xp: number }>("/api/session", { game, correct, total }),
+        request<{ level: string; progress: Progress }>("/api/placement-test", {
+            method: "POST",
+            body: { correct, total },
+        }),
+    session: (game: string, correct: number, total: number, attemptId: string) =>
+        request<{ xp: number; progress: Progress }>("/api/session", {
+            method: "POST",
+            body: { game, correct, total, attemptId },
+        }),
+    saveStudio: (score: number, attemptId: string) =>
+        request<{ xp: number; progress: Progress }>("/api/studio-session", {
+            method: "POST",
+            body: { score, attemptId },
+        }),
+    progress: () => request<Progress>("/api/progress"),
+    resetProgress: () => request<Progress>("/api/progress", { method: "DELETE" }),
 };

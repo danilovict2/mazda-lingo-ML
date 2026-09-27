@@ -37,7 +37,7 @@ bun run preview
 5. Open **Shape Your Sound** → **Try demo recording** → **Finish & analyze**. Save the practice.
 6. Open **Speech profile** for the radar chart, skill breakdown, and recommendation.
 
-The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage separately for each Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
+The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts at 360 XP; new sessions, XP, accuracy, placement, and profile improvements persist in SQLite under the Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
 
 ## Architecture
 
@@ -54,12 +54,29 @@ frontend/
 scripts/
   clips.json                 Every reference clip: text, stress markup, model
   generate_audio.py          Calls ElevenLabs and writes the clips + timings
-main.py                      FastAPI application; no database
+main.py                      FastAPI API and production SPA hosting
+database.py                  Transactional SQLite persistence
 speech_features.py           Loudness, pitch and stress measurements (shared)
 speech_scoring.py            Scores a recording against a reference clip
+deploy/                      DigitalOcean Docker Compose and HTTPS proxy
 ```
 
-React + TypeScript + Vite, React Router, Lucide icons, and plain CSS. The accessible radar is a small SVG component, avoiding a chart dependency. Fonts have system fallbacks. React context and localStorage are the only state/persistence layer. The demo backend lives in root `main.py`.
+React + TypeScript + Vite, React Router, Lucide icons, and plain CSS power the interface. FastAPI validates Auth0 access tokens and stores each account’s progress in SQLite. Session writes are transactional and idempotent, and the database uses WAL mode with a ten-second busy timeout for concurrent requests.
+
+## Deploy to DigitalOcean
+
+SQLite needs a persistent filesystem. DigitalOcean App Platform containers have ephemeral filesystems and do not support volumes, so deploy this configuration to a Droplet. The included Compose stack runs one application process, a persistent database volume, and Caddy for automatic HTTPS.
+
+1. Create an Ubuntu Droplet, point the domain’s DNS A record to it, and install Docker Engine with the Compose plugin.
+2. Clone the repository. Copy `deploy/.env.example` to `deploy/.env` and fill in the domain and Auth0 values.
+3. Add `https://your-domain.example` to the Auth0 application’s allowed callback, logout, and web-origin URLs.
+4. From the repository root, deploy with:
+
+```sh
+docker compose --env-file deploy/.env -f deploy/compose.yaml up -d --build
+```
+
+The SQLite database lives in the `deploy_cadence-data` Docker volume at `/data/cadence.db` inside the container. Keep the application at one replica because SQLite coordinates access to one local database file. For DigitalOcean Block Storage, mount the volume on the host, change the Compose mapping to `/mnt/cadence-data:/data`, and give UID 10001 write access to that directory. Include the data volume in the backup plan. Check the service with `https://your-domain.example/api/health`.
 
 The six selection games contain 4–5 questions each. Five representative questions drive placement. Difficulty changes the question sequence; Soundprint also changes visual contrast. Speaking difficulty switches words, sentences, and paragraphs. Correct and incorrect answers both offer explanations and allow immediate continuation.
 

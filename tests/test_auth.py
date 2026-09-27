@@ -31,7 +31,13 @@ class AuthenticationTests(unittest.TestCase):
 
     def test_health_public_and_practice_protected(self):
         self.assertEqual(self.client.get("/api/health").status_code, 200)
-        for route in ("placement-test", "session", "analyze-speech"):
+        for route in (
+            "placement-test",
+            "session",
+            "studio-session",
+            "analyze-speech",
+            "analyze-recording",
+        ):
             self.assertEqual(
                 self.client.post("/api/" + route, json={}).status_code, 401
             )

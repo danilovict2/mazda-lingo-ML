@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Check } from "lucide-react";
 import type { StressStepsQuestion } from "../data";
 import { StressPattern } from "./StressPattern";
+import { AudioButton } from "./AudioButton";
 
 export function StressStepsView({
     q,
@@ -121,6 +122,10 @@ export function StressStepsView({
                                     {showCorrectness && !isExample && isCorrect && (
                                         <Check size={16} className="check-icon" />
                                     )}
+                                    {/* The stress is only revealed after Check. */}
+                                    {showCorrectness && (
+                                        <AudioButton compact text={word} clip={`sort-${word.toLowerCase()}`} />
+                                    )}
                                 </div>
                             );
                         })}
@@ -151,6 +156,10 @@ export function StressStepsView({
                                     <span>{word}</span>
                                     {showCorrectness && !isExample && isCorrect && (
                                         <Check size={16} className="check-icon" />
+                                    )}
+                                    {/* The stress is only revealed after Check. */}
+                                    {showCorrectness && (
+                                        <AudioButton compact text={word} clip={`sort-${word.toLowerCase()}`} />
                                     )}
                                 </div>
                             );

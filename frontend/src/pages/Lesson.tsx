@@ -165,6 +165,23 @@ export function Lesson() {
                             }}
                         />
                     )}
+                    {id === "stress-twins" && selected !== null && (
+                        // Revealed after answering: hear each word as a noun, then as a verb.
+                        <div className="hear-words">
+                            <span className="eyebrow">HEAR THE STRESS · NOUN, THEN VERB</span>
+                            <div>
+                                {spoken!.options.map((word) => (
+                                    <AudioButton
+                                        key={word}
+                                        compact
+                                        text={word}
+                                        label={word}
+                                        clip={`twins-pair-${word}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     {apiError && <p role="alert" className="notice">{apiError}</p>}
                     <div className="exercise-actions">
                         <Button disabled={selected === null || busy} onClick={next}>

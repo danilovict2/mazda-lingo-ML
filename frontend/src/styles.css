@@ -112,16 +112,7 @@ svg {
 }
 
 .sidebar {
-    width: 236px;
-    flex-shrink: 0;
-    background: #fff;
-    border-right: 1px solid var(--border);
-    padding: 33px 21px 0;
-    position: fixed;
-    inset: 0 auto 0 0;
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
+    display: none;
 }
 
 .logo {
@@ -310,8 +301,8 @@ nav {
 }
 
 .main-shell {
-    margin-left: 236px;
-    width: calc(100% - 236px);
+    margin-left: 0;
+    width: 100%;
 }
 
 .topbar {
@@ -433,6 +424,10 @@ main {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 272px;
     gap: 25px;
+}
+
+.dashboard-layout.single-column {
+    grid-template-columns: 1fr;
 }
 
 .continue-card {

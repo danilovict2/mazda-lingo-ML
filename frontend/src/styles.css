@@ -3694,7 +3694,7 @@ p {
 }
 
 /* Say It Right: a full-width horizontal card under the 2x2 game grid. */
-.game-grid .game-card.wide {
+.game-card.wide {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 68px 1fr auto;
@@ -3751,4 +3751,52 @@ p {
     margin: 0;
     padding: 0;
     font-size: 12px;
+}
+
+/* Dashboard: game cards and side panels in one grid, so Today's goal lines up
+   with the first row of games and the radar panel ends with Say It Right. */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 272px;
+    grid-template-areas:
+        "g1 g2 goal"
+        "g3 g4 radar"
+        "wide wide radar";
+    gap: 10px;
+}
+
+.dashboard-grid > .game-card:nth-child(1) { grid-area: g1; }
+.dashboard-grid > .game-card:nth-child(2) { grid-area: g2; }
+.dashboard-grid > .game-card:nth-child(3) { grid-area: g3; }
+.dashboard-grid > .game-card:nth-child(4) { grid-area: g4; }
+.dashboard-grid > .game-card.wide { grid-area: wide; }
+.dashboard-grid > .goal-panel { grid-area: goal; margin-left: 5px; }
+.dashboard-grid > .profile-preview { grid-area: radar; margin-left: 5px; }
+
+@media (min-width: 1550px) {
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 300px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 240px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "g1 g2"
+            "g3 g4"
+            "wide wide"
+            "goal radar";
+    }
+
+    .dashboard-grid > .goal-panel,
+    .dashboard-grid > .profile-preview {
+        margin-left: 0;
+    }
 }

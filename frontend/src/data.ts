@@ -9,12 +9,13 @@ export type Question = {
 
 export type StressStepsQuestion = {
     words: string[];
-    category1: string;
     category1Label: string;
-    category2: string;
+    category1Pattern: number[];
+    category1Example: string;
     category2Label: string;
+    category2Pattern: number[];
+    category2Example: string;
     correctMap: Record<string, number>;
-    examples: { word: string; category: number }[];
 };
 export const games = [
     {
@@ -321,23 +322,13 @@ const stressSteps: StressStepsQuestion[] = [
             "electrician",
             "engineering",
             "environment",
-            "especially",
-            "experience",
-            "immigration",
-            "infinitive",
-            "impractical",
-            "information",
-            "publicity",
-            "punctuation",
-            "reputation",
-            "responsible",
-            "situation",
-            "unsuccessful",
         ],
-        category1: "x!xx",
-        category1Label: "Stress on 2nd syllable (4-syllable words)",
-        category2: "xx!x",
-        category2Label: "Stress on 3rd syllable (4-syllable words)",
+        category1Label: "Stress on 2nd syllable",
+        category1Pattern: [1, 3, 1, 1],
+        category1Example: "community",
+        category2Label: "Stress on 3rd syllable",
+        category2Pattern: [1, 1, 3, 1],
+        category2Example: "information",
         correctMap: {
             apostrophe: 0,
             Argentina: 0,
@@ -351,6 +342,30 @@ const stressSteps: StressStepsQuestion[] = [
             electrician: 0,
             engineering: 0,
             environment: 0,
+        },
+    },
+    {
+        words: [
+            "especially",
+            "experience",
+            "immigration",
+            "infinitive",
+            "impractical",
+            "information",
+            "publicity",
+            "punctuation",
+            "reputation",
+            "responsible",
+            "situation",
+            "unsuccessful",
+        ],
+        category1Label: "Stress on 2nd syllable",
+        category1Pattern: [1, 3, 1, 1],
+        category1Example: "community",
+        category2Label: "Stress on 3rd syllable",
+        category2Pattern: [1, 1, 3, 1],
+        category2Example: "information",
+        correctMap: {
             especially: 0,
             experience: 0,
             immigration: 0,
@@ -364,12 +379,6 @@ const stressSteps: StressStepsQuestion[] = [
             situation: 1,
             unsuccessful: 1,
         },
-        examples: [
-            { word: "community", category: 0 },
-            { word: "definition", category: 0 },
-            { word: "information", category: 1 },
-            { word: "situation", category: 1 },
-        ],
     },
 ];
 

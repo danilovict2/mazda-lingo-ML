@@ -1699,29 +1699,20 @@ footer {
     margin-bottom: 10px;
 }
 
-.examples-section {
-    background: #fff;
-    border: 1px solid #e6e1ed;
-    border-radius: 10px;
-    padding: 15px;
+.stress-pattern {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 60px;
+    padding: 10px 0;
 }
 
-.examples-section h4 {
-    font-size: 12px;
-    color: #8862c1;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.example-word {
-    display: inline-block;
-    background: #f0ecf7;
-    color: #8862c1;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    margin: 4px 4px 4px 0;
+.stress-bar {
+    width: 20px;
+    background: linear-gradient(to top, #8862c1, #b69dd4);
+    border-radius: 3px 3px 0 0;
+    min-height: 20px;
 }
 
 .stress-words-pool {
@@ -1780,25 +1771,37 @@ footer {
     padding: 20px;
     min-height: 300px;
     transition: border-color 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
 .stress-column:hover {
     border-color: #b69dd4;
 }
 
-.column-header {
-    font-size: 16px;
-    font-weight: 700;
-    color: #8862c1;
-    margin-bottom: 5px;
+.column-content {
     text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e6e1ed;
+}
+
+.column-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.column-example {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8862c1;
+    margin-bottom: 8px;
 }
 
 .column-label {
     font-size: 11px;
     color: #a08bac;
-    text-align: center;
-    margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
@@ -1807,6 +1810,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    flex: 1;
 }
 
 .placed-word {

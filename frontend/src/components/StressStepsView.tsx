@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Check } from "lucide-react";
 import type { StressStepsQuestion } from "../data";
+import { StressPattern } from "./StressPattern";
 
 export function StressStepsView({
     q,
@@ -12,6 +13,7 @@ export function StressStepsView({
     const [placed, setPlaced] = useState<Record<string, number>>({});
     const [feedback, setFeedback] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
+    const [showCorrectness, setShowCorrectness] = useState(false);
     const draggedWord = useRef<string | null>(null);
 
     const unplacedWords = q.words.filter((w) => !(w in placed));
@@ -62,13 +64,13 @@ export function StressStepsView({
             ([word, cat]) => q.correctMap[word] === cat
         );
 
-        setSubmitted(true);
-        onComplete(isCorrect);
+        setShowCorrectness(true);
 
         if (isCorrect) {
-            setFeedback(null);
+            setSubmitted(true);
+            onComplete(true);
         } else {
-            setFeedback("Check your placements and try again.");
+            setFeedback("Check your placements. You can move words around and try again.");
         }
     }
 
@@ -76,29 +78,6 @@ export function StressStepsView({
         <div className="stress-steps-container">
             <div className="stress-instructions">
                 <p>Put the words into the correct columns. Look at the examples first.</p>
-            </div>
-
-            <div className="stress-examples">
-                <div className="examples-section">
-                    <h4>{q.category1Label}</h4>
-                    {q.examples
-                        .filter((e) => e.category === 0)
-                        .map((e) => (
-                            <span key={e.word} className="example-word">
-                                {e.word}
-                            </span>
-                        ))}
-                </div>
-                <div className="examples-section">
-                    <h4>{q.category2Label}</h4>
-                    {q.examples
-                        .filter((e) => e.category === 1)
-                        .map((e) => (
-                            <span key={e.word} className="example-word">
-                                {e.word}
-                            </span>
-                        ))}
-                </div>
             </div>
 
             <div className="stress-words-pool">
@@ -123,13 +102,18 @@ export function StressStepsView({
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, 0)}
                 >
-                    <div className="column-header">{q.category1}</div>
-                    <div className="column-label">{q.category1Label}</div>
+                    <div className="column-content">
+                        <div className="column-header">
+                            <StressPattern pattern={q.category1Pattern} />
+                        </div>
+                        <div className="column-example">{q.category1Example}</div>
+                        <div className="column-label">{q.category1Label}</div>
+                    </div>
                     <div className="words-list">
                         {column1Words.map((word) => (
                             <div
                                 key={word}
-                                className={`placed-word ${submitted && q.correctMap[word] !== 0 ? "incorrect" : submitted && q.correctMap[word] === 0 ? "correct" : ""}`}
+                                className={`placed-word ${showCorrectness && q.correctMap[word] !== 0 ? "incorrect" : showCorrectness && q.correctMap[word] === 0 ? "correct" : ""}`}
                             >
                                 <span>{word}</span>
                                 <button
@@ -139,7 +123,7 @@ export function StressStepsView({
                                 >
                                     ×
                                 </button>
-                                {submitted && q.correctMap[word] === 0 && (
+                                {showCorrectness && q.correctMap[word] === 0 && (
                                     <Check size={16} className="check-icon" />
                                 )}
                             </div>
@@ -152,13 +136,18 @@ export function StressStepsView({
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, 1)}
                 >
-                    <div className="column-header">{q.category2}</div>
-                    <div className="column-label">{q.category2Label}</div>
+                    <div className="column-content">
+                        <div className="column-header">
+                            <StressPattern pattern={q.category2Pattern} />
+                        </div>
+                        <div className="column-example">{q.category2Example}</div>
+                        <div className="column-label">{q.category2Label}</div>
+                    </div>
                     <div className="words-list">
                         {column2Words.map((word) => (
                             <div
                                 key={word}
-                                className={`placed-word ${submitted && q.correctMap[word] !== 1 ? "incorrect" : submitted && q.correctMap[word] === 1 ? "correct" : ""}`}
+                                className={`placed-word ${showCorrectness && q.correctMap[word] !== 1 ? "incorrect" : showCorrectness && q.correctMap[word] === 1 ? "correct" : ""}`}
                             >
                                 <span>{word}</span>
                                 <button
@@ -168,7 +157,7 @@ export function StressStepsView({
                                 >
                                     ×
                                 </button>
-                                {submitted && q.correctMap[word] === 1 && (
+                                {showCorrectness && q.correctMap[word] === 1 && (
                                     <Check size={16} className="check-icon" />
                                 )}
                             </div>
@@ -180,7 +169,7 @@ export function StressStepsView({
             {feedback && (
                 <div
                     role="status"
-                    className={`feedback ${submitted ? (Object.entries(placed).every(([word, cat]) => q.correctMap[word] === cat) ? "success" : "gentle") : ""}`}
+                    className={`feedback ${submitted ? "success" : "gentle"}`}
                 >
                     <span>{feedback}</span>
                 </div>
@@ -191,7 +180,7 @@ export function StressStepsView({
                 disabled={submitted}
                 className="submit-btn"
             >
-                {submitted ? "Submitted" : "Check"}
+                {submitted ? "Perfect!" : "Check"}
             </button>
         </div>
     );

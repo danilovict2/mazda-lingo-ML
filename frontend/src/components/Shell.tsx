@@ -6,6 +6,21 @@ import { initialProgress } from "../data";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
 
+function TopPanel() {
+    const { progress } = useProgress();
+    return (
+        <div className="top-panel">
+            <span className="avatar">JD</span>
+            <span className="streak">
+                <Flame size={16} className="orange" /> 7
+            </span>
+            <span className="xp">
+                <Zap size={16} className="violet" /> {progress.xp}
+            </span>
+        </div>
+    );
+}
+
 export function Shell({ children }: { children: React.ReactNode }) {
     const { progress, setProgress } = useProgress();
     const location = useLocation();
@@ -68,6 +83,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </div>
             </aside>
             <div className="main-shell">
+                <TopPanel />
                 <header className="topbar">
                     <button
                         className="mobile-menu icon-button"

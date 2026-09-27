@@ -34,6 +34,7 @@ REFERENCES = json.loads(REFERENCE_FILE.read_text()) if REFERENCE_FILE.exists() e
 MAX_UPLOAD = 10 * 1024 * 1024
 
 
+# Game id -> display name saved with each session. Must match frontend/src/data.ts.
 GAMES = {
     "stress-sort": "Stress Sort",
     "stress-twins": "Stress Twins",
@@ -63,6 +64,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )
+
+
 class Placement(BaseModel):
     correct: int = Field(ge=0, le=5)
     total: Literal[5] = 5

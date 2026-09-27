@@ -228,55 +228,56 @@ const echo: Question[] = [
 ];
 const twins: Question[] = [
     {
-        text: "a record → to record",
+        text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "REcord → reCORD",
-            "reCORD → REcord",
-            "REcord → REcord",
-            "reCORD → reCORD",
+            "permit",
+            "record",
+            "desert",
+            "import",
         ],
-        correct: 0,
+        correct: 3,
         explanation:
-            "A REcord is a noun. To reCORD is an action. Moving the stress changes the grammatical role.",
+            "import keeps the IM-port stress in both forms. permit, record, and desert all change stress between noun and verb.",
     },
     {
-        text: "a present → to present",
+        text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "preSENT → PREsent",
-            "PREsent → preSENT",
-            "PREsent → PREsent",
-            "preSENT → preSENT",
-        ],
-        correct: 1,
-        explanation:
-            "A PREsent is a gift; to preSENT is to show or introduce something.",
-    },
-    {
-        text: "a contract → to contract",
-        prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "conTRACT → CONtract",
-            "CONtract → CONtract",
-            "CONtract → conTRACT",
-            "conTRACT → conTRACT",
+            "produce",
+            "present",
+            "answer",
+            "progress",
         ],
         correct: 2,
         explanation:
-            "A CONtract is an agreement. To conTRACT can mean to become smaller.",
+            "answer keeps the AN-swer stress in both forms. produce, present, and progress all move the stress.",
     },
     {
-        text: "an object → to object",
+        text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "obJECT → OBject",
-            "OBject → OBject",
-            "obJECT → obJECT",
-            "OBject → obJECT",
+            "extract",
+            "console",
+            "protest",
+            "support",
         ],
-        correct: 3,
-        explanation: "An OBject is a thing. To obJECT is to express disagreement.",
+        correct: 0,
+        explanation:
+            "extract keeps the EX-tract stress in both forms. console, protest, and support all change their stress pattern.",
+    },
+    {
+        text: "Compare these four words:",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
+        options: [
+            "increase",
+            "surprise",
+            "paper",
+            "detail",
+        ],
+        correct: 2,
+        explanation:
+            "paper keeps the PA-per stress in both forms. increase, surprise, and detail all shift their stress.",
     },
 ];
 

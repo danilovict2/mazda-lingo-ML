@@ -308,11 +308,25 @@ nav {
 .top-panel {
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
     padding: 0 40px;
     height: 56px;
     background: white;
     border-bottom: 1px solid var(--border);
+}
+
+.project-name {
+    font-family: "Manrope", sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    color: #302d3d;
+}
+
+.top-panel-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
 .top-panel .avatar {
@@ -327,11 +341,6 @@ nav {
     gap: 8px;
     font-size: 13px;
     font-weight: 600;
-    margin-left: auto;
-}
-
-.top-panel .streak:first-of-type {
-    margin-left: auto;
 }
 
 .topbar {
@@ -2798,6 +2807,13 @@ footer {
     .top-panel {
         padding: 0 18px;
         height: 50px;
+    }
+
+    .project-name {
+        font-size: 20px;
+    }
+
+    .top-panel-right {
         gap: 16px;
     }
 

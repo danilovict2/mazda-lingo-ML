@@ -10,13 +10,16 @@ function TopPanel() {
     const { progress } = useProgress();
     return (
         <div className="top-panel">
-            <span className="avatar">JD</span>
-            <span className="streak">
-                <Flame size={16} className="orange" /> 7
-            </span>
-            <span className="xp">
-                <Zap size={16} className="violet" /> {progress.xp}
-            </span>
+            <span className="project-name">Lingo</span>
+            <div className="top-panel-right">
+                <span className="streak">
+                    <Flame size={16} className="orange" /> 7
+                </span>
+                <span className="xp">
+                    <Zap size={16} className="violet" /> {progress.xp}
+                </span>
+                <span className="avatar">JD</span>
+            </div>
         </div>
     );
 }

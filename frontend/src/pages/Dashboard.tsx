@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AudioLines, ArrowRight, ArrowUpRight, Check, Clock, Flame, Mic, Sparkles, Target, Zap, Layers } from "lucide-react";
@@ -10,6 +11,7 @@ import { GameCard } from "../components/GameCard";
 import { useProgress } from "../state/ProgressProvider";
 
 export function Dashboard() {
+    const { user } = useAuth0();
     const { progress } = useProgress();
     useEffect(() => {
         if (window.location.hash)
@@ -21,7 +23,7 @@ export function Dashboard() {
                 <div>
                     <span className="eyebrow">A LITTLE BETTER, EVERY DAY</span>
                     <h1>
-                        Find your rhythm, Jamie <span className="hello">✦</span>
+                        Find your rhythm, {user?.given_name || user?.name || "learner"} <span className="hello">✦</span>
                     </h1>
                     <p>Your next confident conversation starts here.</p>
                 </div>

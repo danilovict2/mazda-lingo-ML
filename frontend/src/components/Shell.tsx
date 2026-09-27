@@ -1,3 +1,5 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "./LogoutButton";
 import type React from "react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -7,6 +9,9 @@ import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
 
 export function Shell({ children }: { children: React.ReactNode }) {
+    const { user } = useAuth0();
+    const name = user?.name || user?.email || "Learner";
+    const initials = name.slice(0, 2).toUpperCase();
     const { progress, setProgress } = useProgress();
     const location = useLocation();
     const [open, setOpen] = useState(false);
@@ -55,6 +60,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     </Link>
                 </div>
                 <div className="sidebar-bottom">
+                    <LogoutButton />
                     <span className="demo-pill">
                         <i /> DEMO MODE
                     </span>
@@ -71,9 +77,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         Reset demo
                     </button>
                     <div className="user">
-                        <span className="avatar">JD</span>
+                        <span className="avatar">{initials}</span>
                         <div>
-                            <strong>Jamie Davis</strong>
+                            <strong>{name}</strong>
                             <small>Your voice, in progress</small>
                         </div>
                         <span className="online-dot" />
@@ -107,7 +113,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                             <Zap size={18} className="violet" /> {progress.xp}{" "}
                             <small>XP</small>
                         </span>
-                        <span className="avatar small">JD</span>
+                        <span className="avatar small">{initials}</span>
                     </div>
                 </header>
                 <main>{children}</main>

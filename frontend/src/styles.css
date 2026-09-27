@@ -1601,6 +1601,30 @@ footer {
     box-decoration-break: clone;
 }
 
+.spoken-word {
+    border-radius: 6px;
+    transition:
+        color 0.12s,
+        background 0.12s;
+}
+
+.spoken-word.active {
+    color: #6d45b0;
+    background: #dccdf1;
+}
+
+.soundprint-card .spoken-word.active {
+    color: #fff;
+    background: #54427a;
+}
+
+.listen-hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -14px 0 6px;
+}
+
 .lesson-footnote {
     text-align: center;
     font-size: 10px;
@@ -1655,6 +1679,66 @@ footer {
     opacity: 1;
 }
 
+.soundprint-svg {
+    display: block;
+    width: 100%;
+    height: 157px;
+    margin: 6px 0;
+}
+
+.soundprint-svg .bar {
+    fill: #b69be6;
+    transition: fill 0.1s;
+}
+
+.soundprint-svg .bar.upcoming {
+    fill: #5e4f78;
+}
+
+.soundprint-svg .bar.faint {
+    opacity: 0.55;
+}
+
+.soundprint-svg .pitch-line {
+    fill: none;
+    stroke: #ffd27a;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.soundprint-svg .syllable-edge {
+    stroke: #6b5d82;
+    stroke-dasharray: 3 4;
+    vector-effect: non-scaling-stroke;
+}
+
+.soundprint-svg .stress-band {
+    fill: #8e6fc633;
+}
+
+.soundprint-svg .playhead {
+    stroke: #fff;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+}
+
+.syllable-labels.real {
+    position: relative;
+    height: 36px;
+}
+
+.syllable-labels.real span {
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+.syllable-labels.real .stressed {
+    color: #fff;
+    font-weight: 700;
+}
+
 .syllable-labels {
     display: flex;
     justify-content: space-around;
@@ -1677,6 +1761,12 @@ footer {
     background: #b69dd4;
     border-radius: 50%;
     animation: pulse 1.3s infinite;
+    transition: background 0.1s;
+}
+
+.rhythm-beats i.beat-active {
+    background: #6d45b0;
+    animation: none;
 }
 
 .result-screen {
@@ -2969,7 +3059,8 @@ footer {
         padding: 13px 10px;
     }
 
-    .soundprint-visual .wave {
+    .soundprint-visual .wave,
+    .soundprint-svg {
         gap: 2px;
         height: 130px;
     }

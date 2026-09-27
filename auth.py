@@ -7,6 +7,11 @@ import certifi
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from dotenv import load_dotenv
+
+# Keep local startup consistent whether uvicorn is invoked directly or with
+# ``--env-file .env``. Existing process/container variables still take precedence.
+load_dotenv()
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -18,11 +23,12 @@ def settings():
     if not domain or any(c in domain for c in "/:#?@") or not audience:
         raise HTTPException(503, "Authentication is not configured")
     issuer = f"https://{domain}/"
-    # Use certifi's CA bundle: python.org builds of Python on macOS ship without
-    # trusted certificates, so fetching Auth0's signing keys would otherwise fail.
-    context = ssl.create_default_context(cafile=certifi.where())
+    # Python installations do not always have a usable system CA store (notably
+    # python.org macOS builds). Use the bundled Mozilla roots so Auth0's JWKS
+    # fetch does not fail with CERTIFICATE_VERIFY_FAILED.
+    tls = ssl.create_default_context(cafile=certifi.where())
     return issuer, audience, jwt.PyJWKClient(
-        issuer + ".well-known/jwks.json", timeout=5, ssl_context=context
+        issuer + ".well-known/jwks.json", timeout=5, ssl_context=tls
     )
 
 

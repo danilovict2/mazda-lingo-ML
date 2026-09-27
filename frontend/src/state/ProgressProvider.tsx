@@ -18,7 +18,11 @@ export function ProgressProvider({ children, userId }: { children: ReactNode; us
         setLoading(true);
         api.progress()
             .then((saved) => active && setProgress(saved))
-            .catch(() => active && setError("Could not load your progress. Please refresh to try again."))
+            .catch((cause: unknown) => {
+                if (!active) return;
+                const detail = cause instanceof Error ? cause.message : "API unavailable";
+                setError(`Could not load your progress: ${detail}`);
+            })
             .finally(() => active && setLoading(false));
         return () => { active = false; };
     }, [userId]);

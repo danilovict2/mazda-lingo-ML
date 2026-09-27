@@ -68,7 +68,7 @@ React + TypeScript + Vite, React Router, Lucide icons, and plain CSS power the i
 SQLite needs a persistent filesystem. DigitalOcean App Platform containers have ephemeral filesystems and do not support volumes, so deploy this configuration to a Droplet. The included Compose stack runs one application process, a persistent database volume, and Caddy for automatic HTTPS.
 
 1. Create an Ubuntu Droplet, point the domain’s DNS A record to it, and install Docker Engine with the Compose plugin.
-2. Clone the repository. Copy `deploy/.env.example` to `deploy/.env` and fill in the domain and Auth0 values.
+2. Clone the repository. Copy `deploy/.env.example` to `deploy/.env` and fill in the domain, Auth0 values, and ElevenLabs API key. The ElevenLabs key is optional if real microphone analysis is not needed.
 3. Add `https://your-domain.example` to the Auth0 application’s allowed callback, logout, and web-origin URLs.
 4. From the repository root, deploy with:
 

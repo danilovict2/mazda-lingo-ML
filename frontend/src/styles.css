@@ -366,7 +366,6 @@ main {
     padding: 20px 40px 20px;
     max-width: 1530px;
     margin: auto;
-    min-height: calc(100vh - 77px);
     display: flex;
     flex-direction: column;
 }
@@ -430,7 +429,6 @@ main {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 272px;
     gap: 15px;
-    flex: 1;
 }
 
 .dashboard-layout.single-column {

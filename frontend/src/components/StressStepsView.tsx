@@ -75,7 +75,6 @@ export function StressStepsView({
         <div className="stress-steps-container">
             <div className="stress-instructions">
                 <h3>Put the words into the correct columns</h3>
-                <p>Look at the examples first.</p>
             </div>
 
             <div className="stress-layout">

@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AudioLines, ArrowUpRight, BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
+import { BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
 import { initialProgress } from "../data";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
@@ -41,19 +41,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         </Link>
                     ))}
                 </nav>
-                <div className="sidebar-tip">
-                    <div className="mini-orbit">
-                        <AudioLines size={26} />
-                    </div>
-                    <h4>
-                        A little practice.
-                        <br />A big difference.
-                    </h4>
-                    <p>Five minutes today, a more confident you tomorrow.</p>
-                    <Link to="/game/shape-your-sound">
-                        Find your voice <ArrowUpRight size={15} />
-                    </Link>
-                </div>
                 <div className="sidebar-bottom">
                     <span className="demo-pill">
                         <i /> DEMO MODE
@@ -112,7 +99,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </header>
                 <main>{children}</main>
                 <footer>
-                    Made for your voice. Built for your confidence.
                     <span>cadence © 2026</span>
                 </footer>
             </div>

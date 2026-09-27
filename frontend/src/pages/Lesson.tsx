@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { ArrowRight, Sparkles, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { games, questions, type StressStepsQuestion } from "../data";
 import { api } from "../api/client";
 import { Button } from "../components/Button";
@@ -135,9 +135,6 @@ export function Lesson() {
                     )}
                     {apiError && <p role="alert" className="notice">{apiError}</p>}
                     <div className="exercise-actions">
-                        <span className="muted">
-                            <Sparkles size={15} /> Every attempt is progress.
-                        </span>
                         <Button disabled={selected === null || busy} onClick={next}>
                             {busy
                                 ? "Saving…"
@@ -147,11 +144,6 @@ export function Lesson() {
                             <ArrowRight size={17} />
                         </Button>
                     </div>
-                    <p className="lesson-footnote">
-                        {progress.completed.includes(game.id)
-                            ? "Revisiting a lesson is how good habits become natural."
-                            : "No pressure. You’re here to practice, not to be perfect."}
-                    </p>
                 </div>
             )}
         </Shell>

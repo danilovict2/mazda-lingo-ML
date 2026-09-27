@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AudioLines, ArrowRight, ArrowUpRight, Check, Clock, Flame, Sparkles, Target, Zap, Layers } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Target, Layers } from "lucide-react";
 import { games } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -32,75 +32,6 @@ export function Dashboard() {
             </div>
             <div className="dashboard-layout">
                 <div className="dashboard-primary">
-                    <section className="continue-card">
-                        <div>
-                            <span className="eyebrow">YOUR NEXT SMALL WIN</span>
-                            <h2>
-                                Same words.
-                                <br />
-                                <span>A whole new meaning.</span>
-                            </h2>
-                            <p>
-                                Discover what a little emphasis can say.
-                                <br />
-                                Your next stop: What do they mean?.
-                            </p>
-                            <Button to="/game/what-do-they-mean">
-                                Let’s practice <ArrowRight size={17} />
-                            </Button>
-                            <div className="hero-meta">
-                                <Clock size={13} /> 5 min <span>•</span> +150 XP <span>•</span>{" "}
-                                Recommended for you
-                            </div>
-                        </div>
-                        <div className="rhythm-orbit">
-                            <div className="orbit ring-one" />
-                            <div className="orbit ring-two" />
-                            <div className="orbit ring-three" />
-                            <div className="orbit-core">
-                                <AudioLines size={59} strokeWidth={1.5} />
-                            </div>
-                            <span className="orbit-spark spark-one">✦</span>
-                            <span className="orbit-spark spark-two">✦</span>
-                            <span className="orbit-word word-one">say it.</span>
-                            <span className="orbit-word word-two">mean it.</span>
-                        </div>
-                    </section>
-                    <div className="metric-row">
-                        <div>
-                            <span className="metric-icon peach">
-                                <Flame size={20} />
-                            </span>
-                            <div>
-                                <strong>
-                                    7 <small>days</small>
-                                </strong>
-                                <p>On a roll. Keep it going!</p>
-                            </div>
-                        </div>
-                        <div>
-                            <span className="metric-icon purple">
-                                <Zap size={20} />
-                            </span>
-                            <div>
-                                <strong>
-                                    {progress.xp} <small>XP</small>
-                                </strong>
-                                <p>A little effort, adding up.</p>
-                            </div>
-                        </div>
-                        <div>
-                            <span className="metric-icon green">
-                                <Check size={20} />
-                            </span>
-                            <div>
-                                <strong>
-                                    {12 + progress.completed.length} <small>lessons</small>
-                                </strong>
-                                <p>More confidence, unlocked.</p>
-                            </div>
-                        </div>
-                    </div>
                     <section id="path" className="path-section">
                         <div className="section-heading">
                             <div>
@@ -176,30 +107,6 @@ export function Dashboard() {
                             Explore your speech profile <ArrowUpRight size={16} />
                         </Link>
                     </section>
-                    <section className="insight-card">
-                        <span className="insight-icon">
-                            <Sparkles size={19} />
-                        </span>
-                        <span className="eyebrow">LOOK AT YOU GROW</span>
-                        <h3>
-                            Your ear for stress
-                            <br />
-                            is getting sharper.
-                        </h3>
-                        <p>
-                            Stress recognition is your strongest skill. Let’s turn that
-                            listening into speaking.
-                        </p>
-                        <div>
-                            <strong>+12%</strong>
-                            <span>recognition this week</span>
-                        </div>
-                    </section>
-                    <div className="quote">
-                        “Confidence isn’t a perfect accent.
-                        <br />
-                        It’s making yourself understood.”<span>THE CADENCE MINDSET</span>
-                    </div>
                 </aside>
             </div>
         </Shell>

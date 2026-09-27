@@ -186,14 +186,14 @@ const echo: Question[] = [
         audio: "rhythm-movie",
         prompt: "Choose a natural pattern for strong enthusiasm.",
         options: [
-            "I REALLY wanted to SEE that MOVIE.",
+            "I REALLY wanted to see that MOVIE.",
             "I really TO see THAT movie.",
             "I REALLY WANTED TO SEE THAT MOVIE.",
             "I really wanted to see THAT.",
         ],
         correct: 0,
         explanation:
-            "Meaningful words carry the beats. Small connecting words stay lighter and quicker.",
+            "“Really” carries the enthusiasm and “movie” is the key information, so they take the beats. The words in between stay lighter and quicker.",
     },
     {
         text: "Could you pass me the salt?",

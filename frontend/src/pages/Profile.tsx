@@ -122,9 +122,9 @@ export function Profile() {
                         </h2>
                         <p>
                             Your word-stress recognition is excellent. Spend your next session
-                            exploring sentence emphasis in Stress Detective.
+                            exploring sentence emphasis in What do they mean?.
                         </p>
-                        <Button to="/game/stress-detective">
+                        <Button to="/game/what-do-they-mean">
                             Practice sentence emphasis <ArrowRight size={16} />
                         </Button>
                     </section>

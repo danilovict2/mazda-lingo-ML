@@ -32,9 +32,9 @@ export function Lesson() {
     if (id === "shape-your-sound") return <Studio />;
     const source = questions[game.id];
     const list =
-        id !== "stress-steps" && difficulty === "Easy"
+        id !== "stress-sort" && difficulty === "Easy"
             ? [source[1], source[0], source[2], source[3]]
-            : id !== "stress-steps" && difficulty === "Hard"
+            : id !== "stress-sort" && difficulty === "Hard"
                 ? [...source].reverse()
                 : source;
     const q = list[index];
@@ -97,7 +97,7 @@ export function Lesson() {
                             <h1>{game.name}</h1>
                             <p>{game.subtitle}</p>
                         </div>
-                        {id !== "stress-steps" && (
+                        {id !== "stress-sort" && (
                             <select
                                 aria-label="Difficulty"
                                 value={difficulty}
@@ -127,7 +127,7 @@ export function Lesson() {
                                 <span className="eyebrow">
                                     {id === "soundprint"
                                         ? "READ THE SOUND"
-                                        : id === "stress-detective"
+                                        : id === "what-do-they-mean"
                                             ? "LISTEN BETWEEN THE LINES"
                                             : "FIND THE STRONG BEAT"}
                                 </span>
@@ -171,7 +171,7 @@ export function Lesson() {
                             )}
                         </section>
                     )}
-                    {id === "stress-steps" ? (
+                    {id === "stress-sort" ? (
                         <StressStepsView
                             q={q as StressStepsQuestion}
                             onComplete={(isCorrect) => {

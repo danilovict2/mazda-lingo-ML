@@ -19,8 +19,8 @@ export type StressStepsQuestion = {
 };
 export const games = [
     {
-        id: "stress-steps",
-        name: "Stress Steps",
+        id: "stress-sort",
+        name: "Stress Sort",
         subtitle: "Find the beat inside every word.",
         tag: "WORD STRESS",
         color: "purple",
@@ -28,8 +28,8 @@ export const games = [
         time: 3,
     },
     {
-        id: "rhythm-echo",
-        name: "Rhythm Echo",
+        id: "rhythm-match",
+        name: "Rhythm Match",
         subtitle: "Catch the rhythm of real conversation.",
         tag: "SENTENCE RHYTHM",
         color: "peach",
@@ -55,22 +55,13 @@ export const games = [
         time: 4,
     },
     {
-        id: "stress-detective",
-        name: "Stress Detective",
+        id: "what-do-they-mean",
+        name: "What do they mean?",
         subtitle: "Same words. Different meaning.",
         tag: "SENTENCE EMPHASIS",
         color: "pink",
         icon: "detective",
         time: 5,
-    },
-    {
-        id: "rhythm-match",
-        name: "Rhythm Match",
-        subtitle: "Match the beat. Speak naturally.",
-        tag: "NATURAL RHYTHM",
-        color: "yellow",
-        icon: "rhythm",
-        time: 4,
     },
     {
         id: "shape-your-sound",
@@ -347,15 +338,11 @@ const stressSteps: StressStepsQuestion[] = [
 ];
 
 export const questions: Record<string, Question[] | StressStepsQuestion[]> = {
-    "stress-steps": stressSteps,
+    "stress-sort": stressSteps,
     soundprint: words,
-    "stress-detective": detective,
-    "rhythm-echo": echo,
+    "what-do-they-mean": detective,
+    "rhythm-match": echo,
     "stress-twins": twins,
-    "rhythm-match": echo.map((q) => ({
-        ...q,
-        prompt: "Listen, then choose the matching strong-beat pattern.",
-    })),
 };
 export const placement = [words[0], echo[1], twins[0], detective[2], words[2]];
 export const skills = [

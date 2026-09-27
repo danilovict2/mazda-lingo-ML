@@ -43,9 +43,9 @@ export function Dashboard() {
                             <p>
                                 Discover what a little emphasis can say.
                                 <br />
-                                Your next stop: Stress Detective.
+                                Your next stop: What do they mean?.
                             </p>
-                            <Button to="/game/stress-detective">
+                            <Button to="/game/what-do-they-mean">
                                 Let’s practice <ArrowRight size={17} />
                             </Button>
                             <div className="hero-meta">
@@ -118,7 +118,7 @@ export function Dashboard() {
                             <span className="unit-status">
                                 {2 +
                                     progress.completed.filter((x) =>
-                                        ["stress-steps", "rhythm-echo", "stress-twins"].includes(x),
+                                        ["stress-sort", "rhythm-match", "stress-twins"].includes(x),
                                     ).length}
                                 /5 milestones
                             </span>

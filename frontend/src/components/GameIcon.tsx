@@ -4,12 +4,11 @@ export function GameIcon({ id, size = 27 }: { id: string; size?: number }) {
     const Icon =
         (
             {
-                "stress-steps": Footprints,
-                "rhythm-echo": Headphones,
+                "stress-sort": Footprints,
+                "rhythm-match": Headphones,
                 "stress-twins": Layers,
                 soundprint: AudioLines,
-                "stress-detective": Search,
-                "rhythm-match": ChartNoAxesCombined,
+                "what-do-they-mean": Search,
                 "shape-your-sound": Mic,
             } as Record<string, typeof Mic>
         )[id] || AudioLines;

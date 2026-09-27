@@ -5,9 +5,6 @@ import { games, questions, type StressStepsQuestion } from "../data";
 import { api } from "../api/client";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
-import { Wave } from "../components/Wave";
-import { AudioButton } from "../components/AudioButton";
-import { Emphasis } from "../components/Emphasis";
 import { GameIcon } from "../components/GameIcon";
 import { Shell } from "../components/Shell";
 import { QuestionView } from "../components/QuestionView";
@@ -118,34 +115,6 @@ export function Lesson() {
                             {index + 1} of {list.length}
                         </span>
                     </div>
-                    {id !== "stress-sort" && (
-                        <section className="question-card">
-                            <div className="section-heading">
-                                <span className="eyebrow">
-                                    {id === "what-do-they-mean"
-                                        ? "LISTEN BETWEEN THE LINES"
-                                        : "FIND THE STRONG BEAT"}
-                                </span>
-                                <AudioButton text={(q as any).text} />
-                            </div>
-                            <h2 className="question-text">
-                                <Emphasis text={(q as any).text} />
-                            </h2>
-                            {id === "rhythm-match" && (
-                                <div className="rhythm-beats">
-                                    {(q as any).options[(q as any).correct].split(" ").map((word: string, i: number) => (
-                                        <i
-                                            key={i}
-                                            style={{
-                                                transform: `scale(${word === word.toUpperCase() ? 1 : 0.4})`,
-                                                animationDelay: `${i * 0.2}s`,
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </section>
-                    )}
                     {id === "stress-sort" ? (
                         <StressStepsView
                             q={q as StressStepsQuestion}

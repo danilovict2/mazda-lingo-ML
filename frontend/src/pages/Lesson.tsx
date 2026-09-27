@@ -7,13 +7,15 @@ import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
 import { Wave } from "../components/Wave";
 import { AudioButton } from "../components/AudioButton";
-import { Emphasis } from "../components/Emphasis";
+import { SpokenText } from "../components/SpokenText";
+import { Soundprint } from "../components/Soundprint";
 import { GameIcon } from "../components/GameIcon";
 import { Shell } from "../components/Shell";
 import { QuestionView } from "../components/QuestionView";
 import { Completion } from "../components/Completion";
 import { Studio } from "../pages/Studio";
 import { useProgress } from "../state/ProgressProvider";
+import { activeWord, clipMeta } from "../audio";
 
 export function Lesson() {
     const { id } = useParams();
@@ -28,6 +30,7 @@ export function Lesson() {
     const [busy, setBusy] = useState(false);
     const [apiError, setApiError] = useState("");
     const attemptId = useRef(crypto.randomUUID());
+    const [time, setTime] = useState<number | null>(null);
     if (!game) return <Navigate to="/dashboard" />;
     if (id === "shape-your-sound") return <Studio />;
     const source = questions[game.id];
@@ -38,6 +41,9 @@ export function Lesson() {
                 ? [...source].reverse()
                 : source;
     const q = list[index];
+    const meta = clipMeta(q.audio);
+    // Stress Detective hides the stressed word until you answer: you have to hear it.
+    const listenFirst = id === "stress-detective";
     async function next() {
         if (index < list.length - 1) {
             setIndex((i) => i + 1);
@@ -114,29 +120,50 @@ export function Lesson() {
                                         ? "LISTEN BETWEEN THE LINES"
                                         : "FIND THE STRONG BEAT"}
                             </span>
-                            <AudioButton text={q.text} />
+                            <AudioButton text={q.text} clip={q.audio} onTime={setTime} />
                         </div>
                         <h2 className="question-text">
-                            <Emphasis text={q.text} />
+                            <SpokenText
+                                text={q.text}
+                                clip={q.audio}
+                                time={time}
+                                reveal={!listenFirst || selected !== null}
+                            />
                         </h2>
+                        {listenFirst && selected === null && (
+                            <p className="listen-hint">
+                                Press Listen and notice which word stands out.
+                            </p>
+                        )}
                         {id === "soundprint" && (
                             <div
                                 className={`soundprint-visual difficulty-${difficulty.toLowerCase()}`}
                             >
-                                <div className="wave-label">
-                                    <span>SIMULATED SOUNDPRINT</span>
-                                    <span>AMPLITUDE / TIME</span>
-                                </div>
-                                <Wave
-                                    active
-                                    stress={q.stress}
-                                    groups={q.options[q.correct].split("-").length}
-                                />
-                                <div className="syllable-labels">
-                                    {q.options[q.correct].split("-").map((s, i) => (
-                                        <span key={i}>{s.toLowerCase()}</span>
-                                    ))}
-                                </div>
+                                {meta?.syllables ? (
+                                    <Soundprint
+                                        meta={meta}
+                                        time={time}
+                                        reveal={selected !== null}
+                                        difficulty={difficulty}
+                                    />
+                                ) : (
+                                    <>
+                                        <div className="wave-label">
+                                            <span>SIMULATED SOUNDPRINT</span>
+                                            <span>AMPLITUDE / TIME</span>
+                                        </div>
+                                        <Wave
+                                            active
+                                            stress={q.stress}
+                                            groups={q.options[q.correct].split("-").length}
+                                        />
+                                        <div className="syllable-labels">
+                                            {q.options[q.correct].split("-").map((s, i) => (
+                                                <span key={i}>{s.toLowerCase()}</span>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         )}
                         {id === "rhythm-match" && (
@@ -144,6 +171,7 @@ export function Lesson() {
                                 {q.options[q.correct].split(" ").map((word, i) => (
                                     <i
                                         key={i}
+                                        className={i === activeWord(meta, time) ? "beat-active" : ""}
                                         style={{
                                             transform: `scale(${word === word.toUpperCase() ? 1 : 0.4})`,
                                             animationDelay: `${i * 0.2}s`,

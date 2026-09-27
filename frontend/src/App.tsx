@@ -20,7 +20,7 @@ export function App() {
                         <Route path="/game/:id" element={<LessonKey />} />
                         <Route path="/progress" element={<Profile />} />
                     </Route>
-                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </AuthProvider>
         </BrowserRouter>

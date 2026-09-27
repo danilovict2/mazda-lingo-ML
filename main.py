@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import io
+import json
 import os
+import wave
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
 from uuid import UUID, uuid4
 
-from fastapi import Depends, FastAPI, HTTPException
+import httpx
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,6 +20,15 @@ from pydantic import BaseModel, Field
 
 from auth import current_user
 from database import db
+import speech_features as sf
+from speech_scoring import NoSpeech, score
+
+
+ROOT = Path(__file__).resolve().parent
+# Reference clips made by scripts/generate_audio.py.
+REFERENCE_FILE = ROOT / "frontend" / "src" / "generated" / "audio.json"
+REFERENCES = json.loads(REFERENCE_FILE.read_text()) if REFERENCE_FILE.exists() else {}
+MAX_UPLOAD = 10 * 1024 * 1024
 
 
 GAMES = {
@@ -109,7 +122,11 @@ def placement(data: Placement, user: dict = Depends(current_user)):
 
 @app.post("/api/session")
 def session(data: Session, user: dict = Depends(current_user)):
-    if data.correct > data.total or data.game not in GAMES or data.game == "shape-your-sound":
+    if (
+        data.correct > data.total
+        or data.game not in GAMES
+        or data.game == "shape-your-sound"
+    ):
         raise HTTPException(status_code=422, detail="Invalid lesson or answer count")
     xp = data.total * 20 + data.correct * 10
     progress, created = db.save_session(
@@ -163,6 +180,68 @@ def analyze_speech(data: Speech, user: dict = Depends(current_user)):
         "feedback": feedback,
         "simulated": True,
     }
+
+
+def elevenlabs_key() -> str | None:
+    if key := os.environ.get("ELEVENLABS_API_KEY"):
+        return key
+    env = ROOT / ".env"
+    if env.exists():
+        for line in env.read_text().splitlines():
+            if line.startswith("ELEVENLABS_API_KEY="):
+                return line.split("=", 1)[1].strip().strip("\"'")
+    return None
+
+
+@app.post("/api/analyze-recording")
+async def analyze_recording(
+    clip: str = Form(),
+    audio: UploadFile = File(),
+    user: dict = Depends(current_user),
+):
+    """Score a real microphone recording (16-bit mono WAV) against a studio clip."""
+    del user
+    ref = REFERENCES.get(clip)
+    if not clip.startswith("studio-") or not ref:
+        raise HTTPException(422, "Unknown practice text")
+    data = await audio.read(MAX_UPLOAD + 1)
+    if len(data) > MAX_UPLOAD:
+        raise HTTPException(413, "Recording is too long")
+    try:
+        with wave.open(io.BytesIO(data)) as f:
+            if f.getsampwidth() != 2 or f.getnchannels() != 1:
+                raise HTTPException(422, "Expected 16-bit mono WAV audio")
+            rate = f.getframerate()
+            x = sf.to_float(f.readframes(f.getnframes()))
+    except (wave.Error, EOFError):
+        raise HTTPException(422, "Could not read the recording")
+    if x.size < rate * 0.3:
+        raise HTTPException(422, "That recording is too short. Try again.")
+    key = elevenlabs_key()
+    if not key:
+        raise HTTPException(503, "ELEVENLABS_API_KEY is not configured on the server")
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            res = await client.post(
+                "https://api.elevenlabs.io/v1/speech-to-text",
+                headers={"xi-api-key": key},
+                data={
+                    "model_id": "scribe_v2",
+                    "language_code": "en",
+                    "timestamps_granularity": "word",
+                    "tag_audio_events": "false",
+                },
+                files={"file": ("recording.wav", data, "audio/wav")},
+            )
+    except httpx.HTTPError:
+        raise HTTPException(502, "Speech-to-text service is unreachable")
+    if res.status_code != 200:
+        raise HTTPException(502, "Speech-to-text failed")
+    heard = [w for w in res.json().get("words", []) if w.get("type") == "word"]
+    try:
+        return score(ref, x, rate, heard)
+    except NoSpeech as e:
+        raise HTTPException(422, str(e))
 
 
 @app.get("/api/me")

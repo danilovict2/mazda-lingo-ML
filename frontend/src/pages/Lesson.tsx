@@ -13,7 +13,6 @@ import { Shell } from "../components/Shell";
 import { QuestionView } from "../components/QuestionView";
 import { StressStepsView } from "../components/StressStepsView";
 import { Completion } from "../components/Completion";
-import { Studio } from "../pages/Studio";
 import { useProgress } from "../state/ProgressProvider";
 
 export function Lesson() {

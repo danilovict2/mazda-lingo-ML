@@ -29,7 +29,6 @@ export function Lesson() {
     const [busy, setBusy] = useState(false);
     const [apiError, setApiError] = useState("");
     if (!game) return <Navigate to="/dashboard" />;
-    if (id === "shape-your-sound") return <Studio />;
     const source = questions[game.id];
     const list =
         id !== "stress-sort" && difficulty === "Easy"
@@ -120,42 +119,18 @@ export function Lesson() {
                         </span>
                     </div>
                     {id !== "stress-steps" && (
-                        <section
-                            className={`question-card ${id === "soundprint" ? "soundprint-card" : ""}`}
-                        >
+                        <section className="question-card">
                             <div className="section-heading">
                                 <span className="eyebrow">
-                                    {id === "soundprint"
-                                        ? "READ THE SOUND"
-                                        : id === "what-do-they-mean"
-                                            ? "LISTEN BETWEEN THE LINES"
-                                            : "FIND THE STRONG BEAT"}
+                                    {id === "what-do-they-mean"
+                                        ? "LISTEN BETWEEN THE LINES"
+                                        : "FIND THE STRONG BEAT"}
                                 </span>
                                 <AudioButton text={(q as any).text} />
                             </div>
                             <h2 className="question-text">
                                 <Emphasis text={(q as any).text} />
                             </h2>
-                            {id === "soundprint" && (
-                                <div
-                                    className={`soundprint-visual difficulty-${difficulty.toLowerCase()}`}
-                                >
-                                    <div className="wave-label">
-                                        <span>SIMULATED SOUNDPRINT</span>
-                                        <span>AMPLITUDE / TIME</span>
-                                    </div>
-                                    <Wave
-                                        active
-                                        stress={(q as any).stress}
-                                        groups={(q as any).options[(q as any).correct].split("-").length}
-                                    />
-                                    <div className="syllable-labels">
-                                        {(q as any).options[(q as any).correct].split("-").map((s: string, i: number) => (
-                                            <span key={i}>{s.toLowerCase()}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                             {id === "rhythm-match" && (
                                 <div className="rhythm-beats">
                                     {(q as any).options[(q as any).correct].split(" ").map((word: string, i: number) => (

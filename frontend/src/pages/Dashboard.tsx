@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AudioLines, ArrowRight, ArrowUpRight, Check, Clock, Flame, Mic, Sparkles, Target, Zap, Layers } from "lucide-react";
+import { AudioLines, ArrowRight, ArrowUpRight, Check, Clock, Flame, Sparkles, Target, Zap, Layers } from "lucide-react";
 import { games } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -104,27 +104,12 @@ export function Dashboard() {
                     <section id="path" className="path-section">
                         <div className="section-heading">
                             <div>
-                                <h2>Your learning path</h2>
-                                <p>One beat at a time. Every step counts.</p>
+                                <h2>Practice games</h2>
+                                <p>Master the rhythm of English.</p>
                             </div>
-                            <span className="subtle-label">7 practice games</span>
-                        </div>
-                        <div className="unit-heading">
-                            <span className="unit-number">01</span>
-                            <div>
-                                <strong>Build your foundation</strong>
-                                <p>Get comfortable with the beats of English</p>
-                            </div>
-                            <span className="unit-status">
-                                {2 +
-                                    progress.completed.filter((x) =>
-                                        ["stress-sort", "rhythm-match", "stress-twins"].includes(x),
-                                    ).length}
-                                /5 milestones
-                            </span>
                         </div>
                         <div className="game-grid">
-                            {games.slice(0, 3).map((g, i) => (
+                            {games.map((g, i) => (
                                 <GameCard
                                     key={g.id}
                                     game={g}
@@ -138,42 +123,6 @@ export function Dashboard() {
                                 />
                             ))}
                         </div>
-                        <div className="unit-heading second">
-                            <span className="unit-number lavender">02</span>
-                            <div>
-                                <strong>Make it sound like you</strong>
-                                <p>Turn understanding into natural expression</p>
-                            </div>
-                            <span className="unit-status purple-text">YOUR NEXT CHAPTER</span>
-                        </div>
-                        <div className="game-grid">
-                            {games.slice(3, 6).map((g) => (
-                                <GameCard
-                                    key={g.id}
-                                    game={g}
-                                    status={
-                                        progress.completed.includes(g.id)
-                                            ? "Completed"
-                                            : g.id === "rhythm-match" &&
-                                                !progress.completed.length &&
-                                                progress.level !== "Advanced"
-                                                ? "Locked"
-                                                : "Ready to play"
-                                    }
-                                />
-                            ))}
-                        </div>
-                        <Link className="studio-strip" to="/game/shape-your-sound">
-                            <span className="game-icon purple">
-                                <Mic size={23} />
-                            </span>
-                            <div>
-                                <strong>Your voice. Your personal studio.</strong>
-                                <p>Try Shape Your Sound and see your speech come to life.</p>
-                            </div>
-                            <span className="new-badge">TRY THE STUDIO</span>
-                            <ArrowUpRight size={20} />
-                        </Link>
                     </section>
                 </div>
                 <aside className="right-column">

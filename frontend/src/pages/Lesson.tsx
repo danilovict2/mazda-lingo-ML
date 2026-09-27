@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowRight, Lightbulb, X } from "lucide-react";
-import { games, questions, type Question, type SpeakQuestion, type StressStepsQuestion } from "../data";
+import { games, questions, stressStepsByDifficulty, type Question, type SpeakQuestion, type StressStepsQuestion } from "../data";
 import { api } from "../api/client";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -48,22 +48,23 @@ export function Lesson() {
     if (!game) return <Navigate to="/dashboard" />;
     const source = questions[game.id];
     if (!source) return <Navigate to="/dashboard" />;
-    // Stress Sort is a single drag-and-drop board and Say It Right a fixed
-    // speaking set, so neither has a difficulty order.
     const sorting = id === "stress-sort";
     const speaking = id === "say-it-right";
     const fixedOrder = sorting || speaking;
-    const list =
-        !fixedOrder && difficulty === "Easy"
+    const list = sorting
+        ? [stressStepsByDifficulty[difficulty] || stressStepsByDifficulty.Medium]
+        : !fixedOrder && difficulty === "Easy"
             ? [source[1], source[0], source[2], source[3]]
             : !fixedOrder && difficulty === "Hard"
                 ? [...source].reverse()
                 : source;
+
     const q = list[index];
     // Games with a reference recording show the sentence with a Listen button.
     const spoken = fixedOrder ? undefined : (q as Question);
     // "What do they mean?" hides the stressed word until you answer: you have to hear it.
     const listenFirst = id === "what-do-they-mean";
+
     async function next() {
         if (index < list.length - 1) {
             setIndex((i) => i + 1);
@@ -97,6 +98,7 @@ export function Lesson() {
             setBusy(false);
         }
     }
+
     return (
         <Shell>
             {done ? (
@@ -123,20 +125,21 @@ export function Lesson() {
                             <h1>{game.name}</h1>
                             {!sorting && <p>{game.subtitle}</p>}
                         </div>
-                        {!fixedOrder && (
-                            <select
-                                aria-label="Difficulty"
-                                value={difficulty}
-                                disabled={index > 0 || selected !== null}
-                                onChange={(e) => {
-                                    setDifficulty(e.target.value);
-                                    setIndex(0);
-                                }}
-                            >
-                                {["Easy", "Medium", "Hard"].map((d) => (
-                                    <option key={d}>{d}</option>
-                                ))}
-                            </select>
+                        {!speaking && (
+                        <select
+                            aria-label="Difficulty"
+                            value={difficulty}
+                            disabled={index > 0 || selected !== null}
+                            onChange={(e) => {
+                                setDifficulty(e.target.value);
+                                setIndex(0);
+                                setSelected(null);
+                            }}
+                        >
+                            {["Easy", "Medium", "Hard"].map((d) => (
+                                <option key={d}>{d}</option>
+                            ))}
+                        </select>
                         )}
                     </div>
                     <div className="game-tip">
@@ -192,6 +195,7 @@ export function Lesson() {
                         />
                     ) : sorting ? (
                         <StressStepsView
+                            key={`${difficulty}-${index}`}
                             q={q as StressStepsQuestion}
                             onComplete={(isCorrect) => {
                                 setSelected(1);
@@ -213,7 +217,6 @@ export function Lesson() {
                         />
                     )}
                     {id === "stress-twins" && selected !== null && (
-                        // Revealed after answering: hear each word as a noun, then as a verb.
                         <div className="hear-words">
                             <span className="eyebrow">HEAR THE STRESS · NOUN, THEN VERB</span>
                             <div>
@@ -230,16 +233,18 @@ export function Lesson() {
                         </div>
                     )}
                     {apiError && <p role="alert" className="notice">{apiError}</p>}
-                    {!sorting && <div className="exercise-actions">
-                        <Button disabled={selected === null || busy} onClick={next}>
-                            {busy
-                                ? "Saving…"
-                                : index === list.length - 1
-                                    ? "Finish lesson"
-                                    : "Next question"}{" "}
-                            <ArrowRight size={17} />
-                        </Button>
-                    </div>}
+                    {!sorting && (
+                        <div className="exercise-actions">
+                            <Button disabled={selected === null || busy} onClick={next}>
+                                {busy
+                                    ? "Saving…"
+                                    : index === list.length - 1
+                                        ? "Finish lesson"
+                                        : "Next question"}{" "}
+                                <ArrowRight size={17} />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
         </Shell>

@@ -1,9 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Check, Target, Layers } from "lucide-react";
+import { ArrowUpRight, Check, Target, Layers } from "lucide-react";
 import { games } from "../data";
-import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
 import { Shell } from "../components/Shell";
 import { Radar } from "../components/Radar";
@@ -13,6 +12,20 @@ import { useProgress } from "../state/ProgressProvider";
 export function Dashboard() {
     const { progress } = useProgress();
     const { user } = useAuth0();
+    const today = new Date();
+    const week = Array.from({ length: 7 }, (_, index) => {
+        const date = new Date(Date.UTC(
+            today.getUTCFullYear(),
+            today.getUTCMonth(),
+            today.getUTCDate() - 6 + index,
+        ));
+        return {
+            key: date.toISOString().slice(0, 10),
+            label: date.toLocaleDateString(undefined, { weekday: "narrow", timeZone: "UTC" }),
+            today: index === 6,
+        };
+    });
+    const levelNumber = Math.floor(progress.xp / 500) + 1;
     useEffect(() => {
         if (window.location.hash)
             document.getElementById("path")?.scrollIntoView({ behavior: "smooth" });
@@ -27,7 +40,7 @@ export function Dashboard() {
                 </div>
                 <span className="level-badge">
                     <Layers size={15} />
-                    {progress.placed ? progress.level : "Intermediate"} · Level 3
+                    {progress.placed ? progress.level : "Not placed"} · Level {levelNumber}
                 </span>
             </div>
             <section id="path" className="path-section">
@@ -59,26 +72,29 @@ export function Dashboard() {
                         </div>
                         <div className="goal-total">
                             <strong>
-                                {Math.min(100, 40 + progress.completed.length * 30)}
+                                {Math.min(100, progress.todayXp)}
                             </strong>
                             <span>/ 100 XP</span>
                             <span className="goal-emoji">✦</span>
                         </div>
-                        <Bar value={40 + progress.completed.length * 30} />
+                        <Bar value={progress.todayXp} />
                         <p>
-                            {progress.completed.length >= 2
+                            {progress.todayXp >= 100
                                 ? "Goal reached. Look at you go!"
                                 : "A short lesson. A step forward."}
                         </p>
                         <div className="week">
-                            {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-                                <div key={i}>
-                                    <span className={i < 5 ? "done" : i === 5 ? "today" : ""}>
-                                        {i < 5 ? <Check size={12} /> : d}
-                                    </span>
-                                    <small>{d}</small>
-                                </div>
-                            ))}
+                            {week.map((day) => {
+                                const active = progress.activityDays.includes(day.key);
+                                return (
+                                    <div key={day.key}>
+                                        <span className={active ? "done" : day.today ? "today" : ""}>
+                                            {active ? <Check size={12} /> : day.label}
+                                        </span>
+                                        <small>{day.label}</small>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </section>
                     <section className="panel profile-preview">
@@ -86,7 +102,11 @@ export function Dashboard() {
                             <h3>Your speech, visualized</h3>
                             <span className="live-dot" />
                         </div>
-                        <p>A little stronger in every direction.</p>
+                        <p>
+                            {progress.lessonCount
+                                ? "Based on your saved practice sessions."
+                                : "Complete a lesson to begin your profile."}
+                        </p>
                         <Radar />
                         <div className="chart-legend">
                             <span>
@@ -95,7 +115,7 @@ export function Dashboard() {
                             </span>
                             <span>
                                 <i />
-                                Last week
+                                Before latest practice
                             </span>
                         </div>
                         <Link to="/progress" className="panel-link">

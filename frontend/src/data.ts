@@ -444,8 +444,6 @@ export const skills = [
     "Pronunciation",
     "Fluency",
 ];
-export const scores = [82, 68, 75, 71, 90, 79, 73];
-
 export type Progress = {
     xp: number;
     completed: string[];
@@ -454,14 +452,28 @@ export type Progress = {
     placed: boolean;
     level: string;
     sessions: { name: string; accuracy: number; date: string }[];
+    streak: number;
+    todayXp: number;
+    weeklyXp: number;
+    activityDays: string[];
+    lessonCount: number;
+    skillScores: number[];
+    previousSkillScores: number[];
 };
 
 export const initialProgress: Progress = {
-    xp: 360,
+    xp: 0,
     completed: [],
     answers: 0,
     correct: 0,
     placed: false,
     level: "Explorer",
     sessions: [],
+    streak: 0,
+    todayXp: 0,
+    weeklyXp: 0,
+    activityDays: [],
+    lessonCount: 0,
+    skillScores: skills.map(() => 0),
+    previousSkillScores: skills.map(() => 0),
 };

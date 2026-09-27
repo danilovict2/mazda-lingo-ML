@@ -20,7 +20,7 @@ class AuthenticationTests(unittest.TestCase):
         claims = dict(
             sub="auth0|test",
             iss="https://test.auth0.com/",
-            aud="cadence",
+            aud="lingo",
             iat=int(time.time()),
             exp=int(time.time()) + 300,
         )
@@ -54,7 +54,7 @@ class AuthenticationTests(unittest.TestCase):
                 key=self.key.public_key()
             )
         )
-        settings.return_value = ("https://test.auth0.com/", "cadence", keys)
+        settings.return_value = ("https://test.auth0.com/", "lingo", keys)
         self.assertEqual(self.request(self.token()).json(), {"sub": "auth0|test"})
         for changes in (
             {"aud": "wrong"},
@@ -69,7 +69,7 @@ class AuthenticationTests(unittest.TestCase):
         forged = jwt.encode(
             dict(
                 sub="attacker",
-                aud="cadence",
+                aud="lingo",
                 iss="https://test.auth0.com/",
                 iat=int(time.time()),
                 exp=int(time.time()) + 300,
@@ -97,7 +97,7 @@ class AuthenticationTests(unittest.TestCase):
         keys.get_signing_key_from_jwt.side_effect = jwt.PyJWKClientConnectionError(
             "offline"
         )
-        settings.return_value = ("https://test.auth0.com/", "cadence", keys)
+        settings.return_value = ("https://test.auth0.com/", "lingo", keys)
         self.assertEqual(self.request(self.token()).status_code, 503)
 
     def test_missing_configuration(self):
@@ -112,7 +112,7 @@ class AuthenticationTests(unittest.TestCase):
         with patch("auth.jwt.PyJWKClient") as client:
             with patch.dict(
                 "os.environ",
-                {"AUTH0_DOMAIN": "test.auth0.com", "AUTH0_AUDIENCE": "cadence"},
+                {"AUTH0_DOMAIN": "test.auth0.com", "AUTH0_AUDIENCE": "lingo"},
             ):
                 settings()
         context = client.call_args.kwargs["ssl_context"]

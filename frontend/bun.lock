@@ -3,7 +3,7 @@
     "configVersion": 0,
     "workspaces": {
         "": {
-            "name": "cadence",
+            "name": "lingo",
             "dependencies": {
                 "@auth0/auth0-react": "^2.27.0",
                 "lucide-react": "^0.468.0",

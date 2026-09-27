@@ -1,4 +1,4 @@
-"""Cadence API and production frontend server."""
+"""Lingo API and production frontend server."""
 
 from __future__ import annotations
 
@@ -35,12 +35,11 @@ MAX_UPLOAD = 10 * 1024 * 1024
 
 
 GAMES = {
-    "stress-steps": "Stress Steps",
-    "rhythm-echo": "Rhythm Echo",
+    "stress-sort": "Stress Sort",
     "stress-twins": "Stress Twins",
-    "soundprint": "Soundprint",
-    "stress-detective": "Stress Detective",
+    "what-do-they-mean": "What do they mean?",
     "rhythm-match": "Rhythm Match",
+    "say-it-right": "Say It Right",
     "shape-your-sound": "Shape Your Sound",
 }
 
@@ -51,7 +50,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Cadence API", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="Lingo API", version="2.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -64,15 +63,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )
-GAMES = [
-    "stress-sort",
-    "stress-twins",
-    "what-do-they-mean",
-    "rhythm-match",
-    "say-it-right",
-]
-
-
 class Placement(BaseModel):
     correct: int = Field(ge=0, le=5)
     total: Literal[5] = 5

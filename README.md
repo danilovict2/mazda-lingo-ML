@@ -30,14 +30,11 @@ bun run preview
 
 ## A two-minute demo
 
-1. Open the landing page → **Find my starting level**.
-2. Answer a few placement questions, or **Skip to demo result**.
-3. Enter the dashboard → **Stress Detective**. Select an interpretation and show the explanation.
-4. Open **Soundprint** from the learning path for animated, syllable-aligned mock waveforms.
-5. Open **Shape Your Sound** → **Try demo recording** → **Finish & analyze**. Save the practice.
-6. Open **Speech profile** for the radar chart, skill breakdown, and recommendation.
+1. Sign in and answer a few placement questions, or **Skip to demo result**.
+2. Enter the dashboard and complete a practice game.
+3. Open **Speech profile** for the persisted radar chart and skill breakdown.
 
-The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts at 360 XP; new sessions, XP, accuracy, placement, and profile improvements persist in SQLite under the Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
+The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. Sessions, XP, daily and weekly activity, streaks, accuracy, placement, and skill-profile improvements persist in SQLite under the Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP.
 
 ## Architecture
 
@@ -46,7 +43,7 @@ frontend/
   src/main.tsx               Entry point; routes live in src/App.tsx
   src/pages/, components/    Screens and reusable UI
   src/styles.css             Responsive design system and motion
-  src/data.ts                Typed questions, game catalog, demo profile
+  src/data.ts                Typed questions and game catalog
   src/audio.ts               Access to the generated clip timings
   src/generated/audio.json   Generated: word/syllable timings, loudness, pitch
   src/api/client.ts          HTTP requests and response types
@@ -76,7 +73,7 @@ SQLite needs a persistent filesystem. DigitalOcean App Platform containers have 
 docker compose --env-file deploy/.env -f deploy/compose.yaml up -d --build
 ```
 
-The SQLite database lives in the `deploy_cadence-data` Docker volume at `/data/cadence.db` inside the container. Keep the application at one replica because SQLite coordinates access to one local database file. For DigitalOcean Block Storage, mount the volume on the host, change the Compose mapping to `/mnt/cadence-data:/data`, and give UID 10001 write access to that directory. Include the data volume in the backup plan. Check the service with `https://your-domain.example/api/health`.
+The SQLite database lives in the `deploy_lingo-data` Docker volume at `/data/lingo.db` inside the container. Keep the application at one replica because SQLite coordinates access to one local database file. For DigitalOcean Block Storage, mount the volume on the host, change the Compose mapping to `/mnt/lingo-data:/data`, and give UID 10001 write access to that directory. Include the data volume in the backup plan. Check the service with `https://your-domain.example/api/health`.
 
 The six selection games contain 4–5 questions each. Five representative questions drive placement. Difficulty changes the question sequence; Soundprint also changes visual contrast. Speaking difficulty switches words, sentences, and paragraphs. Correct and incorrect answers both offer explanations and allow immediate continuation.
 

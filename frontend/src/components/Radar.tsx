@@ -1,9 +1,10 @@
-import { skills, scores } from "../data";
+import { skills } from "../data";
 import { useProgress } from "../state/ProgressProvider";
 
 export function Radar({ large = false }: { large?: boolean }) {
     const { progress } = useProgress();
-    const gain = progress.completed.length * 2;
+    const scores = progress.skillScores;
+    const previous = progress.previousSkillScores;
     const center = 160,
         r = 108;
     const point = (i: number, v: number) => {
@@ -15,7 +16,7 @@ export function Radar({ large = false }: { large?: boolean }) {
             className={`radar ${large ? "large" : ""}`}
             viewBox="0 0 320 320"
             role="img"
-            aria-label={`Speech profile: ${skills.map((s, i) => `${s} ${Math.min(99, scores[i] + gain)}`).join(", ")}`}
+            aria-label={`Speech profile: ${skills.map((s, i) => `${s} ${scores[i]}`).join(", ")}`}
         >
             <g>
                 {[25, 50, 75, 100].map((v) => (
@@ -37,15 +38,13 @@ export function Radar({ large = false }: { large?: boolean }) {
                     />
                 ))}
                 <polygon
-                    points={scores.map((s, i) => point(i, s - 15)).join(" ")}
+                    points={previous.map((s, i) => point(i, s)).join(" ")}
                     fill="#cfc9e620"
                     stroke="#c4bddb"
                     strokeDasharray="4 4"
                 />
                 <polygon
-                    points={scores
-                        .map((s, i) => point(i, Math.min(99, s + gain)))
-                        .join(" ")}
+                    points={scores.map((s, i) => point(i, s)).join(" ")}
                     fill="#8b73df35"
                     stroke="#8365d6"
                     strokeWidth="2.3"
@@ -53,8 +52,8 @@ export function Radar({ large = false }: { large?: boolean }) {
                 {scores.map((s, i) => (
                     <circle
                         key={i}
-                        cx={point(i, Math.min(99, s + gain)).split(",")[0]}
-                        cy={point(i, Math.min(99, s + gain)).split(",")[1]}
+                        cx={point(i, s).split(",")[0]}
+                        cy={point(i, s).split(",")[1]}
                         r="3.2"
                         fill="#8365d6"
                     />

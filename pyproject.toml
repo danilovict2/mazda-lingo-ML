@@ -1,7 +1,7 @@
 [project]
 name = "ml-lingo"
 version = "0.1.0"
-description = "Cadence pronunciation practice API"
+description = "Lingo pronunciation practice API"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

@@ -1,5 +1,5 @@
 services:
-  cadence:
+  lingo:
     build:
       context: ..
       args:
@@ -12,9 +12,9 @@ services:
       AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:?Set AUTH0_AUDIENCE in deploy/.env}
       ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
       CORS_ORIGINS: https://${DOMAIN:?Set DOMAIN in deploy/.env}
-      DATABASE_PATH: /data/cadence.db
+      DATABASE_PATH: /data/lingo.db
     volumes:
-      - cadence-data:/data
+      - lingo-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
       interval: 30s
@@ -26,7 +26,7 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
-      cadence:
+      lingo:
         condition: service_healthy
     environment:
       DOMAIN: ${DOMAIN:?Set DOMAIN in deploy/.env}
@@ -39,6 +39,6 @@ services:
       - caddy-config:/config
 
 volumes:
-  cadence-data:
+  lingo-data:
   caddy-data:
   caddy-config:

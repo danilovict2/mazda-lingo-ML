@@ -16,7 +16,7 @@ FROM python:3.13-slim AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    DATABASE_PATH=/data/cadence.db \
+    DATABASE_PATH=/data/lingo.db \
     PATH=/app/.venv/bin:$PATH
 WORKDIR /app
 
@@ -27,10 +27,10 @@ COPY auth.py database.py main.py speech_features.py speech_scoring.py ./
 COPY --from=frontend-build /build/frontend/dist ./frontend/dist
 COPY frontend/src/generated/audio.json ./frontend/src/generated/audio.json
 
-RUN useradd --uid 10001 --create-home cadence \
+RUN useradd --uid 10001 --create-home lingo \
     && mkdir -p /data \
-    && chown cadence:cadence /data
-USER cadence
+    && chown lingo:lingo /data
+USER lingo
 
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

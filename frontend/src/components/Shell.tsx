@@ -16,7 +16,7 @@ function TopPanel() {
             </Link>
             <div className="top-panel-right">
                 <span className="streak">
-                    <Flame size={16} className="orange" /> 7
+                    <Flame size={16} className="orange" /> {progress.streak}
                 </span>
                 <span className="xp">
                     <Zap size={16} className="violet" /> {progress.xp}

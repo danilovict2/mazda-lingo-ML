@@ -26,7 +26,9 @@ class ProgressApiTests(unittest.TestCase):
     def test_complete_progress_lifecycle(self):
         initial = self.client.get("/api/progress")
         self.assertEqual(initial.status_code, 200)
-        self.assertEqual(initial.json()["xp"], 360)
+        self.assertEqual(initial.json()["xp"], 0)
+        self.assertEqual(initial.json()["streak"], 0)
+        self.assertEqual(initial.json()["todayXp"], 0)
 
         placement = self.client.post(
             "/api/placement-test", json={"correct": 4, "total": 5}
@@ -36,7 +38,7 @@ class ProgressApiTests(unittest.TestCase):
 
         attempt = "60e07dc0-4b0a-41e8-8716-f16847730d48"
         body = {
-            "game": "stress-steps",
+            "game": "stress-sort",
             "correct": 4,
             "total": 5,
             "attemptId": attempt,
@@ -46,7 +48,13 @@ class ProgressApiTests(unittest.TestCase):
         self.assertEqual(first.status_code, 200)
         self.assertTrue(first.json()["created"])
         self.assertFalse(retry.json()["created"])
-        self.assertEqual(retry.json()["progress"]["xp"], 500)
+        self.assertEqual(retry.json()["progress"]["xp"], 140)
+        self.assertEqual(retry.json()["progress"]["lessonCount"], 1)
+        self.assertEqual(retry.json()["progress"]["streak"], 1)
+        self.assertEqual(retry.json()["progress"]["todayXp"], 140)
+        self.assertEqual(
+            retry.json()["progress"]["skillScores"], [80, 0, 0, 0, 80, 80, 0]
+        )
 
         studio = self.client.post(
             "/api/studio-session",
@@ -60,7 +68,7 @@ class ProgressApiTests(unittest.TestCase):
 
         reset = self.client.delete("/api/progress")
         self.assertEqual(reset.status_code, 200)
-        self.assertEqual(reset.json()["xp"], 360)
+        self.assertEqual(reset.json()["xp"], 0)
         self.assertEqual(reset.json()["sessions"], [])
 
     def test_rejects_invalid_lessons(self):

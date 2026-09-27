@@ -1,7 +1,6 @@
 import { AuthProvider, RequireAuth } from "./auth/Auth";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useParams, useLocation, Navigate } from "react-router-dom";
-import { Landing } from "./pages/Landing";
 import { Dashboard } from "./pages/Dashboard";
 import { Placement } from "./pages/Placement";
 import { Lesson } from "./pages/Lesson";
@@ -13,7 +12,7 @@ export function App() {
             <AuthProvider>
                 <ScrollTop />
                 <Routes>
-                    <Route path="/" element={<Landing />} />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route element={<RequireAuth />}>
                         <Route path="/placement" element={<Placement />} />
                         <Route path="/dashboard" element={<Dashboard />} />

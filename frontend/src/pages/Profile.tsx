@@ -1,6 +1,5 @@
-import { AudioLines, BookOpen, Check, Flame, Target, Zap } from "lucide-react";
-import { skills, scores } from "../data";
-import { Button } from "../components/Button";
+import { BookOpen, Flame, Target, Zap } from "lucide-react";
+import { skills } from "../data";
 import { Bar } from "../components/Bar";
 import { Shell } from "../components/Shell";
 import { Radar } from "../components/Radar";
@@ -8,7 +7,18 @@ import { useProgress } from "../state/ProgressProvider";
 
 export function Profile() {
     const { progress } = useProgress();
-    const gain = progress.completed.length * 2;
+    const gains = progress.skillScores.map(
+        (score, index) => score - progress.previousSkillScores[index],
+    );
+    const practiced = progress.skillScores.filter((score) => score > 0);
+    const previousPracticed = progress.previousSkillScores.filter((score) => score > 0);
+    const overall = practiced.length
+        ? Math.round(practiced.reduce((sum, score) => sum + score, 0) / practiced.length)
+        : 0;
+    const previousOverall = previousPracticed.length
+        ? Math.round(previousPracticed.reduce((sum, score) => sum + score, 0) / previousPracticed.length)
+        : 0;
+    const improvement = overall - previousOverall;
     return (
         <Shell>
             <div className="page-heading">
@@ -19,7 +29,7 @@ export function Profile() {
                     </h1>
                     <p>A fuller picture of your voice. And how far it’s come.</p>
                 </div>
-                <span className="demo-pill">DEMO BASELINE + YOUR PRACTICE</span>
+                <span className="demo-pill">LIVE PRACTICE DATA</span>
             </div>
             <div className="profile-metrics">
                 {[
@@ -27,25 +37,25 @@ export function Profile() {
                         icon: Zap,
                         value: progress.xp,
                         label: "Total XP earned",
-                        note: "+120 this week",
+                        note: `${progress.weeklyXp} earned this week`,
                     },
                     {
                         icon: BookOpen,
-                        value: 12 + progress.completed.length,
+                        value: progress.lessonCount,
                         label: "Lessons completed",
                         note: "Small steps, real progress",
                     },
                     {
                         icon: Target,
-                        value: `${progress.answers ? Math.round((progress.correct / progress.answers) * 100) : 86}%`,
+                        value: `${progress.answers ? Math.round((progress.correct / progress.answers) * 100) : 0}%`,
                         label: "Practice accuracy",
                         note: progress.answers
                             ? "From your answers"
-                            : "Demo starting profile",
+                            : "Complete a lesson to begin",
                     },
                     {
                         icon: Flame,
-                        value: "7 days",
+                        value: `${progress.streak} ${progress.streak === 1 ? "day" : "days"}`,
                         label: "Current streak",
                         note: "Your best kind of habit",
                     },
@@ -65,7 +75,9 @@ export function Profile() {
                             <h2>The shape of your speech</h2>
                             <p>Seven skills. One increasingly confident voice.</p>
                         </div>
-                        <span className="improvement">+{8 + gain}% overall</span>
+                        <span className="improvement">
+                            {improvement > 0 ? "+" : ""}{improvement}% after latest practice
+                        </span>
                     </div>
                     <Radar large />
                     <div className="chart-legend">
@@ -75,7 +87,7 @@ export function Profile() {
                         </span>
                         <span>
                             <i />
-                            Previous profile
+                            Before latest practice
                         </span>
                     </div>
                 </section>
@@ -87,11 +99,13 @@ export function Profile() {
                                 <div>
                                     <span>{s}</span>
                                     <strong>
-                                        {Math.min(99, scores[i] + gain)}{" "}
-                                        <small>+{gain + 8 + i}</small>
+                                        {progress.skillScores[i]}{" "}
+                                        {gains[i] !== 0 && (
+                                            <small>{gains[i] > 0 ? "+" : ""}{gains[i]}</small>
+                                        )}
                                     </strong>
                                 </div>
-                                <Bar value={scores[i] + gain} />
+                                <Bar value={progress.skillScores[i]} />
                             </div>
                         ))}
                     </section>

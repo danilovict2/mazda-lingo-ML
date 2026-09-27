@@ -35,8 +35,8 @@ export function Completion({
                 </div>
                 <div>
                     <AudioLines />
-                    <strong>+2</strong>
-                    <span>Demo profile growth</span>
+                    <strong>Saved</strong>
+                    <span>Profile updated</span>
                 </div>
             </div>
             <p>Keep the momentum going.</p>

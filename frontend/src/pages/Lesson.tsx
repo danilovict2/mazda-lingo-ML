@@ -30,6 +30,7 @@ export function Lesson() {
     const [apiError, setApiError] = useState("");
     if (!game) return <Navigate to="/dashboard" />;
     const source = questions[game.id];
+    if (!source) return <Navigate to="/dashboard" />;
     const list =
         id !== "stress-sort" && difficulty === "Easy"
             ? [source[1], source[0], source[2], source[3]]

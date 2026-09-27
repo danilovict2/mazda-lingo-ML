@@ -1,3 +1,4 @@
+import LoginButton from "../components/LoginButton";
 import { Link } from "react-router-dom";
 import { AudioLines, ArrowRight, ArrowUpRight, Check, Play } from "lucide-react";
 import { Logo } from "../components/Logo";
@@ -10,6 +11,7 @@ export function Landing() {
             <header>
                 <Logo />
                 <nav>
+                    <LoginButton />
                     <a href="#how">How it works</a>
                     <Link to="/progress">The speech profile</Link>
                     <Link to="/dashboard" className="text-link">
@@ -42,8 +44,7 @@ export function Landing() {
                         </Button>
                     </div>
                     <div className="landing-note">
-                        <Check size={15} /> 2-minute placement <span>•</span> No account
-                        needed <span>•</span> Your pace
+                        <Check size={15} /> 2-minute placement <span>•</span> Sign in to practice <span>•</span> Your pace
                     </div>
                 </div>
                 <div className="hero-art">

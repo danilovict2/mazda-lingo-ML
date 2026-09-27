@@ -8,10 +8,11 @@ const ProgressContext = createContext<{
 
 export const useProgress = () => useContext(ProgressContext);
 
-export function ProgressProvider({ children }: { children: ReactNode }) {
+export function ProgressProvider({ children, userId }: { children: ReactNode; userId: string }) {
+    const storageKey = `cadence-progress:${userId}`;
     const [progress, setProgress] = useState<Progress>(() => {
         try {
-            const raw = localStorage.getItem("cadence-progress");
+            const raw = localStorage.getItem(storageKey);
             if (raw) {
                 const p = JSON.parse(raw);
                 if (
@@ -26,9 +27,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     });
     useEffect(() => {
         try {
-            localStorage.setItem("cadence-progress", JSON.stringify(progress));
+            localStorage.setItem(storageKey, JSON.stringify(progress));
         } catch { }
-    }, [progress]);
+    }, [progress, storageKey]);
     return (
         <ProgressContext.Provider value={{ progress, setProgress }}>
             {children}

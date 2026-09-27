@@ -108,6 +108,12 @@ svg {
 
 .app-shell {
     display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    display: none;
     min-height: 100vh;
 }
 
@@ -310,6 +316,61 @@ nav {
 }
 
 .main-shell {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.top-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 56px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.project-name {
+    font-family: "Manrope", sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    color: #302d3d;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.project-name:hover {
+    opacity: 0.7;
+}
+
+.top-panel-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.top-panel .avatar {
+    width: 35px;
+    height: 35px;
+}
+
+.top-panel .streak,
+.top-panel .xp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.topbar {
+    display: none;
     margin-left: 236px;
     width: calc(100% - 236px);
 }
@@ -378,17 +439,37 @@ nav {
 }
 
 main {
-    padding: 34px 40px 36px;
+    padding: 8px 40px 100px;
     max-width: 1530px;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+}
+
+main:has(.stress-steps-container) {
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 24px;
 }
 
 .page-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 29px;
+    margin-bottom: 12px;
     gap: 16px;
+}
+
+.page-heading.compact {
+    margin-bottom: 15px;
+}
+
+.page-heading.compact h1 {
+    margin: 0;
+    font-size: 24px;
 }
 
 .eyebrow {
@@ -432,6 +513,11 @@ main {
 .dashboard-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 272px;
+    gap: 15px;
+}
+
+.dashboard-layout.single-column {
+    grid-template-columns: 1fr;
     gap: 25px;
 }
 
@@ -599,7 +685,7 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    margin: 20px 0 30px;
+    margin: 14px 0 16px;
 }
 
 .metric-row>div {
@@ -733,6 +819,11 @@ main {
 .game-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.game-grid.game-grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
     gap: 13px;
 }
 
@@ -756,7 +847,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 19px;
+    margin-bottom: 16px;
     color: #bab3c3;
 }
 
@@ -777,15 +868,16 @@ main {
 }
 
 .game-card h3 {
-    font-size: 14px;
-    margin: 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 8px 0;
 }
 
 .game-card p {
-    font-size: 10px;
-    line-height: 1.7;
+    font-size: 12px;
+    line-height: 1.6;
     min-height: 34px;
-    max-width: 145px;
+    max-width: none;
 }
 
 .card-bottom {
@@ -865,7 +957,7 @@ main {
     border: 1px solid var(--border);
     border-radius: 13px;
     background: white;
-    padding: 21px;
+    padding: 16px;
 }
 
 .panel h3 {
@@ -1529,15 +1621,23 @@ footer {
 }
 
 .lesson-container {
-    max-width: 850px;
+    max-width: none;
     margin: 0 auto;
+    width: 100%;
+}
+
+.lesson-container:has(.stress-steps-container) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .lesson-heading {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 35px 0 25px;
+    margin: 12px 0 16px;
 }
 
 .lesson-heading h1 {
@@ -1767,6 +1867,264 @@ footer {
 .rhythm-beats i.beat-active {
     background: #6d45b0;
     animation: none;
+}
+
+.stress-steps-container {
+    --stress-word-width: 120px;
+    --stress-word-height: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 320px;
+}
+
+.stress-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.stress-instructions {
+    text-align: center;
+    padding: 4px 0 8px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.stress-instructions h3 {
+    font-size: 16px;
+    color: #302d3d;
+    margin: 0;
+    font-weight: 600;
+}
+
+.stress-examples {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.stress-pattern {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 60px;
+    padding: 10px 0;
+}
+
+.stress-bar {
+    width: 20px;
+    background: linear-gradient(to top, #8862c1, #b69dd4);
+    border-radius: 3px 3px 0 0;
+    min-height: 20px;
+}
+
+.stress-words-pool {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    border: 2px solid #d9cfea;
+    border-radius: 10px;
+    padding: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.words-label {
+    font-size: 11px;
+    color: #9b89b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.words-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
+    grid-auto-rows: var(--stress-word-height);
+    gap: 8px;
+    max-width: calc(6 * var(--stress-word-width) + 5 * 8px);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.draggable-word {
+    background: #f8f3fc;
+    border: 2px solid #b69dd4;
+    border-radius: 6px;
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 10px;
+    cursor: move;
+    user-select: none;
+    transition:
+        background 0.2s,
+        border-color 0.2s;
+    width: var(--stress-word-width);
+    height: var(--stress-word-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.draggable-word:hover {
+    background: #f0e8f8;
+    border-color: #8862c1;
+}
+
+.draggable-word:active {
+    opacity: 0.7;
+}
+
+.stress-columns-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.stress-columns {
+    display: contents;
+}
+
+.stress-column {
+    background: #fff;
+    border: 2px solid #d9cfea;
+    border-radius: 10px;
+    padding: 12px;
+    transition: border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.stress-column:hover {
+    border-color: #b69dd4;
+}
+
+.column-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.column-label {
+    font-size: 10px;
+    color: #a08bac;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.words-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
+    grid-auto-rows: var(--stress-word-height);
+    align-content: start;
+    gap: 8px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.placed-word {
+    background: #f0ecf7;
+    border: 1px solid #d9cfea;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    user-select: none;
+    width: var(--stress-word-width);
+    height: var(--stress-word-height);
+}
+
+.placed-word[draggable="true"] {
+    cursor: grab;
+}
+
+.placed-word[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.placed-word.example-word {
+    background: #e4d9f2;
+    border-color: #b69dd4;
+    font-style: italic;
+    opacity: 0.8;
+    cursor: default;
+}
+
+.placed-word.correct {
+    background: #f0f7f1;
+    border: 2px solid #6ba67d;
+    color: #5d9168;
+    font-weight: 600;
+}
+
+.placed-word.incorrect {
+    background: #fdf2ec;
+    border: 2px solid #e6975e;
+    color: #b8753e;
+    font-weight: 600;
+}
+
+.placed-word span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.check-icon {
+    color: #6ba67d;
+    flex-shrink: 0;
+}
+
+.submit-btn {
+    background: #8862c1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.1s;
+    width: auto;
+    margin: 8px auto 0;
+    display: block;
+    flex-shrink: 0;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #7551b8;
+    transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+    background: #c9bfe4;
+    cursor: default;
 }
 
 .result-screen {
@@ -2154,6 +2512,27 @@ footer {
 .profile-layout {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
+    gap: 16px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.radar-panel {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.radar-panel .radar.large {
+    max-width: 100%;
+    max-height: 280px;
+    width: auto;
+    height: auto;
+    margin: 4px auto 0;
+    flex-shrink: 1;
     gap: 23px;
 }
 
@@ -2185,8 +2564,8 @@ footer {
 
 .radar-summary {
     border-top: 1px solid #eee7f3;
-    margin-top: 29px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
 }
 
 .radar-summary>div {
@@ -2218,7 +2597,11 @@ footer {
 }
 
 .skill-panel {
-    padding: 25px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
 }
 
 .skill-panel h3 {
@@ -2647,6 +3030,30 @@ footer {
 
     .mobile-menu {
         display: inline-flex !important;
+    }
+
+    .top-panel {
+        padding: 0 18px;
+        height: 50px;
+    }
+
+    .project-name {
+        font-size: 20px;
+    }
+
+    .top-panel-right {
+        gap: 16px;
+    }
+
+    .top-panel .avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .top-panel .streak,
+    .top-panel .xp {
+        font-size: 12px;
+        gap: 6px;
     }
 
     .topbar {
@@ -3237,3 +3644,5 @@ p {
         flex-wrap: wrap;
     }
 }
+
+.auth-screen { max-width: 640px; margin: 15vh auto; padding: 24px; }

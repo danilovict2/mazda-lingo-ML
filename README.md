@@ -17,7 +17,7 @@ Open http://localhost:5173. The Python API is required for placement, lesson com
 Required Python API, in a second terminal from the repository root:
 
 ```sh
-uv run uvicorn main:app --reload
+uv run uvicorn main:app --reload --env-file .env
 ```
 
 Vite development and preview proxy `/api` to `http://127.0.0.1:8000`. Optionally set `VITE_API_URL` in `frontend/.env.local` to use another host and restart Vite. Production must route `/api` to the backend or set `VITE_API_URL` at build time. Failed requests show errors instead of local fallback results. API docs: http://localhost:8000/docs.
@@ -37,7 +37,7 @@ bun run preview
 5. Open **Shape Your Sound** → **Try demo recording** → **Finish & analyze**. Save the practice.
 6. Open **Speech profile** for the radar chart, skill breakdown, and recommendation.
 
-The sidebar’s **Reset demo** clears progress. Direct game URLs support quick showcase navigation. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
+The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage separately for each Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
 
 ## Architecture
 

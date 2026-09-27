@@ -3697,9 +3697,23 @@ p {
 .game-grid .game-card.wide {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 52px 1fr auto;
-    column-gap: 20px;
+    grid-template-columns: 68px 1fr auto;
+    align-content: center;
+    column-gap: 24px;
     align-items: center;
+    min-height: 160px;
+    padding: 28px 32px;
+}
+
+.game-card.wide .game-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 17px;
+}
+
+.game-card.wide .game-icon svg {
+    width: 32px;
+    height: 32px;
 }
 
 .game-card.wide .card-top {
@@ -3718,11 +3732,13 @@ p {
 }
 
 .game-card.wide h3 {
-    margin: 4px 0;
+    margin: 6px 0;
+    font-size: 19px;
 }
 
 .game-card.wide p {
     min-height: 0;
+    font-size: 13px;
 }
 
 .game-card.wide .card-bottom {
@@ -3730,8 +3746,9 @@ p {
     grid-row: 1 / 4;
     flex-direction: column;
     align-items: flex-end;
-    gap: 8px;
+    gap: 10px;
     border: 0;
     margin: 0;
     padding: 0;
+    font-size: 12px;
 }

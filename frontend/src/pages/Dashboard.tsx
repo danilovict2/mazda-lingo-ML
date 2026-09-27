@@ -30,15 +30,14 @@ export function Dashboard() {
                     {progress.placed ? progress.level : "Intermediate"} · Level 3
                 </span>
             </div>
-            <div className="dashboard-layout">
-                <div className="dashboard-primary">
-                    <section id="path" className="path-section">
-                        <div className="section-heading">
-                            <div>
-                                <h2>Practice games</h2>
-                            </div>
-                        </div>
-                        <div className="game-grid game-grid-2x2">
+            <section id="path" className="path-section">
+                <div className="section-heading">
+                    <div>
+                        <h2>Practice games</h2>
+                    </div>
+                </div>
+                {/* Cards and panels share one grid so the panels line up with the card rows. */}
+                <div className="dashboard-grid">
                             {games.map((g, i) => (
                                 <GameCard
                                     key={g.id}
@@ -53,10 +52,6 @@ export function Dashboard() {
                                     }
                                 />
                             ))}
-                        </div>
-                    </section>
-                </div>
-                <aside className="right-column">
                     <section className="panel goal-panel">
                         <div className="section-heading">
                             <h3>Today's goal</h3>
@@ -107,8 +102,8 @@ export function Dashboard() {
                             Explore your speech profile <ArrowUpRight size={16} />
                         </Link>
                     </section>
-                </aside>
-            </div>
+                </div>
+            </section>
         </Shell>
     );
 }

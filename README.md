@@ -1,4 +1,4 @@
-# Cadence
+# Lingo
 
 **Good English. Great rhythm.** A demo-ready pronunciation coach for English word stress, sentence emphasis, and natural rhythm. Seven short games turn listening and speaking practice into a visual, rewarding learning path.
 

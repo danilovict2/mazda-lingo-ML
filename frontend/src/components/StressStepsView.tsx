@@ -94,6 +94,7 @@ export function StressStepsView({
                     </div>
                 </div>
 
+                <div className="stress-columns-wrapper">
                 <div className="stress-columns">
                 <div
                     className="stress-column"
@@ -155,6 +156,7 @@ export function StressStepsView({
                             );
                         })}
                     </div>
+                </div>
                 </div>
                 </div>
             </div>

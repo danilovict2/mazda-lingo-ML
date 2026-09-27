@@ -1747,9 +1747,9 @@ footer {
 }
 
 .stress-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.8fr;
-    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     flex: 1;
     overflow-y: auto;
     min-height: 0;
@@ -1801,6 +1801,7 @@ footer {
     border-radius: 10px;
     padding: 12px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .words-label {
@@ -1813,8 +1814,8 @@ footer {
 }
 
 .words-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
     overflow-y: auto;
     flex: 1;
@@ -1824,15 +1825,15 @@ footer {
     background: #f8f3fc;
     border: 2px solid #b69dd4;
     border-radius: 8px;
-    padding: 10px 12px;
+    padding: 8px 10px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     cursor: move;
     user-select: none;
     transition:
         background 0.2s,
         border-color 0.2s;
-    flex-shrink: 0;
+    min-height: 0;
 }
 
 .draggable-word:hover {
@@ -1844,12 +1845,17 @@ footer {
     opacity: 0.7;
 }
 
-.stress-columns {
+.stress-columns-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     flex: 1;
     overflow: hidden;
+    min-height: 0;
+}
+
+.stress-columns {
+    display: contents;
 }
 
 .stress-column {

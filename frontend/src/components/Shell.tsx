@@ -10,7 +10,9 @@ function TopPanel() {
     const { progress } = useProgress();
     return (
         <div className="top-panel">
-            <span className="project-name">Lingo</span>
+            <Link to="/dashboard" className="project-name">
+                Lingo
+            </Link>
             <div className="top-panel-right">
                 <span className="streak">
                     <Flame size={16} className="orange" /> 7

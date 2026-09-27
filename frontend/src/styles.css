@@ -321,6 +321,13 @@ nav {
     font-weight: 800;
     letter-spacing: -1.2px;
     color: #302d3d;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.project-name:hover {
+    opacity: 0.7;
 }
 
 .top-panel-right {

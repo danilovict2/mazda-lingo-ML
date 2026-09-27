@@ -111,23 +111,6 @@ export function Profile() {
                             </div>
                         ))}
                     </section>
-                    <section className="recommendation">
-                        <span className="eyebrow">
-                            <Sparkles size={16} /> YOUR NEXT SMALL WIN
-                        </span>
-                        <h2>
-                            You hear the difference.
-                            <br />
-                            Now, make it heard.
-                        </h2>
-                        <p>
-                            Your word-stress recognition is excellent. Spend your next session
-                            exploring sentence emphasis in What do they mean?.
-                        </p>
-                        <Button to="/game/what-do-they-mean">
-                            Practice sentence emphasis <ArrowRight size={16} />
-                        </Button>
-                    </section>
                 </div>
             </div>
             <section className="panel history">

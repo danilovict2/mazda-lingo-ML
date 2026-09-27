@@ -19,6 +19,7 @@ export type StressStepsQuestion = {
     category2Example: string;
     correctMap: Record<string, number>;
 };
+
 export const games = [
     {
         id: "stress-sort",
@@ -65,6 +66,7 @@ export const games = [
         time: 4,
     },
 ];
+
 const word = (
     text: string,
     options: string[],
@@ -79,6 +81,7 @@ const word = (
     stress,
     explanation: `Exactly where the beat belongs: ${options[correct]}. Give that syllable a little more length and energy.`,
 });
+
 const words = [
     word(
         "photography",
@@ -116,6 +119,7 @@ const words = [
         2,
     ),
 ];
+
 const detective: Question[] = [
     {
         text: "I didn’t say **she** stole my coffee.",
@@ -188,6 +192,7 @@ const detective: Question[] = [
             "Stressing “now” makes the timing the focus: immediately, rather than later.",
     },
 ];
+
 const echo: Question[] = [
     {
         text: "I really wanted to see that movie.",
@@ -246,16 +251,12 @@ const echo: Question[] = [
             "Adjectives, nouns, and adverbs can carry the main beats. “It’s a” is lighter.",
     },
 ];
+
 const twins: Question[] = [
     {
         text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "permit",
-            "record",
-            "desert",
-            "promise",
-        ],
+        options: ["permit", "record", "desert", "promise"],
         correct: 3,
         explanation:
             "promise keeps the PROM-ise stress in both forms. permit, record, and desert all change stress between noun and verb.",
@@ -263,12 +264,7 @@ const twins: Question[] = [
     {
         text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "produce",
-            "present",
-            "answer",
-            "progress",
-        ],
+        options: ["produce", "present", "answer", "progress"],
         correct: 2,
         explanation:
             "answer keeps the AN-swer stress in both forms. produce, present, and progress all move the stress.",
@@ -276,12 +272,7 @@ const twins: Question[] = [
     {
         text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "extract",
-            "console",
-            "protest",
-            "support",
-        ],
+        options: ["extract", "console", "protest", "support"],
         correct: 3,
         explanation:
             "support keeps the sup-PORT stress in both forms. extract, console, and protest all change their stress pattern.",
@@ -289,20 +280,47 @@ const twins: Question[] = [
     {
         text: "Compare these four words:",
         prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "increase",
-            "conflict",
-            "paper",
-            "rebel",
-        ],
+        options: ["increase", "conflict", "paper", "rebel"],
         correct: 2,
         explanation:
             "paper keeps the PA-per stress in both forms. increase, conflict, and rebel all shift their stress.",
     },
 ];
 
-const stressSteps: StressStepsQuestion[] = [
-    {
+export const stressStepsByDifficulty: Record<string, StressStepsQuestion> = {
+    // 9 words total (5 on 1st syllable, 4 on 2nd syllable)
+    Easy: {
+        words: [
+            "doctor",
+            "market",
+            "window",
+            "pencil",
+            "purple",
+            "agree",
+            "hotel",
+            "decide",
+            "begin",
+        ],
+        category1Label: "Stress on 1st syllable",
+        category1Pattern: [3, 1],
+        category1Example: "table",
+        category2Label: "Stress on 2nd syllable",
+        category2Pattern: [1, 3],
+        category2Example: "guitar",
+        correctMap: {
+            doctor: 0,
+            market: 0,
+            window: 0,
+            pencil: 0,
+            purple: 0,
+            agree: 1,
+            hotel: 1,
+            decide: 1,
+            begin: 1,
+        },
+    },
+    // 10 words total (5 on 2nd syllable, 5 on 3rd syllable)
+    Medium: {
         words: [
             "apostrophe",
             "apparently",
@@ -334,14 +352,59 @@ const stressSteps: StressStepsQuestion[] = [
             reputation: 1,
         },
     },
-];
+    // 15 words total (8 on 2nd syllable, 7 on 3rd syllable)
+    // Words are acoustically tricky due to subtle suffix-driven vowel reductions
+    Hard: {
+        words: [
+            "photography",
+            "catastrophe",
+            "analysis",
+            "significant",
+            "alternative",
+            "particular",
+            "democracy",
+            "phenomenon",
+            "photographic",
+            "characteristic",
+            "economics",
+            "opportunity",
+            "enthusiastic",
+            "recommendation",
+            "representative",
+        ],
+        category1Label: "Stress on 2nd syllable",
+        category1Pattern: [1, 3, 1, 1],
+        category1Example: "pho-TOG-ra-phy",
+        category2Label: "Stress on 3rd syllable",
+        category2Pattern: [1, 1, 3, 1],
+        category2Example: "pho-to-GRAPH-ic",
+        correctMap: {
+            photography: 0,
+            catastrophe: 0,
+            analysis: 0,
+            significant: 0,
+            alternative: 0,
+            particular: 0,
+            democracy: 0,
+            phenomenon: 0,
+            photographic: 1,
+            characteristic: 1,
+            economics: 1,
+            opportunity: 1,
+            enthusiastic: 1,
+            recommendation: 1,
+            representative: 1,
+        },
+    },
+};
 
 export const questions: Record<string, Question[] | StressStepsQuestion[]> = {
-    "stress-sort": stressSteps,
+    "stress-sort": [stressStepsByDifficulty.Medium],
     "what-do-they-mean": detective,
     "rhythm-match": echo,
     "stress-twins": twins,
 };
+
 export const placement = [words[0], echo[1], twins[0], detective[2], words[2]];
 export const skills = [
     "Word stress",
@@ -353,6 +416,7 @@ export const skills = [
     "Fluency",
 ];
 export const scores = [82, 68, 75, 71, 90, 79, 73];
+
 export type Progress = {
     xp: number;
     completed: string[];
@@ -362,6 +426,7 @@ export type Progress = {
     level: string;
     sessions: { name: string; accuracy: number; date: string }[];
 };
+
 export const initialProgress: Progress = {
     xp: 360,
     completed: [],

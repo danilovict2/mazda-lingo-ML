@@ -81,6 +81,8 @@ uv run scripts/generate_audio.py detective-she  # regenerate one clip
 
 Commit the generated `.wav` files and `frontend/src/generated/audio.json`.
 
-API routes: `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech` (demo scores), `/api/analyze-recording` (real scores). Lesson content remains local, and persistence is owned by the browser.
+**Say It Right** (speaking game): the player records a sentence stressing the highlighted words. `POST /api/check-stress` transcribes the take with ElevenLabs speech-to-text, then `stress_check.py` compares each word's loudness and length per syllable within the speaker's own sentence. The attempt passes when the sentence was said and the target words are at least as prominent as every other content word. The game only uses sentences the checker judged correctly in calibration.
+
+API routes (all but health need a signed-in user): `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech` (demo scores), `/api/analyze-recording` (real scores), `/api/check-stress` (Say It Right). Lesson content remains local, and persistence is owned by the browser.
 
 Responsive layouts, visible keyboard focus, semantic buttons, disabled answer states, live feedback, reduced-motion support, and labeled audio controls are included.

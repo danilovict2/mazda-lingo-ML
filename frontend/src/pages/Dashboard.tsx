@@ -43,6 +43,7 @@ export function Dashboard() {
                                 <GameCard
                                     key={g.id}
                                     game={g}
+                                    wide={g.id === "say-it-right"}
                                     status={
                                         progress.completed.includes(g.id)
                                             ? "Completed"

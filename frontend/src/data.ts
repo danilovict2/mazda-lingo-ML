@@ -229,7 +229,7 @@ const echo: Question[] = [
 const twins: Question[] = [
     {
         text: "a record → to record",
-        prompt: "Choose the noun → verb stress pair.",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
             "REcord → reCORD",
             "reCORD → REcord",
@@ -242,7 +242,7 @@ const twins: Question[] = [
     },
     {
         text: "a present → to present",
-        prompt: "How does the stress move?",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
             "preSENT → PREsent",
             "PREsent → preSENT",
@@ -255,7 +255,7 @@ const twins: Question[] = [
     },
     {
         text: "a contract → to contract",
-        prompt: "Choose the usual noun → verb pattern.",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
             "conTRACT → CONtract",
             "CONtract → CONtract",
@@ -268,7 +268,7 @@ const twins: Question[] = [
     },
     {
         text: "an object → to object",
-        prompt: "Choose the noun → verb stress pair.",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
             "obJECT → OBject",
             "OBject → OBject",

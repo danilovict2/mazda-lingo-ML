@@ -1,16 +1,18 @@
 """Cadence demo API. Replace analyze_speech with a Python scoring pipeline."""
 
 from typing import Literal
-from fastapi import FastAPI
+import os
+from fastapi import Depends, FastAPI
+from auth import current_user
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 app = FastAPI(title="Cadence API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 GAMES = [
     "stress-steps",
@@ -44,7 +46,7 @@ def health():
     return {"status": "ok"}
 
 
-@app.post("/api/placement-test")
+@app.post("/api/placement-test", dependencies=[Depends(current_user)])
 def placement(data: Placement):
     return {
         "level": "Advanced"
@@ -55,7 +57,7 @@ def placement(data: Placement):
     }
 
 
-@app.post("/api/session")
+@app.post("/api/session", dependencies=[Depends(current_user)])
 def session(data: Session):
     from fastapi import HTTPException
 
@@ -64,7 +66,7 @@ def session(data: Session):
     return {"xp": data.total * 20 + data.correct * 10}
 
 
-@app.post("/api/analyze-speech")
+@app.post("/api/analyze-speech", dependencies=[Depends(current_user)])
 def analyze_speech(data: Speech):
     # Integration boundary: accept an audio upload and call your Python speech/AI
     # pipeline here. This endpoint intentionally scores no actual recording.
@@ -95,3 +97,8 @@ def analyze_speech(data: Speech):
         ],
         "simulated": True,
     }
+
+
+@app.get("/api/me")
+def me(user: dict = Depends(current_user)):
+    return {"sub": user["sub"]}

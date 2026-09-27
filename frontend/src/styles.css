@@ -449,6 +449,12 @@ main {
     width: 100%;
 }
 
+main:has(.stress-steps-container) {
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 24px;
+}
+
 .page-heading {
     display: flex;
     justify-content: space-between;
@@ -1620,6 +1626,13 @@ footer {
     width: 100%;
 }
 
+.lesson-container:has(.stress-steps-container) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+}
+
 .lesson-heading {
     display: flex;
     align-items: center;
@@ -1767,11 +1780,13 @@ footer {
 }
 
 .stress-steps-container {
+    --stress-word-width: 120px;
+    --stress-word-height: 34px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: 100%;
-    overflow-y: auto;
+    flex: 1;
+    min-height: 320px;
 }
 
 .stress-layout {
@@ -1843,8 +1858,10 @@ footer {
 
 .words-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
+    grid-auto-rows: var(--stress-word-height);
     gap: 8px;
+    max-width: calc(6 * var(--stress-word-width) + 5 * 8px);
     overflow-y: auto;
     flex: 1;
 }
@@ -1861,7 +1878,11 @@ footer {
     transition:
         background 0.2s,
         border-color 0.2s;
-    min-height: 0;
+    width: var(--stress-word-width);
+    height: var(--stress-word-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .draggable-word:hover {
@@ -1920,8 +1941,10 @@ footer {
 }
 
 .words-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
+    grid-auto-rows: var(--stress-word-height);
+    align-content: start;
     gap: 8px;
     flex: 1;
     overflow-y: auto;
@@ -1939,6 +1962,8 @@ footer {
     gap: 6px;
     transition: all 0.2s;
     user-select: none;
+    width: var(--stress-word-width);
+    height: var(--stress-word-height);
 }
 
 .placed-word[draggable="true"] {
@@ -1973,6 +1998,10 @@ footer {
 
 .placed-word span {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .check-icon {

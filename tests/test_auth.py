@@ -16,48 +16,88 @@ class AuthenticationTests(unittest.TestCase):
         cls.client = TestClient(app)
 
     def token(self, **changes):
-        claims = dict(sub="auth0|test", iss="https://test.auth0.com/", aud="cadence", iat=int(time.time()), exp=int(time.time()) + 300)
+        claims = dict(
+            sub="auth0|test",
+            iss="https://test.auth0.com/",
+            aud="cadence",
+            iat=int(time.time()),
+            exp=int(time.time()) + 300,
+        )
         claims.update(changes)
         return jwt.encode(claims, self.key, algorithm="RS256")
 
     def request(self, token):
-        return self.client.get('/api/me', headers={'Authorization': 'Bearer ' + token})
+        return self.client.get("/api/me", headers={"Authorization": "Bearer " + token})
 
     def test_health_public_and_practice_protected(self):
-        self.assertEqual(self.client.get('/api/health').status_code, 200)
-        for route in ('placement-test', 'session', 'analyze-speech'):
-            self.assertEqual(self.client.post('/api/' + route, json={}).status_code, 401)
-        self.assertEqual(self.client.get('/api/me').status_code, 401)
+        self.assertEqual(self.client.get("/api/health").status_code, 200)
+        for route in ("placement-test", "session", "analyze-speech"):
+            self.assertEqual(
+                self.client.post("/api/" + route, json={}).status_code, 401
+            )
+        self.assertEqual(self.client.get("/api/me").status_code, 401)
 
-    @patch('auth.settings')
+    @patch("auth.settings")
     def test_signed_tokens_and_claim_validation(self, settings):
-        keys = SimpleNamespace(get_signing_key_from_jwt=lambda _: SimpleNamespace(key=self.key.public_key()))
-        settings.return_value = ('https://test.auth0.com/', 'cadence', keys)
-        self.assertEqual(self.request(self.token()).json(), {'sub': 'auth0|test'})
-        for changes in ({'aud': 'wrong'}, {'iss': 'https://wrong/'}, {'exp': 1}, {'sub': ''}, {'iat': int(time.time()) + 600}):
+        keys = SimpleNamespace(
+            get_signing_key_from_jwt=lambda _: SimpleNamespace(
+                key=self.key.public_key()
+            )
+        )
+        settings.return_value = ("https://test.auth0.com/", "cadence", keys)
+        self.assertEqual(self.request(self.token()).json(), {"sub": "auth0|test"})
+        for changes in (
+            {"aud": "wrong"},
+            {"iss": "https://wrong/"},
+            {"exp": 1},
+            {"sub": ""},
+            {"iat": int(time.time()) + 600},
+        ):
             self.assertEqual(self.request(self.token(**changes)).status_code, 401)
-        self.assertEqual(self.request('malformed').status_code, 401)
+        self.assertEqual(self.request("malformed").status_code, 401)
         other = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-        forged = jwt.encode(dict(sub='attacker', aud='cadence', iss='https://test.auth0.com/', iat=int(time.time()), exp=int(time.time()) + 300), other, algorithm='RS256')
+        forged = jwt.encode(
+            dict(
+                sub="attacker",
+                aud="cadence",
+                iss="https://test.auth0.com/",
+                iat=int(time.time()),
+                exp=int(time.time()) + 300,
+            ),
+            other,
+            algorithm="RS256",
+        )
         self.assertEqual(self.request(forged).status_code, 401)
-        headers = {'Authorization': 'Bearer ' + self.token()}
-        for route, body in [('placement-test', {'correct': 3}), ('session', {'game': 'stress-steps', 'correct': 2, 'total': 3}), ('analyze-speech', {'text': 'hello'})]:
-            self.assertEqual(self.client.post('/api/' + route, json=body, headers=headers).status_code, 200)
+        headers = {"Authorization": "Bearer " + self.token()}
+        for route, body in [
+            ("placement-test", {"correct": 3}),
+            ("session", {"game": "stress-steps", "correct": 2, "total": 3}),
+            ("analyze-speech", {"text": "hello"}),
+        ]:
+            self.assertEqual(
+                self.client.post(
+                    "/api/" + route, json=body, headers=headers
+                ).status_code,
+                200,
+            )
 
-    @patch('auth.settings')
+    @patch("auth.settings")
     def test_key_service_failure(self, settings):
         keys = unittest.mock.Mock()
-        keys.get_signing_key_from_jwt.side_effect = jwt.PyJWKClientConnectionError('offline')
-        settings.return_value = ('https://test.auth0.com/', 'cadence', keys)
+        keys.get_signing_key_from_jwt.side_effect = jwt.PyJWKClientConnectionError(
+            "offline"
+        )
+        settings.return_value = ("https://test.auth0.com/", "cadence", keys)
         self.assertEqual(self.request(self.token()).status_code, 503)
 
     def test_missing_configuration(self):
         from auth import settings
+
         settings.cache_clear()
-        with patch.dict('os.environ', {'AUTH0_DOMAIN': '', 'AUTH0_AUDIENCE': ''}):
+        with patch.dict("os.environ", {"AUTH0_DOMAIN": "", "AUTH0_AUDIENCE": ""}):
             self.assertEqual(self.request(self.token()).status_code, 503)
         settings.cache_clear()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

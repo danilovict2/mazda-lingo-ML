@@ -1,6 +1,3 @@
-import type React from "react";
-import { useState } from "react";
-import { BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import type React from "react";
@@ -31,7 +28,6 @@ function TopPanel() {
     );
 }
 
-export function Shell({ children }: { children: React.ReactNode }) {
 export function Shell({ children }: { children: React.ReactNode }) {
     const { user } = useAuth0();
     const name = user?.name || user?.email || "Learner";

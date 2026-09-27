@@ -113,34 +113,6 @@ export function Profile() {
                     </section>
                 </div>
             </div>
-            <section className="panel history">
-                <div className="section-heading">
-                    <h2>Your recent rhythm</h2>
-                    <span className="subtle-label">One practice at a time</span>
-                </div>
-                {(progress.sessions.length
-                    ? progress.sessions
-                    : [
-                        { name: "Stress Steps", accuracy: 90, date: "Demo · Yesterday" },
-                        { name: "Rhythm Echo", accuracy: 80, date: "Demo · Yesterday" },
-                        { name: "Stress Twins", accuracy: 88, date: "Demo · 2 days ago" },
-                    ]
-                ).map((s, i) => (
-                    <div className="history-row" key={i}>
-                        <span className="metric-icon purple">
-                            <AudioLines size={18} />
-                        </span>
-                        <div>
-                            <strong>{s.name}</strong>
-                            <small>{s.date}</small>
-                        </div>
-                        <span>{s.accuracy}% accuracy</span>
-                        <span className="green-text">
-                            <Check size={15} /> Complete
-                        </span>
-                    </div>
-                ))}
-            </section>
         </Shell>
     );
 }

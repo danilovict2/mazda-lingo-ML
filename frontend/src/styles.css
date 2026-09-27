@@ -408,7 +408,7 @@ nav {
 }
 
 main {
-    padding: 20px 40px 20px;
+    padding: 16px 40px 16px;
     max-width: 1530px;
     margin: auto;
     display: flex;
@@ -419,7 +419,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     gap: 16px;
 }
 
@@ -644,7 +644,7 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    margin: 20px 0 30px;
+    margin: 14px 0 16px;
 }
 
 .metric-row>div {
@@ -915,7 +915,7 @@ main {
     border: 1px solid var(--border);
     border-radius: 13px;
     background: white;
-    padding: 21px;
+    padding: 16px;
 }
 
 .panel h3 {
@@ -2239,7 +2239,7 @@ footer {
 }
 
 .score-row {
-    margin: 19px 0;
+    margin: 10px 0;
 }
 
 .score-row>div:first-child {
@@ -2316,16 +2316,16 @@ footer {
 .profile-layout {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
-    gap: 23px;
+    gap: 16px;
 }
 
 .radar-panel {
-    padding: 25px;
+    padding: 16px;
 }
 
 .radar-panel .radar.large {
-    max-width: 490px;
-    margin: 15px auto 0;
+    max-width: 350px;
+    margin: 8px auto 0;
 }
 
 .radar-panel h2 {
@@ -2347,15 +2347,15 @@ footer {
 
 .radar-summary {
     border-top: 1px solid #eee7f3;
-    margin-top: 29px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
 }
 
 .radar-summary>div {
     display: flex;
     align-items: center;
     gap: 13px;
-    padding: 16px 0;
+    padding: 8px 0;
     color: #a68dbd;
 }
 
@@ -2380,7 +2380,7 @@ footer {
 }
 
 .skill-panel {
-    padding: 25px;
+    padding: 16px;
 }
 
 .skill-panel h3 {

@@ -1740,14 +1740,26 @@ footer {
 .stress-steps-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.stress-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 16px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
 }
 
 .stress-instructions {
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
     color: #6a6573;
-    padding: 15px;
+    padding: 8px 0;
+    flex-shrink: 0;
 }
 
 .stress-examples {
@@ -1777,38 +1789,47 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background: #fff;
+    border: 2px solid #d9cfea;
+    border-radius: 10px;
+    padding: 14px;
+    overflow: hidden;
 }
 
 .words-label {
-    font-size: 12px;
-    color: #8862c1;
+    font-size: 11px;
+    color: #9b89b8;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
 
 .words-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .draggable-word {
-    background: #fff;
+    background: #f8f3fc;
     border: 2px solid #b69dd4;
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px 12px;
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     cursor: move;
     user-select: none;
     transition:
         background 0.2s,
         border-color 0.2s;
+    flex-shrink: 0;
 }
 
 .draggable-word:hover {
-    background: #f8f3fc;
+    background: #f0e8f8;
     border-color: #8862c1;
 }
 
@@ -1819,18 +1840,21 @@ footer {
 .stress-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
+    flex: 1;
+    overflow: hidden;
 }
 
 .stress-column {
     background: #fff;
     border: 2px solid #d9cfea;
     border-radius: 10px;
-    padding: 20px;
-    min-height: 300px;
+    padding: 14px;
     transition: border-color 0.2s;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
 }
 
 .stress-column:hover {
@@ -1840,16 +1864,18 @@ footer {
 .column-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
 }
 
 .column-label {
-    font-size: 11px;
+    font-size: 10px;
     color: #a08bac;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .words-list {
@@ -1857,6 +1883,8 @@ footer {
     flex-direction: column;
     gap: 8px;
     flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .placed-word {

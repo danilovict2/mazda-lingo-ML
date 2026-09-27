@@ -77,23 +77,24 @@ export function StressStepsView({
                 <p>Put the words into the correct columns. Look at the examples first.</p>
             </div>
 
-            <div className="stress-words-pool">
-                <div className="words-label">Words to place:</div>
-                <div className="words-grid">
-                    {unplacedWords.map((word) => (
-                        <div
-                            key={word}
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, word)}
-                            className="draggable-word"
-                        >
-                            {word}
-                        </div>
-                    ))}
+            <div className="stress-layout">
+                <div className="stress-words-pool">
+                    <div className="words-label">Words to place:</div>
+                    <div className="words-grid">
+                        {unplacedWords.map((word) => (
+                            <div
+                                key={word}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, word)}
+                                className="draggable-word"
+                            >
+                                {word}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <div className="stress-columns">
+                <div className="stress-columns">
                 <div
                     className="stress-column"
                     onDragOver={handleDragOver}
@@ -154,6 +155,7 @@ export function StressStepsView({
                             );
                         })}
                     </div>
+                </div>
                 </div>
             </div>
 

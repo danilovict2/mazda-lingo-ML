@@ -7,7 +7,7 @@ export function Logo() {
             <span className="logo-mark">
                 <AudioLines size={25} />
             </span>
-            cadence<span className="logo-dot">.</span>
+            lingo<span className="logo-dot">.</span>
         </Link>
     );
 }

@@ -1,4 +1,5 @@
 import { ProgressProvider } from "./state/ProgressProvider";
+import { AuthProvider, RequireAuth } from "./auth/Auth";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useParams, useLocation, Navigate } from "react-router-dom";
 import { Landing } from "./pages/Landing";

@@ -6,41 +6,48 @@ export type Question = {
     explanation: string;
     stress?: number;
 };
-
-export type StressStepsQuestion = {
-    words: string[];
-    category1Label: string;
-    category1Pattern: number[];
-    category1Example: string;
-    category2Label: string;
-    category2Pattern: number[];
-    category2Example: string;
-    correctMap: Record<string, number>;
-};
 export const games = [
     {
-        id: "stress-sort",
-        name: "Stress Sort",
-        subtitle: "Group words by their stressed syllable.",
-        tag: "WORD STRESS · LEXICAL PHONOLOGY",
+        id: "stress-steps",
+        name: "Stress Steps",
+        subtitle: "Find the beat inside every word.",
+        tag: "WORD STRESS",
         color: "purple",
         icon: "steps",
         time: 3,
     },
     {
+        id: "rhythm-echo",
+        name: "Rhythm Echo",
+        subtitle: "Catch the rhythm of real conversation.",
+        tag: "SENTENCE RHYTHM",
+        color: "peach",
+        icon: "audio",
+        time: 4,
+    },
+    {
         id: "stress-twins",
         name: "Stress Twins",
-        subtitle: "Explore how stress distinguishes nouns and verbs.",
-        tag: "WORD STRESS · GRAMMAR",
+        subtitle: "Find the words that move to the same beat.",
+        tag: "STRESS & MEANING",
         color: "green",
         icon: "twins",
         time: 3,
     },
     {
-        id: "what-do-they-mean",
-        name: "What do they mean?",
-        subtitle: "Discover how emphasis changes the implied meaning.",
-        tag: "SENTENCE STRESS · PRAGMATICS",
+        id: "soundprint",
+        name: "Soundprint",
+        subtitle: "See the shape of stress.",
+        tag: "SOUND RECOGNITION",
+        color: "blue",
+        icon: "wave",
+        time: 4,
+    },
+    {
+        id: "stress-detective",
+        name: "Stress Detective",
+        subtitle: "Same words. Different meaning.",
+        tag: "SENTENCE EMPHASIS",
         color: "pink",
         icon: "detective",
         time: 5,
@@ -48,11 +55,20 @@ export const games = [
     {
         id: "rhythm-match",
         name: "Rhythm Match",
-        subtitle: "Compare the spacing between stressed beats.",
-        tag: "SPEECH TIMING · PROSODY",
-        color: "peach",
-        icon: "audio",
+        subtitle: "Match the beat. Speak naturally.",
+        tag: "NATURAL RHYTHM",
+        color: "yellow",
+        icon: "rhythm",
         time: 4,
+    },
+    {
+        id: "shape-your-sound",
+        name: "Shape Your Sound",
+        subtitle: "Speak it. See it. Improve it.",
+        tag: "SPEAKING STUDIO",
+        color: "purple",
+        icon: "mic",
+        time: 5,
     },
 ];
 const word = (
@@ -228,103 +244,67 @@ const echo: Question[] = [
 ];
 const twins: Question[] = [
     {
-        text: "Compare these four words:",
-        prompt: "Which word keeps the same stress as a noun and a verb?",
+        text: "a record → to record",
+        prompt: "Choose the noun → verb stress pair.",
         options: [
-            "permit",
-            "record",
-            "desert",
-            "import",
-        ],
-        correct: 3,
-        explanation:
-            "import keeps the IM-port stress in both forms. permit, record, and desert all change stress between noun and verb.",
-    },
-    {
-        text: "Compare these four words:",
-        prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "produce",
-            "present",
-            "answer",
-            "progress",
-        ],
-        correct: 2,
-        explanation:
-            "answer keeps the AN-swer stress in both forms. produce, present, and progress all move the stress.",
-    },
-    {
-        text: "Compare these four words:",
-        prompt: "Which word keeps the same stress as a noun and a verb?",
-        options: [
-            "extract",
-            "console",
-            "protest",
-            "support",
+            "REcord → reCORD",
+            "reCORD → REcord",
+            "REcord → REcord",
+            "reCORD → reCORD",
         ],
         correct: 0,
         explanation:
-            "extract keeps the EX-tract stress in both forms. console, protest, and support all change their stress pattern.",
+            "A REcord is a noun. To reCORD is an action. Moving the stress changes the grammatical role.",
     },
     {
-        text: "Compare these four words:",
-        prompt: "Which word keeps the same stress as a noun and a verb?",
+        text: "a present → to present",
+        prompt: "How does the stress move?",
         options: [
-            "increase",
-            "surprise",
-            "paper",
-            "detail",
+            "preSENT → PREsent",
+            "PREsent → preSENT",
+            "PREsent → PREsent",
+            "preSENT → preSENT",
+        ],
+        correct: 1,
+        explanation:
+            "A PREsent is a gift; to preSENT is to show or introduce something.",
+    },
+    {
+        text: "a contract → to contract",
+        prompt: "Choose the usual noun → verb pattern.",
+        options: [
+            "conTRACT → CONtract",
+            "CONtract → CONtract",
+            "CONtract → conTRACT",
+            "conTRACT → conTRACT",
         ],
         correct: 2,
         explanation:
-            "paper keeps the PA-per stress in both forms. increase, surprise, and detail all shift their stress.",
+            "A CONtract is an agreement. To conTRACT can mean to become smaller.",
     },
-];
-
-const stressSteps: StressStepsQuestion[] = [
     {
-        words: [
-            "apostrophe",
-            "apparently",
-            "available",
-            "community",
-            "development",
-            "environment",
-            "Argentina",
-            "definition",
-            "disappointing",
-            "engineering",
-            "information",
-            "reputation",
+        text: "an object → to object",
+        prompt: "Choose the noun → verb stress pair.",
+        options: [
+            "obJECT → OBject",
+            "OBject → OBject",
+            "obJECT → obJECT",
+            "OBject → obJECT",
         ],
-        category1Label: "Stress on 2nd syllable",
-        category1Pattern: [1, 3, 1, 1],
-        category1Example: "community",
-        category2Label: "Stress on 3rd syllable",
-        category2Pattern: [1, 1, 3, 1],
-        category2Example: "information",
-        correctMap: {
-            apostrophe: 0,
-            apparently: 0,
-            available: 0,
-            community: 0,
-            development: 0,
-            environment: 0,
-            Argentina: 1,
-            definition: 1,
-            disappointing: 1,
-            engineering: 1,
-            information: 1,
-            reputation: 1,
-        },
+        correct: 3,
+        explanation: "An OBject is a thing. To obJECT is to express disagreement.",
     },
 ];
-
-export const questions: Record<string, Question[] | StressStepsQuestion[]> = {
-    "stress-sort": stressSteps,
-    "what-do-they-mean": detective,
-    "rhythm-match": echo,
+export const questions: Record<string, Question[]> = {
+    "stress-steps": words,
+    soundprint: words,
+    "stress-detective": detective,
+    "rhythm-echo": echo,
     "stress-twins": twins,
+    "rhythm-match": echo.map((q) => ({
+        ...q,
+        prompt: "Listen, then choose the matching strong-beat pattern.",
+    })),
 };
 export const placement = [words[0], echo[1], twins[0], detective[2], words[2]];
 export const skills = [

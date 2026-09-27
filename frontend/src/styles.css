@@ -114,6 +114,20 @@ svg {
 
 .sidebar {
     display: none;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 236px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 33px 21px 0;
+    position: fixed;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
 }
 
 .logo {
@@ -357,6 +371,18 @@ nav {
 
 .topbar {
     display: none;
+    margin-left: 236px;
+    width: calc(100% - 236px);
+}
+
+.topbar {
+    height: 77px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffffa0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
 }
 
 .breadcrumb {
@@ -486,6 +512,7 @@ main {
 
 .dashboard-layout.single-column {
     grid-template-columns: 1fr;
+    gap: 25px;
 }
 
 .continue-card {
@@ -791,13 +818,14 @@ main {
 
 .game-grid.game-grid-2x2 {
     grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
 }
 
 .game-card {
     background: white;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px;
+    padding: 16px;
     transition:
         transform 0.2s,
         box-shadow 0.2s;
@@ -820,15 +848,15 @@ main {
 .game-icon {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 46px;
+    height: 46px;
     border-radius: 13px;
     flex-shrink: 0;
 }
 
 .game-tag {
     color: #aaa1b4;
-    font-size: 9px;
+    font-size: 7px;
     letter-spacing: 1.15px;
     font-weight: 600;
 }
@@ -851,10 +879,10 @@ main {
     justify-content: space-between;
     gap: 3px;
     border-top: 1px solid #f2f0f5;
-    margin-top: 14px;
+    margin-top: 16px;
     padding-top: 12px;
     color: #a6a0ad;
-    font-size: 11px;
+    font-size: 8px;
 }
 
 .card-bottom span:first-child {
@@ -1622,7 +1650,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 27px;
 }
 
 .lesson-progress .progress-track {
@@ -2288,7 +2316,7 @@ footer {
 }
 
 .score-row {
-    margin: 10px 0;
+    margin: 19px 0;
 }
 
 .score-row>div:first-child {
@@ -2386,6 +2414,16 @@ footer {
     height: auto;
     margin: 4px auto 0;
     flex-shrink: 1;
+    gap: 23px;
+}
+
+.radar-panel {
+    padding: 25px;
+}
+
+.radar-panel .radar.large {
+    max-width: 490px;
+    margin: 15px auto 0;
 }
 
 .radar-panel h2 {
@@ -2415,7 +2453,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 13px;
-    padding: 8px 0;
+    padding: 16px 0;
     color: #a68dbd;
 }
 
@@ -3486,3 +3524,5 @@ p {
         flex-wrap: wrap;
     }
 }
+
+.auth-screen { max-width: 640px; margin: 15vh auto; padding: 24px; }

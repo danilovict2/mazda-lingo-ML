@@ -1,7 +1,12 @@
 import type React from "react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "./LogoutButton";
+import type React from "react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AudioLines, ArrowUpRight, BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
 import { initialProgress } from "../data";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
@@ -27,6 +32,10 @@ function TopPanel() {
 }
 
 export function Shell({ children }: { children: React.ReactNode }) {
+export function Shell({ children }: { children: React.ReactNode }) {
+    const { user } = useAuth0();
+    const name = user?.name || user?.email || "Learner";
+    const initials = name.slice(0, 2).toUpperCase();
     const { progress, setProgress } = useProgress();
     const location = useLocation();
     const [open, setOpen] = useState(false);
@@ -61,7 +70,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         </Link>
                     ))}
                 </nav>
+                <div className="sidebar-tip">
+                    <div className="mini-orbit">
+                        <AudioLines size={26} />
+                    </div>
+                    <h4>
+                        A little practice.
+                        <br />A big difference.
+                    </h4>
+                    <p>Five minutes today, a more confident you tomorrow.</p>
+                    <Link to="/game/shape-your-sound">
+                        Find your voice <ArrowUpRight size={15} />
+                    </Link>
+                </div>
                 <div className="sidebar-bottom">
+                    <LogoutButton />
                     <span className="demo-pill">
                         <i /> DEMO MODE
                     </span>
@@ -78,9 +101,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         Reset demo
                     </button>
                     <div className="user">
-                        <span className="avatar">JD</span>
+                        <span className="avatar">{initials}</span>
                         <div>
-                            <strong>Jamie Davis</strong>
+                            <strong>{name}</strong>
                             <small>Your voice, in progress</small>
                         </div>
                         <span className="online-dot" />
@@ -88,7 +111,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </div>
             </aside>
             <div className="main-shell">
-                <TopPanel />
                 <header className="topbar">
                     <button
                         className="mobile-menu icon-button"
@@ -115,7 +137,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                             <Zap size={18} className="violet" /> {progress.xp}{" "}
                             <small>XP</small>
                         </span>
-                        <span className="avatar small">JD</span>
+                        <span className="avatar small">{initials}</span>
                     </div>
                 </header>
                 <main>{children}</main>

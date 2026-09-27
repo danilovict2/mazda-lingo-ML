@@ -454,14 +454,19 @@ export type Progress = {
     placed: boolean;
     level: string;
     sessions: { name: string; accuracy: number; date: string }[];
+    // Add these two optional fields for real-time streaks
+    lastActiveDate?: string;
+    streak?: number;
 };
 
 export const initialProgress: Progress = {
-    xp: 360,
+    xp: 0,
     completed: [],
     answers: 0,
     correct: 0,
     placed: false,
-    level: "Explorer",
+    level: "Beginner · Level 1",
     sessions: [],
+    lastActiveDate: new Date().toISOString().slice(0, 10), // "YYYY-MM-DD"
+    streak: 1, // Today is your first streak!
 };

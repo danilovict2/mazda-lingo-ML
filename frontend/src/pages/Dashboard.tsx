@@ -27,7 +27,7 @@ export function Dashboard() {
                 </div>
                 <span className="level-badge">
                     <Layers size={15} />
-                    {progress.placed ? progress.level : "Intermediate"} · Level 3
+                    {progress.xp < 150 ? "Beginner · Level 1" : progress.xp < 400 ? "Elementary · Level 2" : "Intermediate · Level 3"}
                 </span>
             </div>
             <div className="dashboard-layout">

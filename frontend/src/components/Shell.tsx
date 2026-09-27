@@ -9,16 +9,20 @@ function TopPanel() {
     const { progress } = useProgress();
     const { user } = useAuth0();
     const name = user?.name || user?.email || "Learner";
+
+    // Use dynamic streak from progress (fallback to 1 if user just started today)
+    const currentStreak = progress.streak ?? 1;
+
     return (
         <div className="top-panel">
             <Link to="/dashboard" className="project-name">
                 Lingo
             </Link>
             <div className="top-panel-right">
-                <span className="streak">
-                    <Flame size={16} className="orange" /> 7
+                <span className="streak" title={`${currentStreak} day streak`}>
+                    <Flame size={16} className="orange" /> {currentStreak}
                 </span>
-                <span className="xp">
+                <span className="xp" title={`${progress.xp} Total XP`}>
                     <Zap size={16} className="violet" /> {progress.xp}
                 </span>
                 <Link to="/progress" className="top-link">

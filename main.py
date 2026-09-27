@@ -8,8 +8,7 @@ from pathlib import Path
 from typing import Literal
 
 import httpx
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-import os
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Depends
 from auth import current_user
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -26,7 +25,13 @@ MAX_UPLOAD = 10 * 1024 * 1024
 app = FastAPI(title="Cadence API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
+    allow_origins=[
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+        ).split(",")
+        if origin.strip()
+    ],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Authorization"],
 )
@@ -168,6 +173,8 @@ async def analyze_recording(clip: str = Form(), audio: UploadFile = File()):
         return score(ref, x, rate, heard)
     except NoSpeech as e:
         raise HTTPException(422, str(e))
+
+
 @app.get("/api/me")
 def me(user: dict = Depends(current_user)):
     return {"sub": user["sub"]}

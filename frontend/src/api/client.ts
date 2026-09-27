@@ -31,9 +31,8 @@ function request<T>(path: string, body: unknown): Promise<T> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
-    if (!res.ok) throw new Error(res.status === 401 ? "Your session expired. Please sign in again." : "Unable to complete the request. Please try again.");
-    return (await res.json()) as T;
 }
+
 export const api = {
     analyze: (text: string, difficulty: string) =>
         request<Analysis>("/api/analyze-speech", { text, difficulty }),

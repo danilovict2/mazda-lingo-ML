@@ -1,4 +1,4 @@
-import { AudioLines, ArrowRight, BookOpen, ChartNoAxesCombined, Check, Flame, Sparkles, Target, Trophy, Zap } from "lucide-react";
+import { AudioLines, BookOpen, Check, Flame, Target, Zap } from "lucide-react";
 import { skills, scores } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -77,22 +77,6 @@ export function Profile() {
                             <i />
                             Previous profile
                         </span>
-                    </div>
-                    <div className="radar-summary">
-                        <div>
-                            <Trophy size={21} />
-                            <span>
-                                STRONGEST SKILL<strong>Stress recognition</strong>
-                            </span>
-                            <b>{Math.min(99, 90 + gain)}%</b>
-                        </div>
-                        <div>
-                            <ChartNoAxesCombined size={21} />
-                            <span>
-                                BIGGEST IMPROVEMENT<strong>Sentence emphasis</strong>
-                            </span>
-                            <b>+{12 + gain}%</b>
-                        </div>
                     </div>
                 </section>
                 <div>

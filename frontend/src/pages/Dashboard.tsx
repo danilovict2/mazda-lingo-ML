@@ -17,13 +17,11 @@ export function Dashboard() {
     }, [useLocation().hash]);
     return (
         <Shell>
-            <div className="page-heading">
+            <div className="page-heading compact">
                 <div>
-                    <span className="eyebrow">A LITTLE BETTER, EVERY DAY</span>
                     <h1>
                         Find your rhythm, Jamie <span className="hello">✦</span>
                     </h1>
-                    <p>Your next confident conversation starts here.</p>
                 </div>
                 <span className="level-badge">
                     <Layers size={15} />
@@ -36,7 +34,6 @@ export function Dashboard() {
                         <div className="section-heading">
                             <div>
                                 <h2>Practice games</h2>
-                                <p>Master the rhythm of English.</p>
                             </div>
                         </div>
                         <div className="game-grid game-grid-2x2">

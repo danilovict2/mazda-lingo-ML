@@ -731,6 +731,10 @@ main {
     gap: 13px;
 }
 
+.game-grid.game-grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
 .game-card {
     background: white;
     border: 1px solid var(--border);

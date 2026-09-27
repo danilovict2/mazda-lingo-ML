@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Layers } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Target, Layers } from "lucide-react";
 import { games } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -30,8 +30,62 @@ export function Dashboard() {
                     {progress.placed ? progress.level : "Intermediate"} · Level 3
                 </span>
             </div>
-            <div className="dashboard-layout single-column">
+            <div className="dashboard-layout">
                 <div className="dashboard-primary">
+                    <section id="path" className="path-section">
+                        <div className="section-heading">
+                            <div>
+                                <h2>Practice games</h2>
+                                <p>Master the rhythm of English.</p>
+                            </div>
+                        </div>
+                        <div className="game-grid game-grid-2x2">
+                            {games.map((g, i) => (
+                                <GameCard
+                                    key={g.id}
+                                    game={g}
+                                    status={
+                                        progress.completed.includes(g.id)
+                                            ? "Completed"
+                                            : i === 0
+                                                ? "Start here"
+                                                : "Ready to play"
+                                    }
+                                />
+                            ))}
+                        </div>
+                    </section>
+                </div>
+                <aside className="right-column">
+                    <section className="panel goal-panel">
+                        <div className="section-heading">
+                            <h3>Today's goal</h3>
+                            <Target size={19} className="muted" />
+                        </div>
+                        <div className="goal-total">
+                            <strong>
+                                {Math.min(100, 40 + progress.completed.length * 30)}
+                            </strong>
+                            <span>/ 100 XP</span>
+                            <span className="goal-emoji">✦</span>
+                        </div>
+                        <Bar value={40 + progress.completed.length * 30} />
+                        <p>
+                            {progress.completed.length >= 2
+                                ? "Goal reached. Look at you go!"
+                                : "A short lesson. A step forward."}
+                        </p>
+                        <div className="week">
+                            {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+                                <div key={i}>
+                                    <span className={i < 5 ? "done" : i === 5 ? "today" : ""}>
+                                        {i < 5 ? <Check size={12} /> : d}
+                                    </span>
+                                    <small>{d}</small>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
                     <section className="panel profile-preview">
                         <div className="section-heading">
                             <h3>Your speech, visualized</h3>
@@ -53,30 +107,7 @@ export function Dashboard() {
                             Explore your speech profile <ArrowUpRight size={16} />
                         </Link>
                     </section>
-                    <section id="path" className="path-section">
-                        <div className="section-heading">
-                            <div>
-                                <h2>Practice games</h2>
-                                <p>Master the rhythm of English.</p>
-                            </div>
-                        </div>
-                        <div className="game-grid">
-                            {games.map((g, i) => (
-                                <GameCard
-                                    key={g.id}
-                                    game={g}
-                                    status={
-                                        progress.completed.includes(g.id)
-                                            ? "Completed"
-                                            : i === 0
-                                                ? "Start here"
-                                                : "Ready to play"
-                                    }
-                                />
-                            ))}
-                        </div>
-                    </section>
-                </div>
+                </aside>
             </div>
         </Shell>
     );

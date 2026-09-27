@@ -1,5 +1,7 @@
 export type Question = {
     text: string;
+    /** Clip id in public/audio/, generated from scripts/clips.json. */
+    audio?: string;
     prompt: string;
     options: string[];
     correct: number;
@@ -78,6 +80,7 @@ const word = (
     stress: number,
 ): Question => ({
     text,
+    audio: `word-${text}`,
     prompt: "Which syllable carries the strongest beat?",
     options,
     correct,
@@ -124,6 +127,7 @@ const words = [
 const detective: Question[] = [
     {
         text: "I didn’t say **she** stole my coffee.",
+        audio: "detective-she",
         prompt: "What is the speaker suggesting?",
         options: [
             "Someone else might have taken it.",
@@ -136,7 +140,22 @@ const detective: Question[] = [
             "Stressing “she” contrasts her with someone else. The speaker leaves open the possibility that another person took the coffee.",
     },
     {
+        text: "I didn’t say she stole my **coffee**.",
+        audio: "detective-coffee",
+        prompt: "Same sentence, new stress. What is the speaker suggesting now?",
+        options: [
+            "Someone else might have taken it.",
+            "They took something other than coffee.",
+            "The coffee belonged to someone else.",
+            "The speaker is sure nothing was stolen.",
+        ],
+        correct: 1,
+        explanation:
+            "Stressing “coffee” contrasts it with other things. She may have taken something, just not the coffee.",
+    },
+    {
         text: "Why am I the **only** one copying my cousin?",
+        audio: "detective-only",
         prompt: "What does the emphasis imply?",
         options: [
             "The cousin is not worth copying.",
@@ -150,6 +169,7 @@ const detective: Question[] = [
     },
     {
         text: "I wanted the **blue** one.",
+        audio: "detective-blue",
         prompt: "What is the speaker correcting?",
         options: [
             "Who wanted it.",
@@ -163,6 +183,7 @@ const detective: Question[] = [
     },
     {
         text: "She **actually** finished the project.",
+        audio: "detective-actually",
         prompt: "What feeling does the stress add?",
         options: [
             "Doubt about which project.",
@@ -176,6 +197,7 @@ const detective: Question[] = [
     },
     {
         text: "I said we should leave **now**.",
+        audio: "detective-now",
         prompt: "What matters most to the speaker?",
         options: [
             "The people who are leaving.",
@@ -191,6 +213,7 @@ const detective: Question[] = [
 const echo: Question[] = [
     {
         text: "I really wanted to see that movie.",
+        audio: "rhythm-movie",
         prompt: "Choose a natural pattern for strong enthusiasm.",
         options: [
             "I REALLY wanted to SEE that MOVIE.",
@@ -204,6 +227,7 @@ const echo: Question[] = [
     },
     {
         text: "Could you pass me the salt?",
+        audio: "rhythm-salt",
         prompt: "Which pattern sounds like a neutral request?",
         options: [
             "COULD YOU PASS ME THE SALT?",
@@ -217,6 +241,7 @@ const echo: Question[] = [
     },
     {
         text: "We’re meeting at the station.",
+        audio: "rhythm-station",
         prompt: "Where are the natural main beats?",
         options: [
             "WE’RE meeting AT THE station.",
@@ -230,6 +255,7 @@ const echo: Question[] = [
     },
     {
         text: "It’s a beautiful day outside.",
+        audio: "rhythm-day",
         prompt: "Choose the most natural neutral rhythm.",
         options: [
             "IT’S A beautiful day outside.",
@@ -245,6 +271,7 @@ const echo: Question[] = [
 const twins: Question[] = [
     {
         text: "a record → to record",
+        audio: "twins-record",
         prompt: "Choose the noun → verb stress pair.",
         options: [
             "REcord → reCORD",
@@ -258,6 +285,7 @@ const twins: Question[] = [
     },
     {
         text: "a present → to present",
+        audio: "twins-present",
         prompt: "How does the stress move?",
         options: [
             "preSENT → PREsent",
@@ -271,6 +299,7 @@ const twins: Question[] = [
     },
     {
         text: "a contract → to contract",
+        audio: "twins-contract",
         prompt: "Choose the usual noun → verb pattern.",
         options: [
             "conTRACT → CONtract",
@@ -284,6 +313,7 @@ const twins: Question[] = [
     },
     {
         text: "an object → to object",
+        audio: "twins-object",
         prompt: "Choose the noun → verb stress pair.",
         options: [
             "obJECT → OBject",
@@ -306,7 +336,7 @@ export const questions: Record<string, Question[]> = {
         prompt: "Listen, then choose the matching strong-beat pattern.",
     })),
 };
-export const placement = [words[0], echo[1], twins[0], detective[2], words[2]];
+export const placement = [words[0], echo[1], twins[0], detective[3], words[2]];
 export const skills = [
     "Word stress",
     "Sentence stress",

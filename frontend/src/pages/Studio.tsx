@@ -7,6 +7,8 @@ import { Bar } from "../components/Bar";
 import { Wave } from "../components/Wave";
 import { AudioButton } from "../components/AudioButton";
 import { Shell } from "../components/Shell";
+import { SpokenText } from "../components/SpokenText";
+import { toWav } from "../wav";
 import { useProgress } from "../state/ProgressProvider";
 
 export function Studio() {
@@ -20,6 +22,8 @@ export function Studio() {
     const [saved, setSaved] = useState(false);
     const [notice, setNotice] = useState("");
     const recorder = useRef<MediaRecorder | null>(null);
+    const chunks = useRef<BlobPart[]>([]);
+    const [time, setTime] = useState<number | null>(null);
     const stream = useRef<MediaStream | null>(null);
     const [clip, setClip] = useState("");
     const mounted = useRef(true);
@@ -29,6 +33,7 @@ export function Studio() {
             : difficulty === "Medium"
                 ? "I actually thought you were coming tomorrow."
                 : "I actually thought you were coming tomorrow. If I had known, I would have made us some coffee. Next time, let’s plan a little earlier.";
+    const clipId = `studio-${difficulty.toLowerCase()}`;
     useEffect(() => {
         mounted.current = true;
         return () => {
@@ -51,6 +56,7 @@ export function Studio() {
         setSeconds(0);
         setNotice("");
         setClip("");
+        recorder.current = null;
         if (real) {
             try {
                 const s = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -60,12 +66,12 @@ export function Studio() {
                 }
                 stream.current = s;
                 const r = new MediaRecorder(s);
-                const chunks: BlobPart[] = [];
-                r.ondataavailable = (e) => chunks.push(e.data);
+                chunks.current = [];
+                r.ondataavailable = (e) => chunks.current.push(e.data);
                 r.onstop = () => {
                     if (mounted.current)
                         setClip(
-                            URL.createObjectURL(new Blob(chunks, { type: r.mimeType })),
+                            URL.createObjectURL(new Blob(chunks.current, { type: r.mimeType })),
                         );
                     s.getTracks().forEach((t) => t.stop());
                 };
@@ -80,23 +86,48 @@ export function Studio() {
         }
         setState("recording");
     }
+    /** Stop the microphone and resolve with the finished recording, if any. */
+    function stopRecording(): Promise<Blob | null> {
+        const r = recorder.current;
+        if (!r || r.state !== "recording") {
+            const recorded = new Blob(chunks.current, { type: r?.mimeType });
+            return Promise.resolve(r && recorded.size ? recorded : null);
+        }
+        return new Promise((resolve) => {
+            r.addEventListener(
+                "stop",
+                () => resolve(new Blob(chunks.current, { type: r.mimeType })),
+                { once: true },
+            );
+            r.stop();
+        });
+    }
     async function finish() {
-        recorder.current?.state === "recording" && recorder.current.stop();
         setState("analyzing");
         setNotice("");
         try {
-            const [result] = await Promise.all([
-                api.analyze(text, difficulty),
-                new Promise((resolve) => setTimeout(resolve, 1500)),
-            ]);
+            const recording = await stopRecording();
+            const result = recording
+                ? // Real microphone take: transcribed and scored against the reference clip.
+                  await api.analyzeRecording(await toWav(recording), clipId)
+                : (
+                      await Promise.all([
+                          api.analyze(text, difficulty),
+                          new Promise((resolve) => setTimeout(resolve, 1500)),
+                      ])
+                  )[0];
             if (mounted.current) {
                 setAnalysis(result);
                 setState("result");
             }
-        } catch {
+        } catch (e) {
             if (mounted.current) {
-                setNotice("Analysis failed. Check that the API server is running, then try Finish & analyze again.");
-                setState("recording");
+                const reason = e instanceof Error && e.message !== "API unavailable" ? e.message : "";
+                setNotice(
+                    reason ||
+                        "Analysis failed. Check that the API server is running, then try Finish & analyze again.",
+                );
+                setState(recorder.current ? "idle" : "recording");
             }
         }
     }
@@ -129,7 +160,10 @@ export function Studio() {
                         <p>Speak it. See it. Improve it.</p>
                     </div>
                     <span className="demo-pill">
-                        <i /> SIMULATED AI ANALYSIS
+                        <i />{" "}
+                        {analysis && !analysis.simulated
+                            ? "REAL VOICE ANALYSIS"
+                            : "SIMULATED AI ANALYSIS"}
                     </span>
                 </div>
                 <div className="studio-layout">
@@ -149,9 +183,11 @@ export function Studio() {
                         </div>
                         <div className="section-heading">
                             <span className="eyebrow">MAKE THESE WORDS YOURS</span>
-                            <AudioButton text={text} />
+                            <AudioButton text={text} clip={clipId} onTime={setTime} />
                         </div>
-                        <h2 className="speaking-text">{text}</h2>
+                        <h2 className="speaking-text">
+                            <SpokenText text={text} clip={clipId} time={time} />
+                        </h2>
                         <p className="muted">
                             Let the important words stand out. Leave room to breathe.
                         </p>
@@ -191,7 +227,9 @@ export function Studio() {
                                 {state === "recording"
                                     ? "Speak naturally, then finish when you’re ready."
                                     : state === "analyzing"
-                                        ? "Preparing your simulated speech profile."
+                                        ? recorder.current
+                                            ? "Comparing your voice with the reference."
+                                            : "Preparing your simulated speech profile."
                                         : "A safe space to try, repeat, and get better."}
                             </p>
                         </div>
@@ -230,8 +268,9 @@ export function Studio() {
                             <audio aria-label="Your recorded practice" controls src={clip} />
                         )}
                         <small className="privacy-note">
-                            Demo scores are illustrative. Microphone audio stays in your
-                            browser.
+                            Demo recordings get illustrative scores. Microphone takes are
+                            sent to ElevenLabs for transcription, then scored against the
+                            reference clip.
                         </small>
                     </section>
                     <aside className="panel coaching-panel">
@@ -245,7 +284,11 @@ export function Studio() {
                                     </strong>
                                 </div>
                                 <h2>There’s confidence in your voice.</h2>
-                                <p>Here’s where your next little win lives.</p>
+                                <p>
+                                    {analysis.transcript
+                                        ? `We heard: “${analysis.transcript}”`
+                                        : "Here’s where your next little win lives."}
+                                </p>
                                 {[
                                     { name: "Word stress", score: analysis.wordStress },
                                     { name: "Rhythm", score: analysis.rhythm },

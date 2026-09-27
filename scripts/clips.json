@@ -1,0 +1,44 @@
+{
+    "voice_id": "XrExE9yKIg1WjnnlVkGX",
+    "model_id": "eleven_multilingual_v2",
+    "speed": 0.9,
+    "seed": 42,
+    "notes": [
+        "{word|syl PH ON / syl PH ON} = exact pronunciation in CMU Arpabet, one group per syllable.",
+        "Stress digits: 1 = primary, 2 = secondary, 0 = unstressed. Needs model eleven_flash_v2.",
+        "stress + takes: generate several takes and keep the one where that word (or list of words, stressed equally) stands out most.",
+        "reference: also measure the clip the way the scoring API measures recordings (Shape Your Sound)."
+    ],
+    "clips": [
+        { "id": "word-photography", "model_id": "eleven_flash_v2", "text": "{photography|pho F AH0 / tog T AA1 G / ra R AH0 / phy F IY0}" },
+        { "id": "word-beautiful", "model_id": "eleven_flash_v2", "text": "{beautiful|beau B Y UW1 / ti T AH0 / ful F AH0 L}" },
+        { "id": "word-opportunity", "model_id": "eleven_flash_v2", "text": "{opportunity|op AA2 P / por ER0 / tu T UW1 / ni N AH0 / ty T IY0}" },
+        { "id": "word-computer", "model_id": "eleven_flash_v2", "text": "{computer|com K AH0 M / pu P Y UW1 / ter T ER0}" },
+        { "id": "word-understand", "model_id": "eleven_flash_v2", "text": "{understand|un AH2 N / der D ER0 / stand S T AE1 N D}" },
+
+        { "id": "twins-record", "model_id": "eleven_flash_v2", "text": "A {record|re R EH1 / cord K ER0 D}. To {record|re R IH0 / cord K AO1 R D}." },
+        { "id": "twins-present", "model_id": "eleven_flash_v2", "text": "A {present|pre P R EH1 / sent Z AH0 N T}. To {present|pre P R IY0 / sent Z EH1 N T}." },
+        { "id": "twins-contract", "model_id": "eleven_flash_v2", "text": "A {contract|con K AA1 N / tract T R AE2 K T}. To {contract|con K AH0 N / tract T R AE1 K T}." },
+        { "id": "twins-object", "model_id": "eleven_flash_v2", "text": "An {object|ob AA1 B / ject JH EH0 K T}. To {object|ob AH0 B / ject JH EH1 K T}." },
+
+        { "id": "detective-she", "model_id": "eleven_v3", "text": "I didn't say SHE stole my coffee.", "stress": "she", "takes": 4 },
+        { "id": "detective-coffee", "model_id": "eleven_v3", "text": "I didn't say she stole my COFFEE.", "stress": "coffee", "takes": 4 },
+        { "id": "detective-only", "model_id": "eleven_v3", "text": "Why am I the ONLY one copying my cousin?", "stress": "only", "takes": 4 },
+        { "id": "detective-blue", "model_id": "eleven_v3", "text": "I wanted the BLUE one.", "stress": "blue", "seed": 100, "takes": 3 },
+        { "id": "detective-actually", "model_id": "eleven_v3", "text": "She ACTUALLY finished the project.", "stress": "actually", "takes": 4 },
+        { "id": "detective-now", "model_id": "eleven_v3", "text": "I said we should leave NOW.", "stress": "now", "takes": 4 },
+
+        { "id": "rhythm-movie", "text": "I really wanted to see that movie." },
+        { "id": "rhythm-salt", "model_id": "eleven_v3", "text": "Could you PASS me the SALT?", "stress": ["pass", "salt"], "seed": 200, "takes": 8 },
+        { "id": "rhythm-station", "text": "We're meeting at the station." },
+        { "id": "rhythm-day", "text": "It's a beautiful day outside." },
+
+        { "id": "studio-easy", "model_id": "eleven_flash_v2", "reference": true, "text": "{photography|pho F AH0 / tog T AA1 G / ra R AH0 / phy F IY0}" },
+        { "id": "studio-medium", "reference": true, "text": "I actually thought you were coming tomorrow." },
+        {
+            "id": "studio-hard",
+            "reference": true,
+            "text": "I actually thought you were coming tomorrow. If I had known, I would have made us some coffee. Next time, let's plan a little earlier."
+        }
+    ]
+}

@@ -12,7 +12,7 @@ bun i
 bun run dev
 ```
 
-Open http://localhost:5173. The Python API is required for placement, lesson completion, and speech analysis. Auth0 configuration is required; follow [Auth0 setup](frontend/AUTH0.md) before starting.
+Open http://localhost:5173. The Python API is required for placement, lesson completion, and speech analysis. Real microphone analysis in Shape Your Sound needs an ElevenLabs API key in `.env` at the repository root (`ELEVENLABS_API_KEY=...`); everything else works without one.
 
 Required Python API, in a second terminal from the repository root:
 
@@ -43,23 +43,44 @@ The sidebar’s **Reset demo** clears progress. Practice routes require sign-in;
 
 ```text
 frontend/
-  src/main.tsx        Routes, reusable UI, learning flow, local state
-  src/styles.css     Responsive design system and motion
-  src/data.ts        Typed questions, game catalog, demo profile
-  src/api/client.ts  Required HTTP requests and response types
-main.py            Small FastAPI application; no database
+  src/main.tsx               Entry point; routes live in src/App.tsx
+  src/pages/, components/    Screens and reusable UI
+  src/styles.css             Responsive design system and motion
+  src/data.ts                Typed questions, game catalog, demo profile
+  src/audio.ts               Access to the generated clip timings
+  src/generated/audio.json   Generated: word/syllable timings, loudness, pitch
+  src/api/client.ts          HTTP requests and response types
+  public/audio/*.wav         Generated ElevenLabs reference clips
+scripts/
+  clips.json                 Every reference clip: text, stress markup, model
+  generate_audio.py          Calls ElevenLabs and writes the clips + timings
+main.py                      FastAPI application; no database
+speech_features.py           Loudness, pitch and stress measurements (shared)
+speech_scoring.py            Scores a recording against a reference clip
 ```
 
 React + TypeScript + Vite, React Router, Lucide icons, and plain CSS. The accessible radar is a small SVG component, avoiding a chart dependency. Fonts have system fallbacks. React context and localStorage are the only state/persistence layer. The demo backend lives in root `main.py`.
 
 The six selection games contain 4–5 questions each. Five representative questions drive placement. Difficulty changes the question sequence; Soundprint also changes visual contrast. Speaking difficulty switches words, sentences, and paragraphs. Correct and incorrect answers both offer explanations and allow immediate continuation.
 
-## Audio and future integrations
+## Audio
 
-- Reference playback uses browser SpeechSynthesis; unsupported browsers show a text fallback. Native speech does not guarantee the displayed contrastive stress, so typography is the primary teaching cue.
-- Studio simulation needs no permissions. **Use my microphone** optionally records through MediaRecorder and provides local playback. Permission/device failure falls back to simulation. Streams are stopped when recording finishes or the studio unmounts; audio is never uploaded.
-- All scoring is explicitly mocked. `POST /api/analyze-speech` is the Python integration boundary: replace its response with a real analysis pipeline and add multipart audio upload in `src/api/client.ts` when needed.
-- API routes: `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech`. Lesson content remains local. API session results are stateless, with persistence owned by the browser.
-- Auth0 authenticates accounts; FastAPI validates RS256 access tokens on practice endpoints. Progress remains local to each browser and account, without a database. See [Auth0 setup](frontend/AUTH0.md).
+Every Listen button plays a pre-generated ElevenLabs clip from `frontend/public/audio/`. The browser's SpeechSynthesis voice is only a fallback when a clip is missing. The app never calls ElevenLabs to play audio, so the API key never reaches the browser and the demo works offline.
+
+- **Word stress** (Stress Steps, Soundprint, Stress Twins): exact pronunciations with stress marks, sent as SSML phoneme tags to `eleven_flash_v2` (the only model that supports them).
+- **Sentence stress** (Stress Detective): `eleven_v3` with the stressed word in CAPS. The generator makes several takes and keeps the one where that word stands out most (loudness, length and pitch). Stress Detective hides the bold word until you answer, so you have to hear it.
+- **Timings**: the generator stores word and syllable timings, which drive the word highlighting while a clip plays, the Rhythm Match beats, and the real Soundprint waveform (bars = loudness, line = pitch).
+- **Shape Your Sound**: *Try demo recording* returns illustrative scores. *Use my microphone* converts the take to WAV in the browser and sends it to `POST /api/analyze-recording`, which transcribes it with ElevenLabs speech-to-text and compares word timing, loudness and pitch against the reference clip.
+
+To add or change a clip, edit `scripts/clips.json` (its `notes` explain the markup) and run from the repository root:
+
+```sh
+uv run scripts/generate_audio.py              # only new or changed clips
+uv run scripts/generate_audio.py detective-she  # regenerate one clip
+```
+
+Commit the generated `.wav` files and `frontend/src/generated/audio.json`.
+
+API routes: `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech` (demo scores), `/api/analyze-recording` (real scores). Lesson content remains local, and persistence is owned by the browser.
 
 Responsive layouts, visible keyboard focus, semantic buttons, disabled answer states, live feedback, reduced-motion support, and labeled audio controls are included.

@@ -7,7 +7,7 @@ import { Logo } from "../components/Logo";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
 import { AudioButton } from "../components/AudioButton";
-import { Emphasis } from "../components/Emphasis";
+import { SpokenText } from "../components/SpokenText";
 import { QuestionView } from "../components/QuestionView";
 import { useProgress } from "../state/ProgressProvider";
 
@@ -19,6 +19,7 @@ export function Placement() {
     const [result, setResult] = useState("");
     const [busy, setBusy] = useState(false);
     const [apiError, setApiError] = useState("");
+    const [time, setTime] = useState<number | null>(null);
     const q = placement[index];
     async function finish(skip = false) {
         setBusy(true);
@@ -92,9 +93,14 @@ export function Placement() {
                     </div>
                     <Bar value={(index / 5) * 100} />
                     <div className="placement-question">
-                        <AudioButton text={q.text} />
+                        <AudioButton text={q.text} clip={q.audio} onTime={setTime} />
                         <h1>
-                            <Emphasis text={q.text} />
+                            <SpokenText
+                                text={q.text}
+                                clip={q.audio}
+                                time={time}
+                                reveal={!q.audio?.startsWith("detective-") || selected !== null}
+                            />
                         </h1>
                     </div>
                     <QuestionView

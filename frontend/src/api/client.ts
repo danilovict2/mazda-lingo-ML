@@ -9,20 +9,27 @@ export type Analysis = {
     clarity: number;
     sentenceStress: number;
     feedback: string[];
+    /** What speech-to-text heard; only present for real recordings. */
+    transcript?: string;
+    simulated: boolean;
 };
-const base = (import.meta as unknown as { env: Record<string, string> }).env
-    .VITE_API_URL || "";
-async function request<T>(
-    path: string,
-    body: unknown,
-): Promise<T> {
-    if (!tokenProvider) throw new Error("Please sign in to continue.");
-    const token = await tokenProvider();
+const base = import.meta.env.VITE_API_URL || "";
+async function send<T>(path: string, init: RequestInit, timeout = 10000): Promise<T> {
     const res = await fetch(`${base}${path}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        ...init,
+        signal: AbortSignal.timeout(timeout),
+    });
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(typeof body?.detail === "string" ? body.detail : "API unavailable");
+    }
+    return (await res.json()) as T;
+}
+function request<T>(path: string, body: unknown): Promise<T> {
+    return send<T>(path, {
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) throw new Error(res.status === 401 ? "Your session expired. Please sign in again." : "Unable to complete the request. Please try again.");
     return (await res.json()) as T;
@@ -30,6 +37,13 @@ async function request<T>(
 export const api = {
     analyze: (text: string, difficulty: string) =>
         request<Analysis>("/api/analyze-speech", { text, difficulty }),
+    analyzeRecording: (audio: Blob, clip: string) => {
+        const form = new FormData();
+        form.append("clip", clip);
+        form.append("audio", audio, "recording.wav");
+        // Speech-to-text takes a few seconds, longer for the paragraph.
+        return send<Analysis>("/api/analyze-recording", { body: form }, 45000);
+    },
     placement: (correct: number, total: number) =>
         request<{ level: string }>("/api/placement-test", { correct, total }),
     session: (game: string, correct: number, total: number) =>

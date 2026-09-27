@@ -89,17 +89,17 @@ export function Dashboard() {
                         </div>
                     </div>
 
-                    {/* ================= THE 7 MINI-GAMES LEARNING PATH ================= */}
+                    {/* ================= THE MINI-GAMES LEARNING PATH ================= */}
                     <section id="path" className="path-section">
                         <div className="section-heading">
                             <div>
                                 <h2>Your learning path</h2>
                                 <p>One beat at a time. Every step counts.</p>
                             </div>
-                            <span className="subtle-label">7 practice games</span>
+                            <span className="subtle-label">{games.length} practice games</span>
                         </div>
 
-                        {/* Unit 1: Foundation Games (0 to 3) */}
+                        {/* Unit 1: word stress (Stress Sort, Stress Twins) */}
                         <div className="unit-heading">
                             <span className="unit-number">01</span>
                             <div>
@@ -109,13 +109,13 @@ export function Dashboard() {
                             <span className="unit-status">
                                 {2 +
                                     progress.completed.filter((x) =>
-                                        ["stress-steps", "rhythm-echo", "stress-twins"].includes(x),
+                                        ["stress-sort", "stress-twins"].includes(x),
                                     ).length}
-                                /5 milestones
+                                /4 milestones
                             </span>
                         </div>
-                        <div className="game-grid">
-                            {games.slice(0, 3).map((g, i) => (
+                        <div className="game-grid game-grid-2x2">
+                            {games.slice(0, 2).map((g, i) => (
                                 <GameCard
                                     key={g.id}
                                     game={g}
@@ -130,7 +130,7 @@ export function Dashboard() {
                             ))}
                         </div>
 
-                        {/* Unit 2: Advanced Games (3 to 6) — Rhythm Match ALWAYS Unlocked */}
+                        {/* Unit 2: sentence stress and rhythm (What do they mean?, Rhythm Match) */}
                         <div className="unit-heading second">
                             <span className="unit-number lavender">02</span>
                             <div>
@@ -139,8 +139,8 @@ export function Dashboard() {
                             </div>
                             <span className="unit-status purple-text">YOUR NEXT CHAPTER</span>
                         </div>
-                        <div className="game-grid">
-                            {games.slice(3, 6).map((g) => (
+                        <div className="game-grid game-grid-2x2">
+                            {games.slice(2).map((g) => (
                                 <GameCard
                                     key={g.id}
                                     game={g}

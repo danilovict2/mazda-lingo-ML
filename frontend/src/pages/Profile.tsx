@@ -124,9 +124,9 @@ export function Profile() {
                 </h2>
                 <p>
                     Your word-stress recognition is excellent. Spend your next session
-                    exploring sentence emphasis in Stress Detective.
+                    exploring sentence emphasis in What do they mean?
                 </p>
-                <Button to="/game/stress-detective">
+                <Button to="/game/what-do-they-mean">
                     Practice sentence emphasis <ArrowRight size={16} />
                 </Button>
             </section>
@@ -138,8 +138,8 @@ export function Profile() {
                 {(progress.sessions.length
                     ? progress.sessions
                     : [
-                        { name: "Stress Steps", accuracy: 90, date: "Demo · Yesterday" },
-                        { name: "Rhythm Echo", accuracy: 80, date: "Demo · Yesterday" },
+                        { name: "Stress Sort", accuracy: 90, date: "Demo · Yesterday" },
+                        { name: "Rhythm Match", accuracy: 80, date: "Demo · Yesterday" },
                         { name: "Stress Twins", accuracy: 88, date: "Demo · 2 days ago" },
                     ]
                 ).map((s, i) => (

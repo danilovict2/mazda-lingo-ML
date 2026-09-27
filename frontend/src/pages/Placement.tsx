@@ -93,7 +93,7 @@ export function Placement() {
                     </div>
                     <Bar value={(index / 5) * 100} />
                     <div className="placement-question">
-                        <AudioButton text={q.text} clip={q.audio} onTime={setTime} />
+                        {q.audio && <AudioButton text={q.text} clip={q.audio} onTime={setTime} />}
                         <h1>
                             <SpokenText
                                 text={q.text}

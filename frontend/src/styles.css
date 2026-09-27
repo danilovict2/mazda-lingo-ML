@@ -322,18 +322,6 @@ nav {
     min-height: 100vh;
 }
 
-/* Stress Steps is a drag-and-drop board that fills exactly one screen and
-   scrolls inside its own panel; every other page scrolls normally. */
-.app-shell:has(.stress-steps-container) {
-    height: 100vh;
-    overflow: hidden;
-}
-
-.main-shell:has(.stress-steps-container) {
-    height: 100%;
-    min-height: 0;
-}
-
 .top-panel {
     display: flex;
     align-items: center;
@@ -1875,13 +1863,11 @@ footer {
 }
 
 .stress-steps-container {
-    --stress-word-width: 120px;
-    --stress-word-height: 34px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1;
-    min-height: 320px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .stress-layout {
@@ -1953,10 +1939,8 @@ footer {
 
 .words-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
-    grid-auto-rows: var(--stress-word-height);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    max-width: calc(6 * var(--stress-word-width) + 5 * 8px);
     overflow-y: auto;
     flex: 1;
 }
@@ -1973,11 +1957,7 @@ footer {
     transition:
         background 0.2s,
         border-color 0.2s;
-    width: var(--stress-word-width);
-    height: var(--stress-word-height);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 0;
 }
 
 .draggable-word:hover {
@@ -2036,10 +2016,8 @@ footer {
 }
 
 .words-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
-    grid-auto-rows: var(--stress-word-height);
-    align-content: start;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
     flex: 1;
     overflow-y: auto;
@@ -2057,8 +2035,6 @@ footer {
     gap: 6px;
     transition: all 0.2s;
     user-select: none;
-    width: var(--stress-word-width);
-    height: var(--stress-word-height);
 }
 
 .placed-word[draggable="true"] {
@@ -2093,10 +2069,6 @@ footer {
 
 .placed-word span {
     flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .check-icon {

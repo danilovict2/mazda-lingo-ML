@@ -1,17 +1,7 @@
 import { useState, useRef } from "react";
 import { Check } from "lucide-react";
+import type { StressStepsQuestion } from "../data";
 import { StressPattern } from "./StressPattern";
-
-type StressStepsQuestion = {
-    words: string[];
-    category1Example: string;
-    category2Example: string;
-    category1Pattern: number[];
-    category2Pattern: number[];
-    category1Label: string;
-    category2Label: string;
-    correctMap: Record<string, number>;
-};
 
 export function StressStepsView({
     q,

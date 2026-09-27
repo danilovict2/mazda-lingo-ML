@@ -36,13 +36,10 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 GAMES = [
-    "stress-steps",
-    "rhythm-echo",
+    "stress-sort",
     "stress-twins",
-    "soundprint",
-    "stress-detective",
+    "what-do-they-mean",
     "rhythm-match",
-    "shape-your-sound",
 ]
 
 

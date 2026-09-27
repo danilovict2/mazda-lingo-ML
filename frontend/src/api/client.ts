@@ -37,6 +37,15 @@ function request<T>(path: string, body: unknown): Promise<T> {
     });
 }
 
+/** Result of a Say It Right attempt. */
+export type StressCheck = {
+    passed: boolean;
+    feedback: string;
+    transcript: string;
+    recognised: number;
+    strongest: string | null;
+    words: { text: string; target: boolean; heard: boolean; prominence: number }[];
+};
 export const api = {
     analyze: (text: string, difficulty: string) =>
         request<Analysis>("/api/analyze-speech", { text, difficulty }),
@@ -46,6 +55,13 @@ export const api = {
         form.append("audio", audio, "recording.wav");
         // Speech-to-text takes a few seconds, longer for the paragraph.
         return send<Analysis>("/api/analyze-recording", { body: form }, 45000);
+    },
+    checkStress: (audio: Blob, sentence: string, targets: string[]) => {
+        const form = new FormData();
+        form.append("sentence", sentence);
+        form.append("targets", targets.join(","));
+        form.append("audio", audio, "recording.wav");
+        return send<StressCheck>("/api/check-stress", { body: form }, 45000);
     },
     placement: (correct: number, total: number) =>
         request<{ level: string }>("/api/placement-test", { correct, total }),

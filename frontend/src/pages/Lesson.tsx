@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowRight, Lightbulb, X } from "lucide-react";
-import { games, questions, type Question, type StressStepsQuestion } from "../data";
+import { games, questions, type Question, type SpeakQuestion, type StressStepsQuestion } from "../data";
 import { api } from "../api/client";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -11,6 +11,7 @@ import { GameIcon } from "../components/GameIcon";
 import { Shell } from "../components/Shell";
 import { QuestionView } from "../components/QuestionView";
 import { StressStepsView } from "../components/StressStepsView";
+import { SpeakView } from "../components/SpeakView";
 import { Completion } from "../components/Completion";
 import { useProgress } from "../state/ProgressProvider";
 
@@ -42,20 +43,25 @@ export function Lesson() {
     const [busy, setBusy] = useState(false);
     const [apiError, setApiError] = useState("");
     const [time, setTime] = useState<number | null>(null);
+    // Say It Right: questions already passed (any passing attempt counts once).
+    const [passed, setPassed] = useState<number[]>([]);
     if (!game) return <Navigate to="/dashboard" />;
     const source = questions[game.id];
     if (!source) return <Navigate to="/dashboard" />;
-    // Stress Sort is a single drag-and-drop board, so it has no difficulty order.
+    // Stress Sort is a single drag-and-drop board and Say It Right a fixed
+    // speaking set, so neither has a difficulty order.
     const sorting = id === "stress-sort";
+    const speaking = id === "say-it-right";
+    const fixedOrder = sorting || speaking;
     const list =
-        !sorting && difficulty === "Easy"
+        !fixedOrder && difficulty === "Easy"
             ? [source[1], source[0], source[2], source[3]]
-            : !sorting && difficulty === "Hard"
+            : !fixedOrder && difficulty === "Hard"
                 ? [...source].reverse()
                 : source;
     const q = list[index];
     // Games with a reference recording show the sentence with a Listen button.
-    const spoken = sorting ? undefined : (q as Question);
+    const spoken = fixedOrder ? undefined : (q as Question);
     // "What do they mean?" hides the stressed word until you answer: you have to hear it.
     const listenFirst = id === "what-do-they-mean";
     async function next() {
@@ -117,7 +123,7 @@ export function Lesson() {
                             <h1>{game.name}</h1>
                             {!sorting && <p>{game.subtitle}</p>}
                         </div>
-                        {!sorting && (
+                        {!fixedOrder && (
                             <select
                                 aria-label="Difficulty"
                                 value={difficulty}
@@ -172,7 +178,19 @@ export function Lesson() {
                             )}
                         </section>
                     )}
-                    {sorting ? (
+                    {speaking ? (
+                        <SpeakView
+                            key={index}
+                            q={q as SpeakQuestion}
+                            onResult={(ok) => {
+                                setSelected(1);
+                                if (ok && !passed.includes(index)) {
+                                    setPassed((p) => [...p, index]);
+                                    setCorrect((c) => c + 1);
+                                }
+                            }}
+                        />
+                    ) : sorting ? (
                         <StressStepsView
                             q={q as StressStepsQuestion}
                             onComplete={(isCorrect) => {

@@ -118,7 +118,7 @@ export function Lesson() {
                             {index + 1} of {list.length}
                         </span>
                     </div>
-                    {id !== "stress-steps" && (
+                    {id !== "stress-sort" && (
                         <section className="question-card">
                             <div className="section-heading">
                                 <span className="eyebrow">

@@ -21,10 +21,13 @@ function TopPanel() {
                 <span className="xp">
                     <Zap size={16} className="violet" /> {progress.xp}
                 </span>
+                <Link to="/progress" className="top-link">
+                    Profile
+                </Link>
                 <LogoutButton />
-                <span className="avatar" title={name}>
+                <Link to="/progress" className="avatar" title={`${name} · Speech profile`}>
                     {name.slice(0, 2).toUpperCase()}
-                </span>
+                </Link>
             </div>
         </div>
     );

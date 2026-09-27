@@ -5,10 +5,17 @@ export function QuestionView({
     q,
     selected,
     onSelect,
+    success = "You found the beat!",
+    retry = "Almost. Let’s listen a little closer.",
+    xp,
 }: {
     q: Question;
     selected: number | null;
     onSelect: (i: number) => void;
+    success?: string;
+    retry?: string;
+    /** XP this answer earns, shown in the feedback; omit where no XP is awarded. */
+    xp?: { correct: number; wrong: number };
 }) {
     return (
         <>
@@ -41,9 +48,8 @@ export function QuestionView({
                     </span>
                     <div>
                         <strong>
-                            {selected === q.correct
-                                ? "You found the beat! +30 XP"
-                                : "Almost. Let’s listen a little closer."}
+                            {selected === q.correct ? success : retry}
+                            {xp && ` +${selected === q.correct ? xp.correct : xp.wrong} XP`}
                         </strong>
                         <p>{q.explanation}</p>
                     </div>

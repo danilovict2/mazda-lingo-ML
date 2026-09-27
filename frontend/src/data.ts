@@ -22,6 +22,8 @@ export type StressStepsQuestion = {
 export const games = [
     {
         id: "stress-sort",
+        tip: "The tall bar is the stressed syllable: said louder, longer and higher. Put each word under the pattern it matches.",
+        example: { clip: "sort-community", label: "com-MU-ni-ty" },
         name: "Stress Sort",
         subtitle: "Group words by their stressed syllable.",
         tag: "WORD STRESS · LEXICAL PHONOLOGY",
@@ -31,6 +33,8 @@ export const games = [
     },
     {
         id: "stress-twins",
+        tip: "Many words move their stress: the noun stresses the start, the verb the end. Find the one word that doesn’t move.",
+        example: { clip: "twins-object", label: "an OB-ject, to ob-JECT" },
         name: "Stress Twins",
         subtitle: "Explore how stress distinguishes nouns and verbs.",
         tag: "WORD STRESS · GRAMMAR",
@@ -40,6 +44,8 @@ export const games = [
     },
     {
         id: "what-do-they-mean",
+        tip: "The stressed word is said louder and higher, and it changes what the speaker really means.",
+        example: { clip: "rhythm-station", label: "We’re MEETING at the station" },
         name: "What do they mean?",
         subtitle: "Discover how emphasis changes the implied meaning.",
         tag: "SENTENCE STRESS · PRAGMATICS",
@@ -49,6 +55,8 @@ export const games = [
     },
     {
         id: "rhythm-match",
+        tip: "English has a beat: key words are strong, while small words like “to”, “the” and “at” stay quick and light.",
+        example: { clip: "studio-medium", label: "a natural sentence rhythm" },
         name: "Rhythm Match",
         subtitle: "Compare the spacing between stressed beats.",
         tag: "SPEECH TIMING · PROSODY",

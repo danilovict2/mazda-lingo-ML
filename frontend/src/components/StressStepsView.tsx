@@ -7,9 +7,14 @@ import { AudioButton } from "./AudioButton";
 export function StressStepsView({
     q,
     onComplete,
+    onContinue,
+    continuing = false,
 }: {
     q: StressStepsQuestion;
     onComplete: (correct: boolean) => void;
+    /** Called when the player presses Continue after a correct sort. */
+    onContinue: () => void;
+    continuing?: boolean;
 }) {
     const [placed, setPlaced] = useState<Record<string, number>>({});
     const [feedback, setFeedback] = useState<string | null>(null);
@@ -180,11 +185,11 @@ export function StressStepsView({
             )}
 
             <button
-                onClick={handleSubmit}
-                disabled={submitted}
+                onClick={submitted ? onContinue : handleSubmit}
+                disabled={continuing}
                 className="submit-btn"
             >
-                {submitted ? "Perfect!" : "Check"}
+                {continuing ? "Saving…" : submitted ? "Continue →" : "Check"}
             </button>
         </div>
     );

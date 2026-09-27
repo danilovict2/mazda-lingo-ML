@@ -39,7 +39,7 @@ export function Completion({
                     <span>Demo profile growth</span>
                 </div>
             </div>
-            <p>New practice unlocked. Keep the momentum going.</p>
+            <p>Keep the momentum going.</p>
             <div className="actions">
                 <Button to="/dashboard">
                     Continue learning <ArrowRight size={17} />

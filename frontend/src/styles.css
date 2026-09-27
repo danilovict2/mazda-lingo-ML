@@ -113,20 +113,6 @@ svg {
 
 .sidebar {
     display: none;
-    min-height: 100vh;
-}
-
-.sidebar {
-    width: 236px;
-    flex-shrink: 0;
-    background: #fff;
-    border-right: 1px solid var(--border);
-    padding: 33px 21px 0;
-    position: fixed;
-    inset: 0 auto 0 0;
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
 }
 
 .logo {
@@ -322,18 +308,6 @@ nav {
     min-height: 100vh;
 }
 
-/* Stress Steps is a drag-and-drop board that fills exactly one screen and
-   scrolls inside its own panel; every other page scrolls normally. */
-.app-shell:has(.stress-steps-container) {
-    height: 100vh;
-    overflow: hidden;
-}
-
-.main-shell:has(.stress-steps-container) {
-    height: 100%;
-    min-height: 0;
-}
-
 .top-panel {
     display: flex;
     align-items: center;
@@ -380,13 +354,7 @@ nav {
 }
 
 .topbar {
-    height: 77px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #ffffffa0;
-    border-bottom: 1px solid var(--border);
-    padding: 0 40px;
+    display: none;
 }
 
 .breadcrumb {
@@ -454,12 +422,6 @@ main {
     width: 100%;
 }
 
-main:has(.stress-steps-container) {
-    min-height: 0;
-    overflow-y: auto;
-    padding-bottom: 24px;
-}
-
 .page-heading {
     display: flex;
     justify-content: space-between;
@@ -523,7 +485,6 @@ main:has(.stress-steps-container) {
 
 .dashboard-layout.single-column {
     grid-template-columns: 1fr;
-    gap: 25px;
 }
 
 .continue-card {
@@ -829,14 +790,13 @@ main:has(.stress-steps-container) {
 
 .game-grid.game-grid-2x2 {
     grid-template-columns: repeat(2, 1fr);
-    gap: 13px;
 }
 
 .game-card {
     background: white;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 16px;
+    padding: 20px;
     transition:
         transform 0.2s,
         box-shadow 0.2s;
@@ -859,15 +819,15 @@ main:has(.stress-steps-container) {
 .game-icon {
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 52px;
+    height: 52px;
     border-radius: 13px;
     flex-shrink: 0;
 }
 
 .game-tag {
     color: #aaa1b4;
-    font-size: 7px;
+    font-size: 9px;
     letter-spacing: 1.15px;
     font-weight: 600;
 }
@@ -890,10 +850,10 @@ main:has(.stress-steps-container) {
     justify-content: space-between;
     gap: 3px;
     border-top: 1px solid #f2f0f5;
-    margin-top: 16px;
+    margin-top: 14px;
     padding-top: 12px;
     color: #a6a0ad;
-    font-size: 8px;
+    font-size: 11px;
 }
 
 .card-bottom span:first-child {
@@ -1631,13 +1591,6 @@ footer {
     width: 100%;
 }
 
-.lesson-container:has(.stress-steps-container) {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 0;
-}
-
 .lesson-heading {
     display: flex;
     align-items: center;
@@ -1668,7 +1621,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 27px;
+    margin-bottom: 12px;
 }
 
 .lesson-progress .progress-track {
@@ -1704,30 +1657,6 @@ footer {
     border-radius: 6px;
     padding: 0 5px;
     box-decoration-break: clone;
-}
-
-.spoken-word {
-    border-radius: 6px;
-    transition:
-        color 0.12s,
-        background 0.12s;
-}
-
-.spoken-word.active {
-    color: #6d45b0;
-    background: #dccdf1;
-}
-
-.soundprint-card .spoken-word.active {
-    color: #fff;
-    background: #54427a;
-}
-
-.listen-hint {
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    margin: -14px 0 6px;
 }
 
 .lesson-footnote {
@@ -1784,66 +1713,6 @@ footer {
     opacity: 1;
 }
 
-.soundprint-svg {
-    display: block;
-    width: 100%;
-    height: 157px;
-    margin: 6px 0;
-}
-
-.soundprint-svg .bar {
-    fill: #b69be6;
-    transition: fill 0.1s;
-}
-
-.soundprint-svg .bar.upcoming {
-    fill: #5e4f78;
-}
-
-.soundprint-svg .bar.faint {
-    opacity: 0.55;
-}
-
-.soundprint-svg .pitch-line {
-    fill: none;
-    stroke: #ffd27a;
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
-}
-
-.soundprint-svg .syllable-edge {
-    stroke: #6b5d82;
-    stroke-dasharray: 3 4;
-    vector-effect: non-scaling-stroke;
-}
-
-.soundprint-svg .stress-band {
-    fill: #8e6fc633;
-}
-
-.soundprint-svg .playhead {
-    stroke: #fff;
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-}
-
-.syllable-labels.real {
-    position: relative;
-    height: 36px;
-}
-
-.syllable-labels.real span {
-    position: absolute;
-    transform: translateX(-50%);
-}
-
-.syllable-labels.real .stressed {
-    color: #fff;
-    font-weight: 700;
-}
-
 .syllable-labels {
     display: flex;
     justify-content: space-around;
@@ -1866,22 +1735,12 @@ footer {
     background: #b69dd4;
     border-radius: 50%;
     animation: pulse 1.3s infinite;
-    transition: background 0.1s;
-}
-
-.rhythm-beats i.beat-active {
-    background: #6d45b0;
-    animation: none;
 }
 
 .stress-steps-container {
-    --stress-word-width: 120px;
-    --stress-word-height: 34px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1;
-    min-height: 320px;
 }
 
 .stress-layout {
@@ -1952,11 +1811,10 @@ footer {
 }
 
 .words-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
-    grid-auto-rows: var(--stress-word-height);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
     gap: 8px;
-    max-width: calc(6 * var(--stress-word-width) + 5 * 8px);
     overflow-y: auto;
     flex: 1;
 }
@@ -1965,19 +1823,15 @@ footer {
     background: #f8f3fc;
     border: 2px solid #b69dd4;
     border-radius: 6px;
-    padding: 6px 8px;
+    padding: 6px 12px;
     text-align: center;
-    font-size: 10px;
+    font-size: 13px;
     cursor: move;
     user-select: none;
     transition:
         background 0.2s,
         border-color 0.2s;
-    width: var(--stress-word-width);
-    height: var(--stress-word-height);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 0;
 }
 
 .draggable-word:hover {
@@ -1993,9 +1847,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
+    min-height: 300px;
 }
 
 .stress-columns {
@@ -2036,10 +1888,9 @@ footer {
 }
 
 .words-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, var(--stress-word-width));
-    grid-auto-rows: var(--stress-word-height);
-    align-content: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
     gap: 8px;
     flex: 1;
     overflow-y: auto;
@@ -2050,15 +1901,13 @@ footer {
     background: #f0ecf7;
     border: 1px solid #d9cfea;
     border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 10px;
+    padding: 6px 12px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s;
     user-select: none;
-    width: var(--stress-word-width);
-    height: var(--stress-word-height);
 }
 
 .placed-word[draggable="true"] {
@@ -2093,10 +1942,6 @@ footer {
 
 .placed-word span {
     flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .check-icon {
@@ -2440,7 +2285,7 @@ footer {
 }
 
 .score-row {
-    margin: 19px 0;
+    margin: 10px 0;
 }
 
 .score-row>div:first-child {
@@ -2538,16 +2383,6 @@ footer {
     height: auto;
     margin: 4px auto 0;
     flex-shrink: 1;
-    gap: 23px;
-}
-
-.radar-panel {
-    padding: 25px;
-}
-
-.radar-panel .radar.large {
-    max-width: 490px;
-    margin: 15px auto 0;
 }
 
 .radar-panel h2 {
@@ -2577,7 +2412,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 13px;
-    padding: 16px 0;
+    padding: 8px 0;
     color: #a68dbd;
 }
 
@@ -3471,8 +3306,7 @@ footer {
         padding: 13px 10px;
     }
 
-    .soundprint-visual .wave,
-    .soundprint-svg {
+    .soundprint-visual .wave {
         gap: 2px;
         height: 130px;
     }
@@ -3651,3 +3485,40 @@ p {
 }
 
 .auth-screen { max-width: 640px; margin: 15vh auto; padding: 24px; }
+
+.spoken-word {
+    border-radius: 6px;
+    transition:
+        color 0.12s,
+        background 0.12s;
+}
+
+.spoken-word.active {
+    color: #6d45b0;
+    background: #dccdf1;
+}
+
+.listen-hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -14px 0 6px;
+}
+
+/* Log out sits quietly in the top panel, next to the avatar. */
+.top-panel .button.logout {
+    background: none;
+    border: 1px solid var(--border);
+    color: #6d6b7d;
+    padding: 6px 12px;
+    min-height: 0;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.top-panel .button.logout:hover:not(:disabled) {
+    color: #6d45b0;
+    border-color: #d9cfea;
+    transform: none;
+}

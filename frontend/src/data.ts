@@ -8,48 +8,41 @@ export type Question = {
     explanation: string;
     stress?: number;
 };
+
+export type StressStepsQuestion = {
+    words: string[];
+    category1Label: string;
+    category1Pattern: number[];
+    category1Example: string;
+    category2Label: string;
+    category2Pattern: number[];
+    category2Example: string;
+    correctMap: Record<string, number>;
+};
 export const games = [
     {
-        id: "stress-steps",
-        name: "Stress Steps",
-        subtitle: "Find the beat inside every word.",
-        tag: "WORD STRESS",
+        id: "stress-sort",
+        name: "Stress Sort",
+        subtitle: "Group words by their stressed syllable.",
+        tag: "WORD STRESS · LEXICAL PHONOLOGY",
         color: "purple",
         icon: "steps",
         time: 3,
     },
     {
-        id: "rhythm-echo",
-        name: "Rhythm Echo",
-        subtitle: "Catch the rhythm of real conversation.",
-        tag: "SENTENCE RHYTHM",
-        color: "peach",
-        icon: "audio",
-        time: 4,
-    },
-    {
         id: "stress-twins",
         name: "Stress Twins",
-        subtitle: "Find the words that move to the same beat.",
-        tag: "STRESS & MEANING",
+        subtitle: "Explore how stress distinguishes nouns and verbs.",
+        tag: "WORD STRESS · GRAMMAR",
         color: "green",
         icon: "twins",
         time: 3,
     },
     {
-        id: "soundprint",
-        name: "Soundprint",
-        subtitle: "See the shape of stress.",
-        tag: "SOUND RECOGNITION",
-        color: "blue",
-        icon: "wave",
-        time: 4,
-    },
-    {
-        id: "stress-detective",
-        name: "Stress Detective",
-        subtitle: "Same words. Different meaning.",
-        tag: "SENTENCE EMPHASIS",
+        id: "what-do-they-mean",
+        name: "What do they mean?",
+        subtitle: "Discover how emphasis changes the implied meaning.",
+        tag: "SENTENCE STRESS · PRAGMATICS",
         color: "pink",
         icon: "detective",
         time: 5,
@@ -57,20 +50,11 @@ export const games = [
     {
         id: "rhythm-match",
         name: "Rhythm Match",
-        subtitle: "Match the beat. Speak naturally.",
-        tag: "NATURAL RHYTHM",
-        color: "yellow",
-        icon: "rhythm",
+        subtitle: "Compare the spacing between stressed beats.",
+        tag: "SPEECH TIMING · PROSODY",
+        color: "peach",
+        icon: "audio",
         time: 4,
-    },
-    {
-        id: "shape-your-sound",
-        name: "Shape Your Sound",
-        subtitle: "Speak it. See it. Improve it.",
-        tag: "SPEAKING STUDIO",
-        color: "purple",
-        icon: "mic",
-        time: 5,
     },
 ];
 const word = (
@@ -140,20 +124,6 @@ const detective: Question[] = [
             "Stressing “she” contrasts her with someone else. The speaker leaves open the possibility that another person took the coffee.",
     },
     {
-        text: "I didn’t say she stole my **coffee**.",
-        audio: "detective-coffee",
-        prompt: "Same sentence, new stress. What is the speaker suggesting now?",
-        options: [
-            "Someone else might have taken it.",
-            "They took something other than coffee.",
-            "The coffee belonged to someone else.",
-            "The speaker is sure nothing was stolen.",
-        ],
-        correct: 1,
-        explanation:
-            "Stressing “coffee” contrasts it with other things. She may have taken something, just not the coffee.",
-    },
-    {
         text: "Why am I the **only** one copying my cousin?",
         audio: "detective-only",
         prompt: "What does the emphasis imply?",
@@ -216,14 +186,14 @@ const echo: Question[] = [
         audio: "rhythm-movie",
         prompt: "Choose a natural pattern for strong enthusiasm.",
         options: [
-            "I REALLY wanted to SEE that MOVIE.",
+            "I REALLY wanted to see that MOVIE.",
             "I really TO see THAT movie.",
             "I REALLY WANTED TO SEE THAT MOVIE.",
             "I really wanted to see THAT.",
         ],
         correct: 0,
         explanation:
-            "Meaningful words carry the beats. Small connecting words stay lighter and quicker.",
+            "“Really” carries the enthusiasm and “movie” is the key information, so they take the beats. The words in between stay lighter and quicker.",
     },
     {
         text: "Could you pass me the salt?",
@@ -270,73 +240,101 @@ const echo: Question[] = [
 ];
 const twins: Question[] = [
     {
-        text: "a record → to record",
-        audio: "twins-record",
-        prompt: "Choose the noun → verb stress pair.",
+        text: "Compare these four words:",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "REcord → reCORD",
-            "reCORD → REcord",
-            "REcord → REcord",
-            "reCORD → reCORD",
+            "permit",
+            "record",
+            "desert",
+            "promise",
         ],
-        correct: 0,
+        correct: 3,
         explanation:
-            "A REcord is a noun. To reCORD is an action. Moving the stress changes the grammatical role.",
+            "promise keeps the PROM-ise stress in both forms. permit, record, and desert all change stress between noun and verb.",
     },
     {
-        text: "a present → to present",
-        audio: "twins-present",
-        prompt: "How does the stress move?",
+        text: "Compare these four words:",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "preSENT → PREsent",
-            "PREsent → preSENT",
-            "PREsent → PREsent",
-            "preSENT → preSENT",
-        ],
-        correct: 1,
-        explanation:
-            "A PREsent is a gift; to preSENT is to show or introduce something.",
-    },
-    {
-        text: "a contract → to contract",
-        audio: "twins-contract",
-        prompt: "Choose the usual noun → verb pattern.",
-        options: [
-            "conTRACT → CONtract",
-            "CONtract → CONtract",
-            "CONtract → conTRACT",
-            "conTRACT → conTRACT",
+            "produce",
+            "present",
+            "answer",
+            "progress",
         ],
         correct: 2,
         explanation:
-            "A CONtract is an agreement. To conTRACT can mean to become smaller.",
+            "answer keeps the AN-swer stress in both forms. produce, present, and progress all move the stress.",
     },
     {
-        text: "an object → to object",
-        audio: "twins-object",
-        prompt: "Choose the noun → verb stress pair.",
+        text: "Compare these four words:",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
         options: [
-            "obJECT → OBject",
-            "OBject → OBject",
-            "obJECT → obJECT",
-            "OBject → obJECT",
+            "extract",
+            "console",
+            "protest",
+            "support",
         ],
         correct: 3,
-        explanation: "An OBject is a thing. To obJECT is to express disagreement.",
+        explanation:
+            "support keeps the sup-PORT stress in both forms. extract, console, and protest all change their stress pattern.",
+    },
+    {
+        text: "Compare these four words:",
+        prompt: "Which word keeps the same stress as a noun and a verb?",
+        options: [
+            "increase",
+            "conflict",
+            "paper",
+            "rebel",
+        ],
+        correct: 2,
+        explanation:
+            "paper keeps the PA-per stress in both forms. increase, conflict, and rebel all shift their stress.",
     },
 ];
-export const questions: Record<string, Question[]> = {
-    "stress-steps": words,
-    soundprint: words,
-    "stress-detective": detective,
-    "rhythm-echo": echo,
+
+const stressSteps: StressStepsQuestion[] = [
+    {
+        words: [
+            "apostrophe",
+            "apparently",
+            "available",
+            "development",
+            "environment",
+            "Argentina",
+            "definition",
+            "disappointing",
+            "engineering",
+            "reputation",
+        ],
+        category1Label: "Stress on 2nd syllable",
+        category1Pattern: [1, 3, 1, 1],
+        category1Example: "community",
+        category2Label: "Stress on 3rd syllable",
+        category2Pattern: [1, 1, 3, 1],
+        category2Example: "information",
+        correctMap: {
+            apostrophe: 0,
+            apparently: 0,
+            available: 0,
+            development: 0,
+            environment: 0,
+            Argentina: 1,
+            definition: 1,
+            disappointing: 1,
+            engineering: 1,
+            reputation: 1,
+        },
+    },
+];
+
+export const questions: Record<string, Question[] | StressStepsQuestion[]> = {
+    "stress-sort": stressSteps,
+    "what-do-they-mean": detective,
+    "rhythm-match": echo,
     "stress-twins": twins,
-    "rhythm-match": echo.map((q) => ({
-        ...q,
-        prompt: "Listen, then choose the matching strong-beat pattern.",
-    })),
 };
-export const placement = [words[0], echo[1], twins[0], detective[3], words[2]];
+export const placement = [words[0], echo[1], twins[0], detective[2], words[2]];
 export const skills = [
     "Word stress",
     "Sentence stress",

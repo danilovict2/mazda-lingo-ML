@@ -1,4 +1,4 @@
-import { AudioLines, ArrowRight, BookOpen, ChartNoAxesCombined, Check, Flame, Sparkles, Target, Trophy, Zap } from "lucide-react";
+import { AudioLines, BookOpen, Check, Flame, Target, Zap } from "lucide-react";
 import { skills, scores } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -78,22 +78,6 @@ export function Profile() {
                             Previous profile
                         </span>
                     </div>
-                    <div className="radar-summary">
-                        <div>
-                            <Trophy size={21} />
-                            <span>
-                                STRONGEST SKILL<strong>Stress recognition</strong>
-                            </span>
-                            <b>{Math.min(99, 90 + gain)}%</b>
-                        </div>
-                        <div>
-                            <ChartNoAxesCombined size={21} />
-                            <span>
-                                BIGGEST IMPROVEMENT<strong>Sentence emphasis</strong>
-                            </span>
-                            <b>+{12 + gain}%</b>
-                        </div>
-                    </div>
                 </section>
                 <div>
                     <section className="panel skill-panel">
@@ -113,51 +97,6 @@ export function Profile() {
                     </section>
                 </div>
             </div>
-            <section className="recommendation">
-                <span className="eyebrow">
-                    <Sparkles size={16} /> YOUR NEXT SMALL WIN
-                </span>
-                <h2>
-                    You hear the difference.
-                    <br />
-                    Now, make it heard.
-                </h2>
-                <p>
-                    Your word-stress recognition is excellent. Spend your next session
-                    exploring sentence emphasis in Stress Detective.
-                </p>
-                <Button to="/game/stress-detective">
-                    Practice sentence emphasis <ArrowRight size={16} />
-                </Button>
-            </section>
-            <section className="panel history">
-                <div className="section-heading">
-                    <h2>Your recent rhythm</h2>
-                    <span className="subtle-label">One practice at a time</span>
-                </div>
-                {(progress.sessions.length
-                    ? progress.sessions
-                    : [
-                        { name: "Stress Steps", accuracy: 90, date: "Demo · Yesterday" },
-                        { name: "Rhythm Echo", accuracy: 80, date: "Demo · Yesterday" },
-                        { name: "Stress Twins", accuracy: 88, date: "Demo · 2 days ago" },
-                    ]
-                ).map((s, i) => (
-                    <div className="history-row" key={i}>
-                        <span className="metric-icon purple">
-                            <AudioLines size={18} />
-                        </span>
-                        <div>
-                            <strong>{s.name}</strong>
-                            <small>{s.date}</small>
-                        </div>
-                        <span>{s.accuracy}% accuracy</span>
-                        <span className="green-text">
-                            <Check size={15} /> Complete
-                        </span>
-                    </div>
-                ))}
-            </section>
         </Shell>
     );
 }

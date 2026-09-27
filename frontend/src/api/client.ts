@@ -15,11 +15,15 @@ export type Analysis = {
 };
 const base = import.meta.env.VITE_API_URL || "";
 async function send<T>(path: string, init: RequestInit, timeout = 10000): Promise<T> {
+    if (!tokenProvider) throw new Error("Please sign in to continue.");
+    const token = await tokenProvider();
     const res = await fetch(`${base}${path}`, {
         method: "POST",
         ...init,
+        headers: { ...init.headers, Authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(timeout),
     });
+    if (res.status === 401) throw new Error("Your session expired. Please sign in again.");
     if (!res.ok) {
         const body = await res.json().catch(() => null);
         throw new Error(typeof body?.detail === "string" ? body.detail : "API unavailable");

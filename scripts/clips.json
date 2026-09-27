@@ -28,9 +28,9 @@
         { "id": "detective-actually", "model_id": "eleven_v3", "text": "She ACTUALLY finished the project.", "stress": "actually", "takes": 4 },
         { "id": "detective-now", "model_id": "eleven_v3", "text": "I said we should leave NOW.", "stress": "now", "takes": 4 },
 
-        { "id": "rhythm-movie", "text": "I really wanted to see that movie." },
+        { "id": "rhythm-movie", "model_id": "eleven_v3", "text": "I really wanted to see that MOVIE.", "stress": ["really", "movie"], "seed": 926 },
         { "id": "rhythm-salt", "model_id": "eleven_v3", "text": "Could you PASS me the SALT?", "stress": ["pass", "salt"], "seed": 200, "takes": 8 },
-        { "id": "rhythm-station", "text": "We're meeting at the station." },
+        { "id": "rhythm-station", "model_id": "eleven_v3", "text": "We're MEETING at the station.", "stress": "meeting", "seed": 300, "takes": 8 },
         { "id": "rhythm-day", "text": "It's a beautiful day outside." },
 
         { "id": "studio-easy", "model_id": "eleven_flash_v2", "reference": true, "text": "{photography|pho F AH0 / tog T AA1 G / ra R AH0 / phy F IY0}" },

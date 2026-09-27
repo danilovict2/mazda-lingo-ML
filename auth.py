@@ -1,7 +1,9 @@
 """Validate Auth0 access tokens; never trust identity supplied in request bodies."""
 import os
+import ssl
 from functools import lru_cache
 
+import certifi
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -16,7 +18,12 @@ def settings():
     if not domain or any(c in domain for c in "/:#?@") or not audience:
         raise HTTPException(503, "Authentication is not configured")
     issuer = f"https://{domain}/"
-    return issuer, audience, jwt.PyJWKClient(issuer + ".well-known/jwks.json", timeout=5)
+    # Use certifi's CA bundle: python.org builds of Python on macOS ship without
+    # trusted certificates, so fetching Auth0's signing keys would otherwise fail.
+    context = ssl.create_default_context(cafile=certifi.where())
+    return issuer, audience, jwt.PyJWKClient(
+        issuer + ".well-known/jwks.json", timeout=5, ssl_context=context
+    )
 
 
 def current_user(credentials: HTTPAuthorizationCredentials | None = Depends(bearer)):

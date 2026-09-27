@@ -71,7 +71,7 @@ class AuthenticationTests(unittest.TestCase):
         headers = {"Authorization": "Bearer " + self.token()}
         for route, body in [
             ("placement-test", {"correct": 3}),
-            ("session", {"game": "stress-steps", "correct": 2, "total": 3}),
+            ("session", {"game": "stress-sort", "correct": 2, "total": 3}),
             ("analyze-speech", {"text": "hello"}),
         ]:
             self.assertEqual(

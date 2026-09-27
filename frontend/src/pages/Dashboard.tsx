@@ -1,7 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AudioLines, ArrowRight, ArrowUpRight, Check, Clock, Flame, Mic, Sparkles, Target, Zap, Layers } from "lucide-react";
+import {
+    AudioLines,
+    ArrowRight,
+    ArrowUpRight,
+    Clock,
+    Flame,
+    Mic,
+    Target,
+    Zap,
+    Layers,
+    Check,
+} from "lucide-react";
 import { games } from "../data";
 import { Button } from "../components/Button";
 import { Bar } from "../components/Bar";
@@ -13,12 +24,17 @@ import { useProgress } from "../state/ProgressProvider";
 export function Dashboard() {
     const { user } = useAuth0();
     const { progress } = useProgress();
+
+    // Auto-scrolls smoothly down to the game path if the URL contains #path
     useEffect(() => {
-        if (window.location.hash)
+        if (window.location.hash) {
             document.getElementById("path")?.scrollIntoView({ behavior: "smooth" });
+        }
     }, [useLocation().hash]);
+
     return (
         <Shell>
+            {/* Header: User Greeting & Current Mastery Tier */}
             <div className="page-heading">
                 <div>
                     <span className="eyebrow">A LITTLE BETTER, EVERY DAY</span>
@@ -32,42 +48,11 @@ export function Dashboard() {
                     {progress.placed ? progress.level : "Intermediate"} · Level 3
                 </span>
             </div>
+
             <div className="dashboard-layout">
+                {/* ================= LEFT MAIN WORKSPACE ================= */}
                 <div className="dashboard-primary">
-                    <section className="continue-card">
-                        <div>
-                            <span className="eyebrow">YOUR NEXT SMALL WIN</span>
-                            <h2>
-                                Same words.
-                                <br />
-                                <span>A whole new meaning.</span>
-                            </h2>
-                            <p>
-                                Discover what a little emphasis can say.
-                                <br />
-                                Your next stop: Stress Detective.
-                            </p>
-                            <Button to="/game/stress-detective">
-                                Let’s practice <ArrowRight size={17} />
-                            </Button>
-                            <div className="hero-meta">
-                                <Clock size={13} /> 5 min <span>•</span> +150 XP <span>•</span>{" "}
-                                Recommended for you
-                            </div>
-                        </div>
-                        <div className="rhythm-orbit">
-                            <div className="orbit ring-one" />
-                            <div className="orbit ring-two" />
-                            <div className="orbit ring-three" />
-                            <div className="orbit-core">
-                                <AudioLines size={59} strokeWidth={1.5} />
-                            </div>
-                            <span className="orbit-spark spark-one">✦</span>
-                            <span className="orbit-spark spark-two">✦</span>
-                            <span className="orbit-word word-one">say it.</span>
-                            <span className="orbit-word word-two">mean it.</span>
-                        </div>
-                    </section>
+                    {/* Quick Metric Stat Badges */}
                     <div className="metric-row">
                         <div>
                             <span className="metric-icon peach">
@@ -103,6 +88,8 @@ export function Dashboard() {
                             </div>
                         </div>
                     </div>
+
+                    {/* ================= THE 7 MINI-GAMES LEARNING PATH ================= */}
                     <section id="path" className="path-section">
                         <div className="section-heading">
                             <div>
@@ -111,6 +98,8 @@ export function Dashboard() {
                             </div>
                             <span className="subtle-label">7 practice games</span>
                         </div>
+
+                        {/* Unit 1: Foundation Games (0 to 3) */}
                         <div className="unit-heading">
                             <span className="unit-number">01</span>
                             <div>
@@ -134,12 +123,14 @@ export function Dashboard() {
                                         progress.completed.includes(g.id)
                                             ? "Completed"
                                             : i === 0
-                                                ? "Start here"
-                                                : "Ready to play"
+                                              ? "Start here"
+                                              : "Ready to play"
                                     }
                                 />
                             ))}
                         </div>
+
+                        {/* Unit 2: Advanced Games (3 to 6) — Rhythm Match ALWAYS Unlocked */}
                         <div className="unit-heading second">
                             <span className="unit-number lavender">02</span>
                             <div>
@@ -156,29 +147,17 @@ export function Dashboard() {
                                     status={
                                         progress.completed.includes(g.id)
                                             ? "Completed"
-                                            : g.id === "rhythm-match" &&
-                                                !progress.completed.length &&
-                                                progress.level !== "Advanced"
-                                                ? "Locked"
-                                                : "Ready to play"
+                                            : "Ready to play"
                                     }
                                 />
                             ))}
                         </div>
-                        <Link className="studio-strip" to="/game/shape-your-sound">
-                            <span className="game-icon purple">
-                                <Mic size={23} />
-                            </span>
-                            <div>
-                                <strong>Your voice. Your personal studio.</strong>
-                                <p>Try Shape Your Sound and see your speech come to life.</p>
-                            </div>
-                            <span className="new-badge">TRY THE STUDIO</span>
-                            <ArrowUpRight size={20} />
-                        </Link>
                     </section>
                 </div>
+
+                {/* ================= RIGHT WIDGET COLUMN ================= */}
                 <aside className="right-column">
+                    {/* Daily XP Target & Days-of-the-Week Tracker */}
                     <section className="panel goal-panel">
                         <div className="section-heading">
                             <h3>Today’s goal</h3>
@@ -208,6 +187,8 @@ export function Dashboard() {
                             ))}
                         </div>
                     </section>
+
+                    {/* Spider / Radar Preview Card */}
                     <section className="panel profile-preview">
                         <div className="section-heading">
                             <h3>Your speech, visualized</h3>
@@ -229,30 +210,6 @@ export function Dashboard() {
                             Explore your speech profile <ArrowUpRight size={16} />
                         </Link>
                     </section>
-                    <section className="insight-card">
-                        <span className="insight-icon">
-                            <Sparkles size={19} />
-                        </span>
-                        <span className="eyebrow">LOOK AT YOU GROW</span>
-                        <h3>
-                            Your ear for stress
-                            <br />
-                            is getting sharper.
-                        </h3>
-                        <p>
-                            Stress recognition is your strongest skill. Let’s turn that
-                            listening into speaking.
-                        </p>
-                        <div>
-                            <strong>+12%</strong>
-                            <span>recognition this week</span>
-                        </div>
-                    </section>
-                    <div className="quote">
-                        “Confidence isn’t a perfect accent.
-                        <br />
-                        It’s making yourself understood.”<span>THE CADENCE MINDSET</span>
-                    </div>
                 </aside>
             </div>
         </Shell>

@@ -1,9 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import type React from "react";
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AudioLines, ArrowUpRight, BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
+import {
+    Flame,
+    Zap,
+    RotateCcw,
+    ChartNoAxesCombined,
+    House,
+} from "lucide-react";
 import { initialProgress } from "../data";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
@@ -34,35 +39,56 @@ export function Shell({ children }: { children: React.ReactNode }) {
     const initials = name.slice(0, 2).toUpperCase();
     const { progress, setProgress } = useProgress();
     const location = useLocation();
-    const [open, setOpen] = useState(false);
+
     return (
-        <div className="app-shell">
-            <aside className={`sidebar ${open ? "open" : ""}`}>
-                <Logo />
-                <div className="workspace-label">YOUR PRACTICE SPACE</div>
-                <nav>
-                    {[
-                        { to: "/dashboard", icon: House, label: "Overview" },
-                        { to: "/dashboard#path", icon: BookOpen, label: "Learning path" },
-                        {
-                            to: "/progress",
-                            icon: ChartNoAxesCombined,
-                            label: "Speech profile",
-                        },
-                    ].map((item) => (
+        <div className="app-shell" style={{ display: "block", minHeight: "100vh", width: "100%" }}>
+            <div className="main-shell" style={{ marginLeft: 0, width: "100%", maxWidth: "1350px", margin: "0 auto", padding: "0 24px" }}>
+                <header className="topbar" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #ebe8f5" }}>
+                    
+                    {/* Left: Brand Logo & Overview Link */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+                        <Logo />
+                        <nav style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                            <Link
+                                to="/dashboard"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "6px",
+                                    padding: "8px 14px",
+                                    borderRadius: "10px",
+                                    fontWeight: 700,
+                                    fontSize: "14px",
+                                    textDecoration: "none",
+                                    color: location.pathname === "/dashboard" ? "#724ae8" : "#6d6b7d",
+                                    backgroundColor: location.pathname === "/dashboard" ? "#f1edfb" : "transparent",
+                                }}
+                            >
+                                <House size={16} /> Overview
+                            </Link>
+                        </nav>
+                    </div>
+
+                    {/* Right: Speech Profile Button, Streak, XP, Reset & Avatar */}
+                    <div className="top-stats" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                         <Link
-                            onClick={() => setOpen(false)}
-                            key={item.label}
-                            to={item.to}
-                            className={
-                                location.pathname + location.hash === item.to ? "active" : ""
-                            }
+                            to="/progress"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                padding: "8px 14px",
+                                borderRadius: "12px",
+                                backgroundColor: location.pathname === "/progress" ? "#ece7fa" : "#f7f6fc",
+                                border: "1px solid #ebe8f5",
+                                color: location.pathname === "/progress" ? "#724ae8" : "#4b465c",
+                                textDecoration: "none",
+                                fontWeight: 800,
+                                fontSize: "13.5px",
+                            }}
                         >
-                            <item.icon size={20} />
-                            {item.label}
-                            {item.label === "Learning path" && (
-                                <span className="nav-count">7</span>
-                            )}
+                            <ChartNoAxesCombined size={18} color="#8365d6" />
+                            <span>Speech profile</span>
                         </Link>
                     ))}
                 </nav>
@@ -126,12 +152,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         </strong>
                     </span>
                     <div className="top-stats">
-                        <span>
+
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontWeight: 700 }}>
                             <Flame size={18} className="orange" /> 7 <small>day streak</small>
                         </span>
-                        <span>
-                            <Zap size={18} className="violet" /> {progress.xp}{" "}
-                            <small>XP</small>
+
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontWeight: 700 }}>
+                            <Zap size={18} className="violet" /> {progress.xp} <small>XP</small>
                         </span>
                         <span className="avatar small">{initials}</span>
                     </div>
@@ -139,6 +166,38 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <main>{children}</main>
                 <footer>
                     <span>Lingo © 2026</span>
+
+                        <button
+                            title="Reset demo progress"
+                            onClick={() => {
+                                if (window.confirm("Reset all demo progress?")) {
+                                    setProgress(initialProgress);
+                                    window.location.href = "/";
+                                }
+                            }}
+                            style={{
+                                background: "transparent",
+                                border: "none",
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                padding: "6px",
+                                borderRadius: "8px",
+                                color: "#8a8599",
+                            }}
+                        >
+                            <RotateCcw size={16} />
+                        </button>
+
+                        <span className="avatar small">JD</span>
+                    </div>
+                </header>
+
+                <main style={{ marginTop: "24px" }}>{children}</main>
+
+                <footer style={{ marginTop: "48px", paddingBottom: "24px", textAlign: "center", color: "#8a8599", fontSize: "13px" }}>
+                    Made for your voice. Built for your confidence.
+                    <span style={{ marginLeft: "12px" }}>cadence © 2026</span>
                 </footer>
             </div>
         </div>

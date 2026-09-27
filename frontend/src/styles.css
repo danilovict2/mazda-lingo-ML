@@ -413,7 +413,7 @@ nav {
 }
 
 main {
-    padding: 8px 40px 12px;
+    padding: 8px 40px 60px;
     max-width: 1530px;
     margin: auto;
     display: flex;
@@ -1757,11 +1757,22 @@ footer {
 
 .stress-instructions {
     text-align: center;
-    font-size: 13px;
-    color: #6a6573;
-    padding: 4px 0;
+    padding: 4px 0 8px;
     margin-bottom: 8px;
     flex-shrink: 0;
+}
+
+.stress-instructions h3 {
+    font-size: 16px;
+    color: #302d3d;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+
+.stress-instructions p {
+    font-size: 12px;
+    color: #6a6573;
+    margin: 0;
 }
 
 .stress-examples {

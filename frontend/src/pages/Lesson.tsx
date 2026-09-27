@@ -91,7 +91,7 @@ export function Lesson() {
                         </span>
                         <div>
                             <h1>{game.name}</h1>
-                            <p>{game.subtitle}</p>
+                            {id !== "stress-sort" && <p>{game.subtitle}</p>}
                         </div>
                         {id !== "stress-sort" && (
                             <select

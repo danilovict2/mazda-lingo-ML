@@ -4,7 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AudioLines, ArrowUpRight, BookOpen, ChartNoAxesCombined, ChevronRight, Flame, House, Zap, RotateCcw, Menu } from "lucide-react";
-import { initialProgress } from "../data";
+import { api } from "../api/client";
 import { Logo } from "../components/Logo";
 import { useProgress } from "../state/ProgressProvider";
 
@@ -66,10 +66,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     </span>
                     <button
                         className="reset"
-                        onClick={() => {
+                        onClick={async () => {
                             if (window.confirm("Reset all demo progress?")) {
-                                setProgress(initialProgress);
-                                window.location.href = "/";
+                                try {
+                                    setProgress(await api.resetProgress());
+                                    window.location.href = "/";
+                                } catch {
+                                    window.alert("Could not reset progress. Please try again.");
+                                }
                             }
                         }}
                     >

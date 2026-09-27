@@ -1,3 +1,5 @@
+import type { Progress } from "../data";
+
 let tokenProvider: (() => Promise<string>) | null = null;
 export function setTokenProvider(provider: (() => Promise<string>) | null) {
     tokenProvider = provider;
@@ -14,14 +16,14 @@ const base = (import.meta as unknown as { env: Record<string, string> }).env
     .VITE_API_URL || "";
 async function request<T>(
     path: string,
-    body: unknown,
+    options: { method?: "GET" | "POST" | "DELETE"; body?: unknown } = {},
 ): Promise<T> {
     if (!tokenProvider) throw new Error("Please sign in to continue.");
     const token = await tokenProvider();
     const res = await fetch(`${base}${path}`, {
-        method: "POST",
+        method: options.method || "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(body),
+        body: options.body === undefined ? undefined : JSON.stringify(options.body),
         signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) throw new Error(res.status === 401 ? "Your session expired. Please sign in again." : "Unable to complete the request. Please try again.");
@@ -29,9 +31,19 @@ async function request<T>(
 }
 export const api = {
     analyze: (text: string, difficulty: string) =>
-        request<Analysis>("/api/analyze-speech", { text, difficulty }),
+        request<Analysis>("/api/analyze-speech", { method: "POST", body: { text, difficulty } }),
     placement: (correct: number, total: number) =>
-        request<{ level: string }>("/api/placement-test", { correct, total }),
-    session: (game: string, correct: number, total: number) =>
-        request<{ xp: number }>("/api/session", { game, correct, total }),
+        request<{ level: string; progress: Progress }>("/api/placement-test", {
+            method: "POST", body: { correct, total },
+        }),
+    session: (game: string, correct: number, total: number, attemptId: string) =>
+        request<{ xp: number; progress: Progress }>("/api/session", {
+            method: "POST", body: { game, correct, total, attemptId },
+        }),
+    saveStudio: (score: number, attemptId: string) =>
+        request<{ xp: number; progress: Progress }>("/api/studio-session", {
+            method: "POST", body: { score, attemptId },
+        }),
+    progress: () => request<Progress>("/api/progress"),
+    resetProgress: () => request<Progress>("/api/progress", { method: "DELETE" }),
 };

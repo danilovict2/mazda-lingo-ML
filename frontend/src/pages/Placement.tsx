@@ -25,7 +25,7 @@ export function Placement() {
         setApiError("");
         try {
             const r = await api.placement(skip ? 3 : correct, 5);
-            setProgress((p) => ({ ...p, placed: true, level: r.level }));
+            setProgress(r.progress);
             setResult(r.level);
         } catch {
             setApiError("Could not reach the API. Check that the server is running and try again.");

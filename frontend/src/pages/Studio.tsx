@@ -23,6 +23,7 @@ export function Studio() {
     const stream = useRef<MediaStream | null>(null);
     const [clip, setClip] = useState("");
     const mounted = useRef(true);
+    const attemptId = useRef(crypto.randomUUID());
     const text =
         difficulty === "Easy"
             ? "photography"
@@ -100,22 +101,16 @@ export function Studio() {
             }
         }
     }
-    function save() {
+    async function save() {
         if (!analysis) return;
-        setProgress((p) => ({
-            ...p,
-            xp: p.xp + 120,
-            completed: Array.from(new Set([...p.completed, "shape-your-sound"])),
-            sessions: [
-                {
-                    name: "Shape Your Sound",
-                    accuracy: analysis.overallScore,
-                    date: new Date().toLocaleDateString(),
-                },
-                ...p.sessions,
-            ].slice(0, 8),
-        }));
-        setSaved(true);
+        setNotice("");
+        try {
+            const result = await api.saveStudio(analysis.overallScore, attemptId.current);
+            setProgress(result.progress);
+            setSaved(true);
+        } catch {
+            setNotice("Could not save this practice. Please try again.");
+        }
     }
     return (
         <Shell>

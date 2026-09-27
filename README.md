@@ -37,7 +37,7 @@ bun run preview
 5. Open **Shape Your Sound** → **Try demo recording** → **Finish & analyze**. Save the practice.
 6. Open **Speech profile** for the radar chart, skill breakdown, and recommendation.
 
-The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts with an illustrative history, 360 XP, and a seven-day streak; new sessions, XP, accuracy, and profile improvements persist in localStorage separately for each Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
+The sidebar’s **Reset demo** clears progress. Practice routes require sign-in; login returns you to your requested route. Rhythm Match unlocks after completing a lesson or an Advanced placement result. The dashboard starts at 360 XP; new sessions, XP, accuracy, placement, and profile improvements persist in SQLite under the Auth0 account. Completing a lesson adds 20 XP per question plus 10 per correct answer; saved studio practice adds 120 XP. Profile growth is intentionally simulated.
 
 ## Architecture
 
@@ -47,10 +47,27 @@ frontend/
   src/styles.css     Responsive design system and motion
   src/data.ts        Typed questions, game catalog, demo profile
   src/api/client.ts  Required HTTP requests and response types
-main.py            Small FastAPI application; no database
+main.py            FastAPI routes and production SPA hosting
+database.py        Transactional SQLite persistence
+deploy/            DigitalOcean Docker Compose and HTTPS proxy
 ```
 
-React + TypeScript + Vite, React Router, Lucide icons, and plain CSS. The accessible radar is a small SVG component, avoiding a chart dependency. Fonts have system fallbacks. React context and localStorage are the only state/persistence layer. The demo backend lives in root `main.py`.
+React + TypeScript + Vite, React Router, Lucide icons, and plain CSS power the interface. FastAPI validates Auth0 access tokens and stores each account’s progress in SQLite. Session writes are transactional and idempotent, and the database uses WAL mode with a ten-second busy timeout for concurrent requests.
+
+## Deploy to DigitalOcean
+
+SQLite needs a persistent filesystem. DigitalOcean App Platform containers have ephemeral filesystems and do not support volumes, so deploy this configuration to a Droplet. The included Compose stack runs one application process, a persistent database volume, and Caddy for automatic HTTPS.
+
+1. Create an Ubuntu Droplet, point the domain’s DNS A record to it, and install Docker Engine with the Compose plugin.
+2. Clone the repository. Copy `deploy/.env.example` to `deploy/.env` and fill in the domain and Auth0 values.
+3. Add `https://your-domain.example` to the Auth0 application’s allowed callback, logout, and web-origin URLs.
+4. From the repository root, deploy with:
+
+```sh
+docker compose --env-file deploy/.env -f deploy/compose.yaml up -d --build
+```
+
+The SQLite database lives in the `deploy_cadence-data` Docker volume at `/data/cadence.db` inside the container. Keep the application at one replica because SQLite coordinates access to one local database file. For DigitalOcean Block Storage, mount the volume on the host, change the Compose mapping to `/mnt/cadence-data:/data`, and give UID 10001 write access to that directory. Include the data volume in the backup plan. Check the service with `https://your-domain.example/api/health`.
 
 The six selection games contain 4–5 questions each. Five representative questions drive placement. Difficulty changes the question sequence; Soundprint also changes visual contrast. Speaking difficulty switches words, sentences, and paragraphs. Correct and incorrect answers both offer explanations and allow immediate continuation.
 
@@ -59,7 +76,7 @@ The six selection games contain 4–5 questions each. Five representative questi
 - Reference playback uses browser SpeechSynthesis; unsupported browsers show a text fallback. Native speech does not guarantee the displayed contrastive stress, so typography is the primary teaching cue.
 - Studio simulation needs no permissions. **Use my microphone** optionally records through MediaRecorder and provides local playback. Permission/device failure falls back to simulation. Streams are stopped when recording finishes or the studio unmounts; audio is never uploaded.
 - All scoring is explicitly mocked. `POST /api/analyze-speech` is the Python integration boundary: replace its response with a real analysis pipeline and add multipart audio upload in `src/api/client.ts` when needed.
-- API routes: `GET /api/health`; `POST /api/placement-test`, `/api/session`, `/api/analyze-speech`. Lesson content remains local. API session results are stateless, with persistence owned by the browser.
-- Auth0 authenticates accounts; FastAPI validates RS256 access tokens on practice endpoints. Progress remains local to each browser and account, without a database. See [Auth0 setup](frontend/AUTH0.md).
+- API routes: `GET /api/health`; authenticated `GET`/`DELETE /api/progress`; and authenticated `POST /api/placement-test`, `/api/session`, `/api/studio-session`, and `/api/analyze-speech`. Lesson content remains bundled with the frontend.
+- Auth0 authenticates accounts; FastAPI validates RS256 access tokens on every account and practice endpoint. See [Auth0 setup](frontend/AUTH0.md).
 
 Responsive layouts, visible keyboard focus, semantic buttons, disabled answer states, live feedback, reduced-motion support, and labeled audio controls are included.

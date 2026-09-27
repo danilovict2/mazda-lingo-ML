@@ -3692,3 +3692,46 @@ p {
     color: var(--muted);
     text-decoration: line-through;
 }
+
+/* Say It Right: a full-width horizontal card under the 2x2 game grid. */
+.game-grid .game-card.wide {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.game-card.wide .card-top {
+    grid-row: 1 / 4;
+    margin: 0;
+}
+
+.game-card.wide .card-top > svg {
+    display: none;
+}
+
+.game-card.wide .game-tag,
+.game-card.wide h3,
+.game-card.wide p {
+    grid-column: 2;
+}
+
+.game-card.wide h3 {
+    margin: 4px 0;
+}
+
+.game-card.wide p {
+    min-height: 0;
+}
+
+.game-card.wide .card-bottom {
+    grid-column: 3;
+    grid-row: 1 / 4;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}

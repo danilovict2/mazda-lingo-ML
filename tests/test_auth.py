@@ -35,6 +35,9 @@ class AuthenticationTests(unittest.TestCase):
             self.assertEqual(
                 self.client.post("/api/" + route, json={}).status_code, 401
             )
+        # Recording routes spend ElevenLabs credits, so they must be protected too.
+        for route in ("analyze-recording", "check-stress"):
+            self.assertEqual(self.client.post("/api/" + route).status_code, 401)
         self.assertEqual(self.client.get("/api/me").status_code, 401)
 
     @patch("auth.settings")

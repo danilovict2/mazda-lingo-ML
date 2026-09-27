@@ -8,6 +8,7 @@ export function GameIcon({ id, size = 27 }: { id: string; size?: number }) {
                 "rhythm-match": Headphones,
                 "stress-twins": Layers,
                 "what-do-they-mean": Search,
+                "say-it-right": Mic,
             } as Record<string, typeof Mic>
         )[id] || AudioLines;
     return <Icon size={size} />;

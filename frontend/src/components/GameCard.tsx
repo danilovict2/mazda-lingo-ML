@@ -6,9 +6,12 @@ import { GameIcon } from "../components/GameIcon";
 export function GameCard({
     game: g,
     status,
+    wide = false,
 }: {
     game: (typeof games)[number];
     status: string;
+    /** Full-width horizontal card spanning the grid (used for Say It Right). */
+    wide?: boolean;
 }) {
     const locked = status === "Locked";
     return (
@@ -18,7 +21,7 @@ export function GameCard({
             onClick={(e) => {
                 if (locked) e.preventDefault();
             }}
-            className={`game-card ${locked ? "locked" : ""}`}
+            className={`game-card ${locked ? "locked" : ""} ${wide ? "wide" : ""}`}
         >
             <div className="card-top">
                 <span className={`game-icon ${g.color}`}>

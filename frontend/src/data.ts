@@ -9,6 +9,13 @@ export type Question = {
     stress?: number;
 };
 
+/** Say It Right: the player says `text` aloud, stressing the **marked** word(s). */
+export type SpeakQuestion = {
+    text: string;
+    /** Model recording of the sentence with the intended stress. */
+    audio: string;
+};
+
 export type StressStepsQuestion = {
     words: string[];
     category1Label: string;
@@ -62,6 +69,17 @@ export const games = [
         tag: "SPEECH TIMING · PROSODY",
         color: "peach",
         icon: "audio",
+        time: 4,
+    },
+    {
+        id: "say-it-right",
+        tip: "Say the sentence and make the highlighted words stand out: louder and a little longer than the rest.",
+        example: { clip: "detective-coffee", label: "I didn’t say she stole my COFFEE" },
+        name: "Say It Right",
+        subtitle: "Say the sentence with the right words stressed.",
+        tag: "SPEAKING · SENTENCE STRESS",
+        color: "blue",
+        icon: "mic",
         time: 4,
     },
 ];
@@ -301,6 +319,16 @@ const twins: Question[] = [
     },
 ];
 
+// Sentences whose stress the checker judged correctly in calibration (see stress_check.py).
+const speak: SpeakQuestion[] = [
+    { text: "I wanted the **blue** one.", audio: "detective-blue" },
+    { text: "We’re **meeting** at the station.", audio: "rhythm-station" },
+    { text: "I said we should leave **now**.", audio: "detective-now" },
+    { text: "Why am I the **only** one copying my cousin?", audio: "detective-only" },
+    { text: "Could you **pass** me the **salt**?", audio: "rhythm-salt" },
+    { text: "I **really** wanted to see that **movie**.", audio: "rhythm-movie" },
+];
+
 const stressSteps: StressStepsQuestion[] = [
     {
         words: [
@@ -336,7 +364,8 @@ const stressSteps: StressStepsQuestion[] = [
     },
 ];
 
-export const questions: Record<string, Question[] | StressStepsQuestion[]> = {
+export const questions: Record<string, Question[] | StressStepsQuestion[] | SpeakQuestion[]> = {
+    "say-it-right": speak,
     "stress-sort": stressSteps,
     "what-do-they-mean": detective,
     "rhythm-match": echo,
